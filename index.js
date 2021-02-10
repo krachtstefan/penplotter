@@ -8,7 +8,7 @@ const hardware = {
 };
 
 board.on("ready", () => {
-  const stepper = new Stepper({
+  const stepperLeft = new Stepper({
     type: Stepper.TYPE.DRIVER,
     stepsPerRev: 200,
     pins: {
@@ -16,27 +16,40 @@ board.on("ready", () => {
       dir: 5,
     },
   });
-
-  const pen = new Servo({
-    pin: hardware.pen.pin,
-    range: [0, 180],
-    startAt: 0,
+  const stepperRight = new Stepper({
+    type: Stepper.TYPE.DRIVER,
+    stepsPerRev: 200,
+    pins: {
+      step: 3,
+      dir: 6,
+    },
   });
-  const liftPen = () => {
-    pen.to(0);
-  };
-  const attachPen = () => {
-    pen.to(180);
-  };
 
-  liftPen();
+  // const pen = new Servo({
+  //   pin: hardware.pen.pin,
+  //   range: [0, 180],
+  //   startAt: 0,
+  // });
+  // const liftPen = () => {
+  //   pen.to(0);
+  // };
+  // const attachPen = () => {
+  //   pen.to(180);
+  // };
 
-  // Set stepper to 180 RPM, counter-clockwise with acceleration and deceleration
-  stepper.rpm(180).ccw().accel(1600).decel(1600);
-  stepper
+  // liftPen();
+
+  stepperRight
+    .rpm(180)
+    .cw()
+    .step(1600, () => {
+      // attachPen();
+    });
+
+  stepperLeft
     .rpm(180)
     .ccw()
     .step(1600, () => {
-      attachPen();
+      // attachPen();
     });
 });
