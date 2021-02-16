@@ -1,7 +1,12 @@
+import type { GridHelper, Material } from "three";
 import React, { useEffect, useRef } from "react";
 
-const Grid = () => {
-  const gridRef = useRef();
+interface OrbitRef {
+  material: Material;
+}
+
+const Grid: React.FC = () => {
+  const gridRef = useRef<OrbitRef>();
 
   useEffect(() => {
     if (gridRef && gridRef.current) {
