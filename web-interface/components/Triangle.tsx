@@ -2,7 +2,13 @@ import * as THREE from "three";
 
 import React, { useMemo } from "react";
 
-const Triangle = ({ vertices }) => {
+import type { Vector3 } from "three";
+
+type TriangleProps = {
+  vertices: [Vector3];
+};
+
+const Triangle: React.FC<TriangleProps> = ({ vertices }) => {
   const f32array = useMemo(
     () =>
       Float32Array.from(
