@@ -1,7 +1,6 @@
 import React, { useRef } from "react";
 import { extend, useFrame, useThree } from "react-three-fiber";
 
-import type { Camera } from "three";
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 import { ReactThreeFiber } from "react-three-fiber";
 

@@ -1,5 +1,6 @@
-import type { GridHelper, Material } from "three";
 import React, { useEffect, useRef } from "react";
+
+import type { Material } from "three";
 
 interface OrbitRef {
   material: Material;
