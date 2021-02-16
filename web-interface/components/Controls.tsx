@@ -17,12 +17,8 @@ declare global {
   }
 }
 
-interface OrbitRef {
-  update: Function;
-}
-
 const Controls: React.FC = () => {
-  const ref = useRef<OrbitRef>();
+  const ref = useRef<OrbitControls>();
   const { camera, gl } = useThree();
 
   useFrame(() => {
