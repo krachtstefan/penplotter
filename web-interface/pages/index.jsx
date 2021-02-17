@@ -1,40 +1,41 @@
 import * as THREE from "three";
 
-import React, {
-  createRef,
-  forwardRef,
-  useEffect,
-  useRef,
-  useState,
-} from "react";
+import React, { useState } from "react";
 
 import { Canvas } from "react-three-fiber";
 import Grid from "../components/Grid";
 import Triangle from "../components/Triangle";
 import config from "../config";
 import dynamic from "next/dynamic";
+import { useSpring } from "react-spring/three.cjs";
 
 const Controls = dynamic(() => import("../components/Controls"), {
   ssr: false,
 });
 
-const Home = () => {
-  const [upperLeft, setUpperLeft] = useState([
-    -config.cylinder.distance / 2,
-    0,
-    0,
-  ]);
-  const [upperRight, setUpperRight] = useState([
-    config.cylinder.distance / 2,
-    0,
-    0,
-  ]);
+const defaultUpperLeft = [-config.cylinder.distance / 2, 0, 0];
+const defaultUpperRight = [config.cylinder.distance / 2, 0, 0];
+const defaultPenPosition = [0, -config.pen.topDistance, 0];
 
-  const [penPosition, setPenPosition] = useState([
-    0,
-    -config.pen.topDistance,
-    0,
-  ]);
+const Home = () => {
+  const [upperLeft, setUpperLeft] = useState(defaultUpperLeft);
+  const [upperRight, setUpperRight] = useState(defaultUpperRight);
+
+  const [penPosition, setPenPosition] = useState(defaultPenPosition);
+
+  useSpring({
+    from: {
+      z: [0, 0, 0],
+    },
+    z: defaultPenPosition,
+    config: {
+      duration: 1000,
+    },
+    onFrame: ({ z }) => {
+      setPenPosition(z);
+    },
+  });
+
   return (
     <Canvas camera={{ position: [-20, 0, -75] }}>
       <ambientLight intensity={0.5} />
