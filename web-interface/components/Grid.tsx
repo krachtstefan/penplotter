@@ -13,7 +13,7 @@ const Grid: React.FC = () => {
     }
   }, []);
 
-  return <gridHelper ref={gridRef} args={[150, 150, "black", "grey"]} />;
+  return <gridHelper ref={gridRef} args={[150, 50, "black", "grey"]} />;
 };
 
 export default Grid;
