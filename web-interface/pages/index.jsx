@@ -17,6 +17,9 @@ const defaultUpperLeft = [-config.cylinder.distance / 2, 0, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0, 0];
 const defaultPenPosition = [0, -config.pen.topDistance, 0];
 
+const getLenghtByPoints = ([x1, y1], [x2, y2]) =>
+  Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2));
+
 const Home = () => {
   const [upperLeft, setUpperLeft] = useState(defaultUpperLeft);
   const [upperRight, setUpperRight] = useState(defaultUpperRight);
