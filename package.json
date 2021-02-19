@@ -4,6 +4,7 @@
   "description": "## setup",
   "main": "index.js",
   "dependencies": {
+    "bignumber.js": "^9.0.1",
     "johnny-five": "^2.0.0"
   },
   "devDependencies": {},
