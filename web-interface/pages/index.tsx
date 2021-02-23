@@ -28,7 +28,7 @@ const Home = () => {
 
   useSpring({
     from: {
-      z: [0, 0, 0],
+      z: [0, 0],
     },
     z: defaultPenPosition,
     config: {
