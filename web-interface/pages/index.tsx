@@ -14,9 +14,9 @@ const Controls = dynamic(() => import("../components/Controls"), {
   ssr: false,
 });
 
-const defaultUpperLeft = [-config.cylinder.distance / 2, 0, 0];
-const defaultUpperRight = [config.cylinder.distance / 2, 0, 0];
-const defaultPenPosition = [0, -config.pen.topDistance, 0];
+const defaultUpperLeft: [number, number] = [-config.cylinder.distance / 2, 0];
+const defaultUpperRight: [number, number] = [config.cylinder.distance / 2, 0];
+const defaultPenPosition: [number, number] = [0, -config.pen.topDistance];
 
 const Home = () => {
   const [upperLeft, setUpperLeft] = useState(defaultUpperLeft);
@@ -47,9 +47,9 @@ const Home = () => {
         <pointLight position={[-10, -10, -10]} />
         <Triangle
           vertices={[
-            new THREE.Vector3(...upperLeft),
-            new THREE.Vector3(...upperRight),
-            new THREE.Vector3(...penPosition),
+            new THREE.Vector3(...upperLeft, 0),
+            new THREE.Vector3(...upperRight, 0),
+            new THREE.Vector3(...penPosition, 0),
           ]}
         />
         <Grid rotation={{ z: -90 }} />
