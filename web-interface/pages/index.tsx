@@ -52,7 +52,7 @@ const Home = () => {
             new THREE.Vector3(...penPosition, 0),
           ]}
         />
-        <Grid rotation={{ z: -90 }} />
+        <Grid />
         <Controls />
       </Canvas>
     </>
