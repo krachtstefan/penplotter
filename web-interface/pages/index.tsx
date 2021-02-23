@@ -1,14 +1,17 @@
 import * as THREE from "three";
 
 import React, { useState } from "react";
+import { getLenghtByPoints, parseSVG } from "../lib/plotter-model";
 
 import { Canvas } from "react-three-fiber";
 import Grid from "../components/Grid";
 import Triangle from "../components/Triangle";
 import config from "../config";
 import dynamic from "next/dynamic";
-import { getLenghtByPoints } from "../../lib/plotter-model";
 import { useSpring } from "react-spring/three.cjs";
+
+const svgFile = preval`module.exports = require("fs").readFileSync("./assets/example.svg", "utf8")`;
+console.log(parseSVG(svgFile));
 
 const Controls = dynamic(() => import("../components/Controls"), {
   ssr: false,
