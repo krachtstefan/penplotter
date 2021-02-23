@@ -5,7 +5,7 @@ import React, { useMemo } from "react";
 import type { Vector3 } from "three";
 
 type TriangleProps = {
-  vertices: [Vector3];
+  vertices: [Vector3, Vector3, Vector3];
 };
 
 const Triangle: React.FC<TriangleProps> = ({ vertices }) => {
