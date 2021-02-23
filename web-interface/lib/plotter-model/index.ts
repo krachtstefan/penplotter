@@ -13,4 +13,4 @@ export const getLenghtByPoints = (
   return a.add(b).sqrt();
 };
 
-export const getSVGObject = (filecontent: string) => parse(filecontent);
+export const parseSVG = (filecontent: string) => parse(filecontent);
