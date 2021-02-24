@@ -1,10 +1,11 @@
 import * as THREE from "three";
 
+import { Canvas, useResource } from "react-three-fiber";
 import { animated, useSpring } from "react-spring/three.cjs";
 
-import { Canvas } from "react-three-fiber";
 import Grid from "../components/Grid";
 import React from "react";
+import chunk from "lodash.chunk";
 import config from "../config";
 import dynamic from "next/dynamic";
 import { parseSVG } from "../lib/plotter-model";
@@ -25,6 +26,7 @@ const penPositions = [...Array(100)].map(() => [
 ]);
 
 const Home = () => {
+  const ref = useResource();
   const { penPosition } = useSpring({
     from: {
       penPosition: [0, 0],
@@ -41,16 +43,36 @@ const Home = () => {
           <pointLight position={[-10, -10, -10]} />
 
           <animated.line
-            geometry={penPosition.interpolate((penX, penY) =>
-              new THREE.BufferGeometry().setFromPoints([
+            geometry={penPosition.interpolate((penX, penY) => {
+              if (ref.current) {
+                let points = [];
+                if (
+                  ref.current.geometry.attributes &&
+                  ref.current.geometry.attributes.position
+                ) {
+                  points = chunk(
+                    ref.current.geometry.attributes.position.array,
+                    3
+                  ).map(([x, y, z]) => new THREE.Vector3(x, y, z));
+                }
+                points.push(new THREE.Vector3(penX, penY, 0));
+                ref.current.geometry.setFromPoints(points);
+              }
+
+              return new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(...defaultUpperLeft, 0),
                 new THREE.Vector3(penX, penY, 0),
                 new THREE.Vector3(...defaultUpperRight, 0),
-              ])
-            )}
+              ]);
+            })}
           >
             <lineBasicMaterial attach="material" color="pink" />
           </animated.line>
+
+          <line ref={ref}>
+            <lineBasicMaterial attach="material" color="green" />
+          </line>
+
           <Grid />
         </group>
         <Controls />
