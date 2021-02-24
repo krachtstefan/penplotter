@@ -49,7 +49,7 @@ const Home = () => {
               ])
             )}
           >
-            <animated.lineBasicMaterial attach="material" color="pink" />
+            <lineBasicMaterial attach="material" color="pink" />
           </animated.line>
           <Grid />
         </group>
