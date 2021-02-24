@@ -29,8 +29,7 @@ const Triangle: React.FC<TriangleProps> = ({ vertices }) => {
       </bufferGeometry>
       <meshBasicMaterial
         attach="material"
-        color="#5243aa"
-        wireframe={false}
+        wireframe={true}
         side={THREE.DoubleSide}
       />
     </mesh>
