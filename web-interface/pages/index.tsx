@@ -1,10 +1,10 @@
 import * as THREE from "three";
 
+import React, { useState } from "react";
 import { animated, useSpring } from "react-spring/three.cjs";
 
 import { Canvas } from "react-three-fiber";
 import Grid from "../components/Grid";
-import React from "react";
 import config from "../config";
 import dynamic from "next/dynamic";
 import { parseSVG } from "../lib/plotter-model";
@@ -25,11 +25,15 @@ const penPositions = [...Array(100)].map(() => [
 ]);
 
 const Home = () => {
+  const [line, setLine] = useState<[number, number][]>([]);
   const { penPosition } = useSpring({
     from: {
       penPosition: [0, 0],
     },
     to: penPositions.map((penPosition) => ({ penPosition })),
+    onFrame: (f) => {
+      setLine((old) => [...old, f.penPosition]);
+    },
   });
 
   return (
@@ -51,6 +55,15 @@ const Home = () => {
           >
             <lineBasicMaterial attach="material" color="pink" />
           </animated.line>
+
+          <line
+            geometry={new THREE.BufferGeometry().setFromPoints(
+              line.map((l) => new THREE.Vector3(...l, 0))
+            )}
+          >
+            <lineBasicMaterial attach="material" color="pink" />
+          </line>
+
           <Grid />
         </group>
         <Controls />
