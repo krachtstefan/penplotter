@@ -1,9 +1,7 @@
 import React, { useEffect, useRef } from "react";
 
-import { GridHelperProps } from "react-three-fiber";
-
-const Grid: React.FC = () => {
-  const gridRef = useRef<GridHelperProps>();
+const Grid = () => {
+  const gridRef = useRef();
 
   useEffect(() => {
     if (gridRef && gridRef.current) {

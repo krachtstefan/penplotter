@@ -17,8 +17,8 @@ const Controls = dynamic(() => import("../components/Controls"), {
   ssr: false,
 });
 
-const defaultUpperLeft: [number, number] = [-config.cylinder.distance / 2, 0];
-const defaultUpperRight: [number, number] = [config.cylinder.distance / 2, 0];
+const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
+const defaultUpperRight = [config.cylinder.distance / 2, 0];
 
 const penPositions = [...Array(100)].map(() => [
   -config.pen.topDistance * Math.random() + config.pen.topDistance / 2,
