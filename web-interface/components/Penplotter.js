@@ -78,11 +78,9 @@ const Penplotter = () => {
               color="black"
             />
           </animated.line>
-
           <line ref={ref}>
             <lineBasicMaterial attach="material" color="green" />
           </line>
-
           <Grid />
         </group>
         <Controls />
