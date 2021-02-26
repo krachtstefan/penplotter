@@ -27,11 +27,15 @@ const penPositions = [...Array(100)].map(() => [
 
 const Home = () => {
   const ref = useResource();
-  const { penPosition } = useSpring({
+  const { penPositionX, penPositionY } = useSpring({
     from: {
-      penPosition: [0, 0],
+      penPositionX: [0],
+      penPositionY: [0],
     },
-    to: penPositions.map((penPosition) => ({ penPosition })),
+    to: penPositions.map((penPosition) => ({
+      penPositionX: penPosition[0],
+      penPositionY: penPosition[1],
+    })),
   });
 
   return (
@@ -43,7 +47,7 @@ const Home = () => {
           <pointLight position={[-10, -10, -10]} />
 
           <animated.line
-            geometry={penPosition.interpolate((penX, penY) => {
+            geometry={penPositionX.interpolate((penX) => {
               if (ref.current) {
                 let points = [];
                 if (
@@ -55,18 +59,24 @@ const Home = () => {
                     3
                   ).map(([x, y, z]) => new THREE.Vector3(x, y, z));
                 }
-                points.push(new THREE.Vector3(penX, penY, 0));
+                points.push(
+                  new THREE.Vector3(penX, penPositionY.payload[0].value, 0)
+                );
                 ref.current.geometry.setFromPoints(points);
               }
 
               return new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(...defaultUpperLeft, 0),
-                new THREE.Vector3(penX, penY, 0),
+                new THREE.Vector3(penX, penPositionY.payload[0].value, 0),
                 new THREE.Vector3(...defaultUpperRight, 0),
               ]);
             })}
           >
-            <lineBasicMaterial attach="material" color="pink" />
+            <lineBasicMaterial
+              linewidth={200}
+              attach="material"
+              color="black"
+            />
           </animated.line>
 
           <line ref={ref}>
