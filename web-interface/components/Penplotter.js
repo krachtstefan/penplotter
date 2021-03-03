@@ -41,17 +41,13 @@ const Penplotter = () => {
 
   return (
     <>
-      <Canvas camera={{ position: [-20, 0, -75] }}>
-        <group position={[0, 30, 0]}>
+      <Canvas camera={{ position: [-20 * 10, 0, -75 * 10] }}>
+        <group position={[0, config.paper.height, 0]}>
           <Paper
             width={config.paper.width}
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
           />
-          <ambientLight intensity={0.5} />
-          <spotLight position={[10, 10, 10]} angle={0.15} penumbra={1} />
-          <pointLight position={[-10, -10, -10]} />
-
           <animated.line
             geometry={penPositionX.interpolate((penX) => {
               if (ref.current) {

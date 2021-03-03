@@ -1,11 +1,11 @@
 const config = {
   cylinder: {
-    distance: 40,
+    distance: 400,
   },
   paper: {
-    width: 25,
-    height: 50,
-    topDistance: 50,
+    width: 210,
+    height: 297,
+    topDistance: 200,
   },
   pen: {
     topDistance: 50,
