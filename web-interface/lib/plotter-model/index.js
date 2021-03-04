@@ -38,7 +38,7 @@ export const translateSVGPoints = (pointString) =>
       if (isX) {
         return [...acc, curr]; // [[x1,y1], x2]
       } else {
-        return [...acc.slice(0, -1), [acc.slice(-1)[0], curr, 0]]; // [[x1,y1], [x2, y2]]
+        return [...acc.slice(0, -1), [acc.slice(-1)[0], curr]]; // [[x1,y1], [x2, y2]]
       }
     }, []);
 
@@ -61,8 +61,8 @@ export const returnPointsFromElement = (element) => {
     case "line":
       const { x1, x2, y1, y2 } = element.properties;
       return [
-        [x1, y1, 0],
-        [x2, y2, 0],
+        [x1, y1],
+        [x2, y2],
       ];
     default:
       return [];
