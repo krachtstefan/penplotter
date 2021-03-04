@@ -58,6 +58,7 @@ const Penplotter = () => {
         penPositionY: penPosition[1],
       };
     }),
+    config: { duration: 500 },
   });
 
   return (
