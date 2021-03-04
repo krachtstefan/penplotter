@@ -5,18 +5,24 @@ import { animated, useSpring } from "react-spring/three.cjs";
 
 import Grid from "./Grid";
 import Paper from "./Paper";
+import PenPlotter from "../lib/plotter-model";
 import React from "react";
 import chunk from "lodash.chunk";
 import config from "../config";
 import dynamic from "next/dynamic";
-import { parseSVG } from "../lib/plotter-model";
 
 const svgFile = preval`module.exports = require("fs").readFileSync("./assets/example.svg", "utf8")`;
-console.log(parseSVG(svgFile));
+const parsedSvg = new PenPlotter(svgFile);
 
 const Controls = dynamic(() => import("./Controls"), {
   ssr: false,
 });
+
+console.log(
+  parsedSvg,
+  parsedSvg.returnElementsByTagName("polyline"),
+  parsedSvg.returnElementsByTagName("polygon")
+);
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0];
