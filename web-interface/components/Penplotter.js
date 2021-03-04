@@ -22,13 +22,19 @@ const allPolygones = parsedSvg
   .returnElementsByTagName("polygon")
   .map((pl) => returnPointsFromElement(pl));
 
-console.log(allPolygones);
+console.log("allPolygones", allPolygones);
 
 const allPolyLines = parsedSvg
   .returnElementsByTagName("polyline")
   .map((pl) => returnPointsFromElement(pl));
 
-console.log(allPolyLines);
+console.log("allPolyLines", allPolyLines);
+
+const allLines = parsedSvg
+  .returnElementsByTagName("line")
+  .map((pl) => returnPointsFromElement(pl));
+
+console.log("allLines", allLines);
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0];
