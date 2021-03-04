@@ -29,4 +29,34 @@ export const getLenghtByPoints = ([x1, y1], [x2, y2]) => {
   return a.add(b).sqrt();
 };
 
+export const translateSVGPoints = (pointString) =>
+  pointString.split(" ").reduce((acc, curr, i) => {
+    const isX = i % 2 === 0;
+    if (isX) {
+      return [...acc, curr]; // [[x1,y1], x2]
+    } else {
+      return [...acc.slice(0, -1), [acc.slice(-1)[0], curr, 0]]; // [[x1,y1], [x2, y2]]
+    }
+  }, []);
+
+export const returnPointsFromElement = (element) => {
+  switch (element.tagName) {
+    case "polyline":
+      return translateSVGPoints(element.properties.points);
+    case "polygon":
+      /**
+       * polygon is like polyline, except the path is closed,
+       * we need to copy the first coordinates
+       */
+      return translateSVGPoints(
+        `${element.properties.points} ${element.properties.points
+          .split(" ")
+          .slice(0, 2)
+          .join(" ")}`
+      );
+    default:
+      return [];
+  }
+};
+
 export default PenPlotter;
