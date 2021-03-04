@@ -30,14 +30,17 @@ export const getLenghtByPoints = ([x1, y1], [x2, y2]) => {
 };
 
 export const translateSVGPoints = (pointString) =>
-  pointString.split(" ").reduce((acc, curr, i) => {
-    const isX = i % 2 === 0;
-    if (isX) {
-      return [...acc, curr]; // [[x1,y1], x2]
-    } else {
-      return [...acc.slice(0, -1), [acc.slice(-1)[0], curr, 0]]; // [[x1,y1], [x2, y2]]
-    }
-  }, []);
+  pointString
+    .split(" ")
+    .map((string) => new BigDecimal(string).toNumber())
+    .reduce((acc, curr, i) => {
+      const isX = i % 2 === 0;
+      if (isX) {
+        return [...acc, curr]; // [[x1,y1], x2]
+      } else {
+        return [...acc.slice(0, -1), [acc.slice(-1)[0], curr, 0]]; // [[x1,y1], [x2, y2]]
+      }
+    }, []);
 
 export const returnPointsFromElement = (element) => {
   switch (element.tagName) {
