@@ -39,22 +39,25 @@ console.log("allLines", allLines);
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0];
 
-const penPositions = [...Array(100)].map(() => [
-  -config.pen.topDistance * Math.random() + config.pen.topDistance / 2,
-  -config.pen.topDistance * Math.random(),
-]);
+// const penPositions = [...Array(100)].map(() => [
+//   -config.pen.topDistance * Math.random() + config.pen.topDistance / 2,
+//   -config.pen.topDistance * Math.random(),
+// ]);
+const penPositions = allPolygones[0];
 
 const Penplotter = () => {
   const ref = useResource();
   const { penPositionX, penPositionY } = useSpring({
     from: {
-      penPositionX: [0],
-      penPositionY: [0],
+      penPositionX: [penPositions[0][0]],
+      penPositionY: [penPositions[0][1]],
     },
-    to: penPositions.map((penPosition) => ({
-      penPositionX: penPosition[0],
-      penPositionY: penPosition[1],
-    })),
+    to: penPositions.slice(1).map((penPosition) => {
+      return {
+        penPositionX: penPosition[0],
+        penPositionY: penPosition[1],
+      };
+    }),
   });
 
   return (
