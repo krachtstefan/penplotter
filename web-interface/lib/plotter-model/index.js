@@ -10,4 +10,13 @@ export const getLenghtByPoints = ([x1, y1], [x2, y2]) => {
   return a.add(b).sqrt();
 };
 
+export const getAllElements = (obj) => {
+  const getChildren = (o) =>
+    o.children
+      ? [{ ...o, children: null }, ...o.children.map((x) => getChildren(x))]
+      : o;
+
+  return getChildren(obj).flat(99);
+};
+
 export const parseSVG = (filecontent) => parse(filecontent);
