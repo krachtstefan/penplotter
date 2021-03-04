@@ -54,6 +54,13 @@ export const returnPointsFromElement = (element) => {
           .slice(0, 2)
           .join(" ")}`
       );
+
+    case "line":
+      const { x1, x2, y1, y2 } = element.properties;
+      return [
+        [x1, y1, 0],
+        [x2, y2, 0],
+      ];
     default:
       return [];
   }
