@@ -69,4 +69,13 @@ export const returnPointsFromElement = (element) => {
   }
 };
 
+export const getDimensions = (arrOfPoints) => {
+  const allX = arrOfPoints.map((p) => p[0]);
+  const allY = arrOfPoints.map((p) => p[1]);
+  return {
+    width: Math.max(...allX) - Math.min(...allX),
+    height: Math.max(...allY) - Math.min(...allY),
+  };
+};
+
 export default PenPlotter;
