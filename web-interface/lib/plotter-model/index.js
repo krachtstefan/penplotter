@@ -81,6 +81,15 @@ export const returnPointsFromElement = (element) => {
   }
 };
 
+export const getPosition = (arrOfPointArrays) => {
+  const allX = arrOfPointArrays.flat().map((p) => p[0]);
+  const allY = arrOfPointArrays.flat().map((p) => p[1]);
+  return {
+    top: Math.max(...allY),
+    left: Math.min(...allX),
+  };
+};
+
 export const getDimensions = (arrOfPointArrays) => {
   const allX = arrOfPointArrays.flat().map((p) => p[0]);
   const allY = arrOfPointArrays.flat().map((p) => p[1]);
