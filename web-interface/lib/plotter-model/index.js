@@ -90,4 +90,9 @@ export const getDimensions = (arrOfPointArrays) => {
   };
 };
 
+export const move = (arrOfPointArrays, { top, left }) =>
+  arrOfPointArrays.map((pA) =>
+    pA.map(([x, y]) => [x + (left || 0), y + (top || 0)])
+  );
+
 export default PenPlotter;
