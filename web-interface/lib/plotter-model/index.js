@@ -92,7 +92,10 @@ export const getDimensions = (arrOfPointArrays) => {
 
 export const move = (arrOfPointArrays, { top, left }) =>
   arrOfPointArrays.map((pA) =>
-    pA.map(([x, y]) => [x + (left || 0), y + (top || 0)])
+    pA.map(([x, y]) => [
+      new BigDecimal(x).add(left || 0).toNumber(),
+      new BigDecimal(y).add(top || 0).toNumber(),
+    ])
   );
 
 export default PenPlotter;
