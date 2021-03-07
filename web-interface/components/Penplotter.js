@@ -3,7 +3,10 @@ import * as THREE from "three";
 import { Canvas, useResource } from "react-three-fiber";
 import PenPlotter, {
   getDimensions,
+  getPosition,
+  move,
   returnPointsFromElement,
+  scale,
 } from "../lib/plotter-model";
 import { animated, useSpring } from "react-spring/three.cjs";
 
@@ -25,19 +28,19 @@ const allElements = parsedSvg
   .returnSupportedElements()
   .map((pl) => returnPointsFromElement(pl));
 
-const srcDimension = getDimensions(allElements);
-console.log(srcDimension);
+const allElementsScaled = scale(allElements, 0.1);
+const { top, left } = getPosition(allElementsScaled);
+const { width, height } = getDimensions(allElementsScaled);
+
+const allElementsMoved = move(allElementsScaled, {
+  top: -top,
+  left: -left - width,
+});
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0];
 
-// const penPositions = [...Array(100)].map(() => [
-//   -config.pen.topDistance * Math.random() + config.pen.topDistance / 2,
-//   -config.pen.topDistance * Math.random(),
-// ]);
-
-console.log(allElements);
-const penPositions = allElements[0];
+const penPositions = allElementsMoved.flat();
 
 const Penplotter = () => {
   const ref = useResource();
@@ -53,7 +56,7 @@ const Penplotter = () => {
       };
     }),
     delay: 1000,
-    config: { duration: 500 },
+    config: { duration: 150 },
   });
 
   return (
