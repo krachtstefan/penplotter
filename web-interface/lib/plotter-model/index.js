@@ -1,7 +1,7 @@
 import BigDecimal from "decimal.js";
 import { parse } from "svg-parser";
 
-const SUPPORTED_TYPES = {
+const TYPES = {
   polyline: "polyline",
   polygon: "polygon",
   line: "line",
@@ -11,11 +11,16 @@ class PenPlotter {
   constructor(svg) {
     const svgObj = parse(svg);
     this.elements = this._getAllElements(svgObj);
+    this.supportedTypes = [TYPES.polyline, TYPES.polygon, TYPES.line];
   }
 
   returnElementsByTagName = function (tagnames) {
     const tagnamesArr = typeof tagnames === "string" ? [tagnames] : tagnames;
     return this.elements.filter((e) => tagnamesArr.includes(e.tagName));
+  };
+
+  returnSupportedElements = function () {
+    return this.returnElementsByTagName(this.supportedTypes);
   };
 
   _getAllElements = (obj) => {
@@ -51,9 +56,9 @@ export const translateSVGPoints = (pointString) =>
 
 export const returnPointsFromElement = (element) => {
   switch (element.tagName) {
-    case SUPPORTED_TYPES.polyline:
+    case TYPES.polyline:
       return translateSVGPoints(element.properties.points);
-    case SUPPORTED_TYPES.polyline:
+    case TYPES.polygon:
       /**
        * polygon is like polyline, except the path is closed,
        * we need to copy the first coordinates
@@ -65,7 +70,7 @@ export const returnPointsFromElement = (element) => {
           .join(" ")}`
       );
 
-    case SUPPORTED_TYPES.line:
+    case TYPES.line:
       const { x1, x2, y1, y2 } = element.properties;
       return [
         [x1, y1],
