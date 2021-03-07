@@ -90,6 +90,14 @@ export const getDimensions = (arrOfPointArrays) => {
   };
 };
 
+export const scale = (arrOfPointArrays, factor) =>
+  arrOfPointArrays.map((pA) =>
+    pA.map(([x, y]) => [
+      new BigDecimal(x).times(factor || 0).toNumber(),
+      new BigDecimal(y).times(factor || 0).toNumber(),
+    ])
+  );
+
 export const move = (arrOfPointArrays, { top, left }) =>
   arrOfPointArrays.map((pA) =>
     pA.map(([x, y]) => [
