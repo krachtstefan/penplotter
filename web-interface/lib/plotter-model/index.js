@@ -69,9 +69,9 @@ export const returnPointsFromElement = (element) => {
   }
 };
 
-export const getDimensions = (...arrOfPointArray) => {
-  const allX = arrOfPointArray.flat().map((p) => p[0]);
-  const allY = arrOfPointArray.flat().map((p) => p[1]);
+export const getDimensions = (...arrOfPointArrays) => {
+  const allX = arrOfPointArrays.flat().map((p) => p[0]);
+  const allY = arrOfPointArrays.flat().map((p) => p[1]);
   return {
     width: Math.max(...allX) - Math.min(...allX),
     height: Math.max(...allY) - Math.min(...allY),
