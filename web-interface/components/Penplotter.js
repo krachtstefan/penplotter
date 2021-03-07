@@ -1,7 +1,10 @@
 import * as THREE from "three";
 
 import { Canvas, useResource } from "react-three-fiber";
-import PenPlotter, { returnPointsFromElement } from "../lib/plotter-model";
+import PenPlotter, {
+  getDimensions,
+  returnPointsFromElement,
+} from "../lib/plotter-model";
 import { animated, useSpring } from "react-spring/three.cjs";
 
 import Grid from "./Grid";
@@ -34,7 +37,8 @@ const allLines = parsedSvg
   .returnElementsByTagName("line")
   .map((pl) => returnPointsFromElement(pl));
 
-console.log("allLines", allLines);
+console.log("allPolyLines", allLines);
+console.log(getDimensions(...allPolygones, ...allPolyLines, ...allLines));
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0];
