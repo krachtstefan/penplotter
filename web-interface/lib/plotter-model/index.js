@@ -7,8 +7,9 @@ class PenPlotter {
     this.elements = this._getAllElements(svgObj);
   }
 
-  returnElementsByTagName = function (tagName) {
-    return this.elements.filter((e) => e.tagName === tagName);
+  returnElementsByTagName = function (tagnames) {
+    const tagnamesArr = typeof tagnames === "string" ? [tagnames] : tagnames;
+    return this.elements.filter((e) => tagnamesArr.includes(e.tagName));
   };
 
   _getAllElements = (obj) => {
