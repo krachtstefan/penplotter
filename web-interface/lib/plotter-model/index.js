@@ -81,7 +81,7 @@ export const returnPointsFromElement = (element) => {
   }
 };
 
-export const getDimensions = (...arrOfPointArrays) => {
+export const getDimensions = (arrOfPointArrays) => {
   const allX = arrOfPointArrays.flat().map((p) => p[0]);
   const allY = arrOfPointArrays.flat().map((p) => p[1]);
   return {

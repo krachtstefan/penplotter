@@ -25,7 +25,7 @@ const allElements = parsedSvg
   .returnSupportedElements()
   .map((pl) => returnPointsFromElement(pl));
 
-const srcDimension = getDimensions(...allElements);
+const srcDimension = getDimensions(allElements);
 console.log(srcDimension);
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
