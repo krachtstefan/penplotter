@@ -21,24 +21,12 @@ const Controls = dynamic(() => import("./Controls"), {
   ssr: false,
 });
 
-const allPolygones = parsedSvg
-  .returnElementsByTagName("polygon")
+const allElements = parsedSvg
+  .returnSupportedElements()
   .map((pl) => returnPointsFromElement(pl));
 
-console.log("allPolygones", allPolygones);
-
-const allPolyLines = parsedSvg
-  .returnElementsByTagName("polyline")
-  .map((pl) => returnPointsFromElement(pl));
-
-console.log("allPolyLines", allPolyLines);
-
-const allLines = parsedSvg
-  .returnElementsByTagName("line")
-  .map((pl) => returnPointsFromElement(pl));
-
-console.log("allPolyLines", allLines);
-console.log(getDimensions(...allPolygones, ...allPolyLines, ...allLines));
+const srcDimension = getDimensions(...allElements);
+console.log(srcDimension);
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0];
@@ -47,7 +35,9 @@ const defaultUpperRight = [config.cylinder.distance / 2, 0];
 //   -config.pen.topDistance * Math.random() + config.pen.topDistance / 2,
 //   -config.pen.topDistance * Math.random(),
 // ]);
-const penPositions = allPolygones[0];
+
+console.log(allElements);
+const penPositions = allElements[0];
 
 const Penplotter = () => {
   const ref = useResource();
