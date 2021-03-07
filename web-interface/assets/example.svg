@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="431px" height="357px" viewBox="0 0 431 357" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="504px" height="462px" viewBox="0 0 504 462" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>example</title>
     <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
         <g id="example" transform="translate(1.000000, 0.000000)" stroke="#979797">
             <polygon id="Path" points="67.7695312 129.289063 114.347656 355.4375 284.230469 253.636719 244.5625 121.730469 427.160156 0.871094 58.8125 28.7031252 0.578125 101.726563"></polygon>
-            <polyline id="Path-2" points="350.410156 166.171875 344.679687 283.878906 270.632813 328.945313"></polyline>
-            <line x1="410.722656" y1="85.2226562" x2="410.722656" y2="346.59375" id="Path-2"></line>
+            <polyline id="Path-2" points="342.410156 298.171875 336.679687 415.878906 262.632813 460.945313"></polyline>
+            <line x1="501.722656" y1="105.222656" x2="501.722656" y2="366.59375" id="Path-2"></line>
         </g>
     </g>
 </svg>
