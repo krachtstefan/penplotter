@@ -10,6 +10,7 @@ import PenPlotter, {
 } from "../lib/plotter-model";
 import { animated, useSpring } from "react-spring/three.cjs";
 
+import BigDecimal from "decimal.js";
 import Grid from "./Grid";
 import Paper from "./Paper";
 import React from "react";
@@ -28,13 +29,23 @@ const allElements = parsedSvg
   .returnSupportedElements()
   .map((pl) => returnPointsFromElement(pl));
 
-const allElementsScaled = scale(allElements, 0.1);
+const { width, height } = getDimensions(allElements);
+const scaling = Math.min(
+  ...[
+    new BigDecimal(config.paper.width).div(new BigDecimal(width)).toNumber(),
+    new BigDecimal(config.paper.height).div(new BigDecimal(height)).toNumber(),
+  ]
+);
+
+const allElementsScaled = scale(allElements, scaling);
 const { top, left } = getPosition(allElementsScaled);
-const { width, height } = getDimensions(allElementsScaled);
+const { width: scaledWidth, height: scaledHeight } = getDimensions(
+  allElementsScaled
+);
 
 const allElementsMoved = move(allElementsScaled, {
   top: -top,
-  left: -left - width,
+  left: -left,
 });
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
