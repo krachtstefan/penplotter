@@ -44,8 +44,9 @@ const { width: scaledWidth, height: scaledHeight } = getDimensions(
 );
 
 const allElementsMoved = move(allElementsScaled, {
-  top: -top,
-  left: -left,
+  top:
+    -top - config.paper.topDistance - (config.paper.height - scaledHeight) / 2,
+  left: -left - scaledWidth / 2,
 });
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
