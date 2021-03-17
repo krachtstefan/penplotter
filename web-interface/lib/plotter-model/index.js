@@ -67,7 +67,7 @@ export const translatePathString = (pathString) =>
     .split("M") // M (move) command, starts a new element
     .filter((x) => x !== "")
     .map((x) =>
-      `M${x}`
+      `L${x}`
         .split(" ")
         .filter((x) => x !== "")
         .reduce((prev, curr) => {
