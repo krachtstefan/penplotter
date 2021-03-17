@@ -3,6 +3,7 @@ import * as THREE from "three";
 import PenPlotter, {
   getDimensions,
   getPosition,
+  mirrorY,
   move,
   returnPointsFromElement,
   scale,
@@ -14,7 +15,6 @@ import { Canvas } from "react-three-fiber";
 import Grid from "./Grid";
 import Paper from "./Paper";
 import React from "react";
-import chunk from "lodash.chunk";
 import config from "../config";
 import dynamic from "next/dynamic";
 
@@ -25,11 +25,11 @@ const Controls = dynamic(() => import("./Controls"), {
   ssr: false,
 });
 
-const allElements = parsedSvg
+const elementsToDraw = parsedSvg
   .returnSupportedElements()
   .map((pl) => returnPointsFromElement(pl));
 
-const { width, height } = getDimensions(allElements);
+const { width, height } = getDimensions(elementsToDraw);
 const scaling = Math.min(
   ...[
     new BigDecimal(config.paper.width).div(new BigDecimal(width)).toNumber(),
@@ -37,22 +37,22 @@ const scaling = Math.min(
   ]
 );
 
-const allElementsScaled = scale(allElements, scaling);
-const { top, left } = getPosition(allElementsScaled);
-const { width: scaledWidth, height: scaledHeight } = getDimensions(
-  allElementsScaled
-);
+// add projection
+const mirroredY = mirrorY(elementsToDraw);
+const scaled = scale(mirroredY, scaling);
+const { top, left } = getPosition(scaled);
+const { width: scaledWidth, height: scaledHeight } = getDimensions(scaled);
 
-const allElementsMoved = move(allElementsScaled, {
+const moved = move(scaled, {
   top:
     -top - config.paper.topDistance - (config.paper.height - scaledHeight) / 2,
-  left: -left - scaledWidth / 2,
+  left: -left - config.paper.width / 2 + (config.paper.width - scaledWidth) / 2,
 });
 
 const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
 const defaultUpperRight = [config.cylinder.distance / 2, 0];
 
-const penPositions = allElementsMoved.flat();
+const penPositions = moved.flat();
 
 const Penplotter = () => {
   const { penPositionX, penPositionY } = useSpring({
@@ -79,7 +79,7 @@ const Penplotter = () => {
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
           />
-          {scaled.map((el, i) => {
+          {moved.map((el, i) => {
             return (
               <line
                 key={i}
