@@ -81,7 +81,7 @@ const Penplotter = () => {
             <line
               key={i}
               geometry={new THREE.BufferGeometry().setFromPoints(
-                el.map((point) => new THREE.Vector3(point[0], point[1], 0))
+                el.map((point) => new THREE.Vector3(point[0], point[1], 0.5))
               )}
             >
               <lineBasicMaterial attach="material" color="black" />
@@ -90,9 +90,9 @@ const Penplotter = () => {
           <animated.line
             geometry={penPositionX.interpolate((penX) =>
               new THREE.BufferGeometry().setFromPoints([
-                new THREE.Vector3(...defaultUpperLeft, 0),
-                new THREE.Vector3(penX, penPositionY.payload[0].value, 0),
-                new THREE.Vector3(...defaultUpperRight, 0),
+                new THREE.Vector3(...defaultUpperLeft, 1),
+                new THREE.Vector3(penX, penPositionY.payload[0].value, 1),
+                new THREE.Vector3(...defaultUpperRight, 1),
               ])
             )}
           >
