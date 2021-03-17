@@ -73,8 +73,8 @@ const Penplotter = () => {
 
   return (
     <>
-      <Canvas camera={{ position: [-20 * 10, 0, -75 * 10] }}>
-        <group position={[0, config.paper.height, 0]}>
+      <Canvas camera={{ position: [20 * 10, 0, 75 * 10] }}>
+        <group position={[0, 0, 0]}>
           <Paper
             width={config.paper.width}
             height={config.paper.height}
