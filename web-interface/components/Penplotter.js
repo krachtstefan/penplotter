@@ -80,7 +80,19 @@ const Penplotter = () => {
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
           />
-          {/* <animated.line
+          {allElements.map((el, i) => {
+            return (
+              <line
+                key={i}
+                geometry={new THREE.BufferGeometry().setFromPoints(
+                  el.map((point) => new THREE.Vector3(point[0], point[1], 0))
+                )}
+              >
+                <lineBasicMaterial attach="material" color="black" />
+              </line>
+            );
+          })}
+          <animated.line
             geometry={penPositionX.interpolate((penX) => {
               if (ref.current) {
                 let points = [];
@@ -106,15 +118,11 @@ const Penplotter = () => {
               ]);
             })}
           >
-            <lineBasicMaterial
-              linewidth={200}
-              attach="material"
-              color="black"
-            />
-          </animated.line> */}
-          <line ref={ref}>
+            <lineBasicMaterial attach="material" color="grey" />
+          </animated.line>
+          {/* <line ref={ref}>
             <lineBasicMaterial attach="material" color="green" />
-          </line>
+          </line> */}
           <Grid />
         </group>
         <Controls />
