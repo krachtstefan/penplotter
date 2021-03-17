@@ -1,6 +1,5 @@
 import * as THREE from "three";
 
-import { Canvas, useResource } from "react-three-fiber";
 import PenPlotter, {
   getDimensions,
   getPosition,
@@ -11,6 +10,7 @@ import PenPlotter, {
 import { animated, useSpring } from "react-spring/three.cjs";
 
 import BigDecimal from "decimal.js";
+import { Canvas } from "react-three-fiber";
 import Grid from "./Grid";
 import Paper from "./Paper";
 import React from "react";
@@ -55,7 +55,6 @@ const defaultUpperRight = [config.cylinder.distance / 2, 0];
 const penPositions = allElementsMoved.flat();
 
 const Penplotter = () => {
-  const ref = useResource();
   const { penPositionX, penPositionY } = useSpring({
     from: {
       penPositionX: [penPositions[0][0]],
@@ -80,7 +79,7 @@ const Penplotter = () => {
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
           />
-          {allElements.map((el, i) => {
+          {scaled.map((el, i) => {
             return (
               <line
                 key={i}
@@ -93,36 +92,17 @@ const Penplotter = () => {
             );
           })}
           <animated.line
-            geometry={penPositionX.interpolate((penX) => {
-              if (ref.current) {
-                let points = [];
-                if (
-                  ref.current.geometry.attributes &&
-                  ref.current.geometry.attributes.position
-                ) {
-                  points = chunk(
-                    ref.current.geometry.attributes.position.array,
-                    3
-                  ).map(([x, y, z]) => new THREE.Vector3(x, y, z));
-                }
-                points.push(
-                  new THREE.Vector3(penX, penPositionY.payload[0].value, 0)
-                );
-                ref.current.geometry.setFromPoints(points);
-              }
-
-              return new THREE.BufferGeometry().setFromPoints([
+            geometry={penPositionX.interpolate((penX) =>
+              new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(...defaultUpperLeft, 0),
                 new THREE.Vector3(penX, penPositionY.payload[0].value, 0),
                 new THREE.Vector3(...defaultUpperRight, 0),
-              ]);
-            })}
+              ])
+            )}
           >
             <lineBasicMaterial attach="material" color="grey" />
           </animated.line>
-          {/* <line ref={ref}>
-            <lineBasicMaterial attach="material" color="green" />
-          </line> */}
+
           <Grid />
         </group>
         <Controls />
