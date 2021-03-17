@@ -77,18 +77,16 @@ const Penplotter = () => {
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
           />
-          {moved.map((el, i) => {
-            return (
-              <line
-                key={i}
-                geometry={new THREE.BufferGeometry().setFromPoints(
-                  el.map((point) => new THREE.Vector3(point[0], point[1], 0))
-                )}
-              >
-                <lineBasicMaterial attach="material" color="black" />
-              </line>
-            );
-          })}
+          {moved.map((el, i) => (
+            <line
+              key={i}
+              geometry={new THREE.BufferGeometry().setFromPoints(
+                el.map((point) => new THREE.Vector3(point[0], point[1], 0))
+              )}
+            >
+              <lineBasicMaterial attach="material" color="black" />
+            </line>
+          ))}
           <animated.line
             geometry={penPositionX.interpolate((penX) =>
               new THREE.BufferGeometry().setFromPoints([
