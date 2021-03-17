@@ -5,7 +5,7 @@ import PenPlotter, {
   getPosition,
   mirrorY,
   move,
-  returnPointsFromElement,
+  returnPointsArrFromElement,
   scale,
 } from "../lib/plotter-model";
 import { animated, useSpring } from "react-spring/three.cjs";
@@ -27,7 +27,8 @@ const Controls = dynamic(() => import("./Controls"), {
 
 const elementsToDraw = parsedSvg
   .returnSupportedElements()
-  .map((pl) => returnPointsFromElement(pl));
+  .map((pl) => returnPointsArrFromElement(pl))
+  .flat();
 
 const { width, height } = getDimensions(elementsToDraw);
 const scaling = Math.min(

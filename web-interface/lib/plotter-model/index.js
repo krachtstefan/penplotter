@@ -63,34 +63,42 @@ export const translateSVGPoints = (pointString) =>
 export const returnPointsFromElement = (element) => {
   switch (element.tagName) {
     case TYPES.polyline:
-      return translateSVGPoints(element.properties.points);
+      return [translateSVGPoints(element.properties.points)];
     case TYPES.polygon:
       /**
        * polygon is like polyline, except the path is closed,
        * we need to copy the first coordinates
        */
-      return translateSVGPoints(
-        `${element.properties.points} ${element.properties.points
-          .split(" ")
-          .slice(0, 2)
-          .join(" ")}`
-      );
+      return [
+        translateSVGPoints(
+          `${element.properties.points} ${element.properties.points
+            .split(" ")
+            .slice(0, 2)
+            .join(" ")}`
+        ),
+      ];
 
     case TYPES.line:
       const { x1, x2, y1, y2 } = element.properties;
       return [
-        [x1, y1],
-        [x2, y2],
+        [
+          [x1, y1],
+          [x2, y2],
+        ],
       ];
     case TYPES.rect:
       const { x, y, width, height } = element.properties;
       return [
-        [x, y],
-        [x + width, y],
-        [x + width, y + height],
-        [x, y + height],
-        [x, y],
+        [
+          [x, y],
+          [x + width, y],
+          [x + width, y + height],
+          [x, y + height],
+          [x, y],
+        ],
       ];
+    case TYPES.path:
+      return translatePathPoints(element.properties.d);
     default:
       return [];
   }
