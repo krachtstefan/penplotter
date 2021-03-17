@@ -66,7 +66,6 @@ const Penplotter = () => {
       };
     }),
     delay: 1000,
-    config: { duration: 150 },
   });
 
   return (
