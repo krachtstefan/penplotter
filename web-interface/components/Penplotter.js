@@ -70,20 +70,23 @@ const Penplotter = () => {
 
   return (
     <>
-      <Canvas camera={{ position: [20 * 10, 0, 75 * 10] }}>
+      <Canvas
+        camera={{ position: [20 * 10, 0, 75 * 10] }}
+        onCreated={({ gl }) => gl.setClearColor("white")}
+      >
         <group position={[0, config.paper.height, 0]}>
           <Material
             width={config.board.width}
             height={config.board.height}
             center={[0, -config.board.height / 2, 0]}
-            zPosition={0}
-            color={"grey"}
+            zPosition={-2}
+            color={"#e1e4e8"}
           />
           <Material
             width={config.paper.width}
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
-            zPosition={1}
+            zPosition={-1}
             color={"white"}
           />
 
@@ -94,7 +97,7 @@ const Penplotter = () => {
                 el.map((point) => new THREE.Vector3(point[0], point[1], 2))
               )}
             >
-              <lineBasicMaterial attach="material" color="black" />
+              <lineBasicMaterial attach="material" color="#444c56" />
             </line>
           ))}
           <animated.line
@@ -106,10 +109,10 @@ const Penplotter = () => {
               ])
             )}
           >
-            <lineBasicMaterial attach="material" color="black" />
+            <lineBasicMaterial attach="material" color="#444c56" />
           </animated.line>
 
-          <Grid />
+          {/* <Grid /> */}
         </group>
         <Controls />
       </Canvas>
