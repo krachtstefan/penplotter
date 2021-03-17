@@ -122,6 +122,12 @@ export const scale = (arrOfPointArrays, factor) =>
     ])
   );
 
+export const mirrorX = (arrOfPointArrays) =>
+  arrOfPointArrays.map((pA) => pA.map(([x, y]) => [-x, y]));
+
+export const mirrorY = (arrOfPointArrays) =>
+  arrOfPointArrays.map((pA) => pA.map(([x, y]) => [x, -y]));
+
 export const move = (arrOfPointArrays, { top, left }) =>
   arrOfPointArrays.map((pA) =>
     pA.map(([x, y]) => [
