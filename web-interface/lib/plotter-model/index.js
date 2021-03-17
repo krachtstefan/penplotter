@@ -6,6 +6,7 @@ const TYPES = {
   polygon: "polygon",
   line: "line",
   rect: "rect",
+  path: "path",
 };
 
 class PenPlotter {
@@ -17,6 +18,7 @@ class PenPlotter {
       TYPES.polygon,
       TYPES.line,
       TYPES.rect,
+      TYPES.path,
     ];
   }
 
@@ -60,7 +62,36 @@ export const translateSVGPoints = (pointString) =>
       }
     }, []);
 
-export const returnPointsFromElement = (element) => {
+export const translatePathString = (pathString) =>
+  pathString
+    .split("M") // M (move) command, starts a new element
+    .filter((x) => x !== "")
+    .map((x) =>
+      `M${x}`
+        .split(" ")
+        .filter((x) => x !== "")
+        .reduce((prev, curr) => {
+          const command = curr.slice(0, 1);
+          const args = curr.slice(1).split(",");
+          let newCoor = [];
+          switch (`${command}`) {
+            case "Z": // close path command
+              newCoor = [prev[0]];
+              break;
+            case "L": // L (line) command draws to a new coordinate
+              newCoor = [args];
+              break;
+            // note, implement lowercase
+            default:
+              console.error(
+                `path command ${command[0]} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
+              );
+          }
+          return [...prev, ...newCoor];
+        }, [])
+    );
+
+export const returnPointsArrFromElement = (element) => {
   switch (element.tagName) {
     case TYPES.polyline:
       return [translateSVGPoints(element.properties.points)];
@@ -98,7 +129,7 @@ export const returnPointsFromElement = (element) => {
         ],
       ];
     case TYPES.path:
-      return translatePathPoints(element.properties.d);
+      return translatePathString(element.properties.d);
     default:
       return [];
   }
@@ -143,5 +174,7 @@ export const move = (arrOfPointArrays, { top, left }) =>
       new BigDecimal(y).add(top || 0).toNumber(),
     ])
   );
+
+// add porjection /
 
 export default PenPlotter;
