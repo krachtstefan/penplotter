@@ -48,8 +48,8 @@ const moved = move(scaled, {
   left: -left - config.paper.width / 2 + (config.paper.width - scaledWidth) / 2,
 });
 
-const defaultUpperLeft = [-config.cylinder.distance / 2, 0];
-const defaultUpperRight = [config.cylinder.distance / 2, 0];
+const upperLeft = [-config.cylinder.distance / 2, 0];
+const upperRight = [config.cylinder.distance / 2, 0];
 
 const penPositions = moved.flat();
 
@@ -103,9 +103,9 @@ const Penplotter = () => {
           <animated.line
             geometry={penPositionX.interpolate((penX) =>
               new THREE.BufferGeometry().setFromPoints([
-                new THREE.Vector3(...defaultUpperLeft, 3),
+                new THREE.Vector3(...upperLeft, 3),
                 new THREE.Vector3(penX, penPositionY.payload[0].value, 3),
-                new THREE.Vector3(...defaultUpperRight, 3),
+                new THREE.Vector3(...upperRight, 3),
               ])
             )}
           >
