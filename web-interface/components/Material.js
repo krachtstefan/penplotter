@@ -2,15 +2,21 @@ import * as THREE from "three";
 
 import React, { useMemo } from "react";
 
-const Paper = ({ width = 20, height = 20, center = [0, 0, 0] }) => {
+const Paper = ({
+  width = 20,
+  height = 20,
+  center = [0, 0, 0],
+  zPosition = 0,
+  color = "white",
+}) => {
   const f32array = useMemo(() => {
     const vertices = [
-      new THREE.Vector3(-width / 2, -height / 2, 0),
-      new THREE.Vector3(width / 2, -height / 2, 0),
-      new THREE.Vector3(width / 2, height / 2, 0),
-      new THREE.Vector3(width / 2, height / 2, 0),
-      new THREE.Vector3(-width / 2, height / 2, 0),
-      new THREE.Vector3(-width / 2, -height / 2, 0),
+      new THREE.Vector3(-width / 2, -height / 2, zPosition),
+      new THREE.Vector3(width / 2, -height / 2, zPosition),
+      new THREE.Vector3(width / 2, height / 2, zPosition),
+      new THREE.Vector3(width / 2, height / 2, zPosition),
+      new THREE.Vector3(-width / 2, height / 2, zPosition),
+      new THREE.Vector3(-width / 2, -height / 2, zPosition),
     ];
 
     return Float32Array.from(
@@ -28,7 +34,7 @@ const Paper = ({ width = 20, height = 20, center = [0, 0, 0] }) => {
       </bufferGeometry>
       <meshBasicMaterial
         attach="material"
-        color="white"
+        color={color}
         wireframe={false}
         side={THREE.DoubleSide}
       />

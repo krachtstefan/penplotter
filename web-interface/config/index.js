@@ -8,6 +8,10 @@ const config = {
     height: 297,
     topDistance: 210,
   },
+  board: {
+    width: 410,
+    height: 510,
+  },
   pen: {
     topDistance: 210,
   },

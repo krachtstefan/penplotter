@@ -13,7 +13,7 @@ import { animated, useSpring } from "react-spring/three.cjs";
 import BigDecimal from "decimal.js";
 import { Canvas } from "react-three-fiber";
 import Grid from "./Grid";
-import Paper from "./Paper";
+import Material from "./Material";
 import React from "react";
 import config from "../config";
 import dynamic from "next/dynamic";
@@ -72,16 +72,26 @@ const Penplotter = () => {
     <>
       <Canvas camera={{ position: [20 * 10, 0, 75 * 10] }}>
         <group position={[0, config.paper.height, 0]}>
-          <Paper
+          <Material
+            width={config.board.width}
+            height={config.board.height}
+            center={[0, -config.board.height / 2, 0]}
+            zPosition={0}
+            color={"grey"}
+          />
+          <Material
             width={config.paper.width}
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
+            zPosition={1}
+            color={"white"}
           />
+
           {moved.map((el, i) => (
             <line
               key={i}
               geometry={new THREE.BufferGeometry().setFromPoints(
-                el.map((point) => new THREE.Vector3(point[0], point[1], 0.5))
+                el.map((point) => new THREE.Vector3(point[0], point[1], 2))
               )}
             >
               <lineBasicMaterial attach="material" color="black" />
@@ -90,13 +100,13 @@ const Penplotter = () => {
           <animated.line
             geometry={penPositionX.interpolate((penX) =>
               new THREE.BufferGeometry().setFromPoints([
-                new THREE.Vector3(...defaultUpperLeft, 1),
-                new THREE.Vector3(penX, penPositionY.payload[0].value, 1),
-                new THREE.Vector3(...defaultUpperRight, 1),
+                new THREE.Vector3(...defaultUpperLeft, 3),
+                new THREE.Vector3(penX, penPositionY.payload[0].value, 3),
+                new THREE.Vector3(...defaultUpperRight, 3),
               ])
             )}
           >
-            <lineBasicMaterial attach="material" color="grey" />
+            <lineBasicMaterial attach="material" color="black" />
           </animated.line>
 
           <Grid />
