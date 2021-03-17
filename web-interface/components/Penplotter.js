@@ -2,6 +2,7 @@ import * as THREE from "three";
 
 import PenPlotter, {
   getDimensions,
+  getLenghtByPoints,
   getPosition,
   mirrorY,
   move,
@@ -52,6 +53,24 @@ const upperLeft = [-config.cylinder.distance / 2, 0];
 const upperRight = [config.cylinder.distance / 2, 0];
 
 const penPositions = moved.flat();
+
+const lengthSequence = penPositions.map((pos) => [
+  getLenghtByPoints(upperLeft, pos),
+  getLenghtByPoints(upperRight, pos),
+]);
+
+const lengthChangeSequence = lengthSequence.map((co, i, srcArr) =>
+  i > 0
+    ? [srcArr[i - 1][0].minus(co[0]), srcArr[i - 1][1].minus(co[1])]
+    : [new BigDecimal(0), new BigDecimal(0)]
+);
+
+const rotationDegSequence = lengthChangeSequence.map((x) => [
+  x[0].div(config.cylinder.circumference).times(360).toNumber(),
+  x[1].div(config.cylinder.circumference).times(360).toNumber(),
+]);
+
+console.log(rotationDegSequence);
 
 const Penplotter = () => {
   const { penPositionX, penPositionY } = useSpring({
