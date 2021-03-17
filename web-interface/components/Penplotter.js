@@ -112,7 +112,7 @@ const Penplotter = () => {
             <lineBasicMaterial attach="material" color="#444c56" />
           </animated.line>
 
-          {/* <Grid /> */}
+          <Grid />
         </group>
         <Controls />
       </Canvas>
