@@ -25,31 +25,31 @@ board.on("ready", () => {
     },
   });
 
-  // const pen = new Servo({
-  //   pin: hardware.pen.pin,
-  //   range: [0, 180],
-  //   startAt: 0,
-  // });
-  // const liftPen = () => {
-  //   pen.to(0);
-  // };
-  // const attachPen = () => {
-  //   pen.to(180);
-  // };
+  const pen = new Servo({
+    pin: hardware.pen.pin,
+    range: [0, 180],
+    startAt: 0,
+  });
+  const liftPen = () => {
+    pen.to(0);
+  };
+  const attachPen = () => {
+    pen.to(180);
+  };
 
-  // liftPen();
+  liftPen();
 
   stepperRight
     .rpm(180)
     .cw()
     .step(1600, () => {
-      // attachPen();
+      attachPen();
     });
 
   stepperLeft
     .rpm(180)
     .ccw()
     .step(1600, () => {
-      // attachPen();
+      attachPen();
     });
 });
