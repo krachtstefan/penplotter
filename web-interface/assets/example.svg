@@ -1,12 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="520px" height="528px" viewBox="0 0 520 528" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-    <title>example</title>
+<svg width="64px" height="59px" viewBox="0 0 64 59" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+    <title>Path 2</title>
     <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="example" stroke="#979797">
-            <polygon id="Path" points="84.7695312 195.289063 131.347656 421.4375 301.230469 319.636719 261.5625 187.730469 444.160156 66.871094 75.8125 94.7031252 17.578125 167.726563"></polygon>
-            <polyline id="Path-2" points="359.410156 364.171875 353.679687 481.878906 279.632813 526.945313"></polyline>
-            <line x1="518.722656" y1="171.222656" x2="518.722656" y2="432.59375" id="Path-2"></line>
-            <rect id="Rectangle" x="0.5" y="0.5" width="187" height="102"></rect>
-        </g>
+        <polygon id="Path-2" stroke="#979797" points="32 0.25 41.34375 18.90625 62.90625 22.65625 47.9375 37.65625 51.125 58.25 32 48.875 12.875 58.25 16.0625 37.65625 1.09375 22.65625 22.65625 18.90625"></polygon>
     </g>
 </svg>
