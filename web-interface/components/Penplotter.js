@@ -80,7 +80,7 @@ const Penplotter = () => {
             height={config.paper.height}
             center={[0, -config.paper.height / 2 - config.paper.topDistance, 0]}
           />
-          <animated.line
+          {/* <animated.line
             geometry={penPositionX.interpolate((penX) => {
               if (ref.current) {
                 let points = [];
@@ -111,7 +111,7 @@ const Penplotter = () => {
               attach="material"
               color="black"
             />
-          </animated.line>
+          </animated.line> */}
           <line ref={ref}>
             <lineBasicMaterial attach="material" color="green" />
           </line>
