@@ -5,7 +5,7 @@ const Grid = ({ size }) => {
 
   useEffect(() => {
     if (gridRef && gridRef.current) {
-      gridRef.current.material.opacity = 0.2;
+      gridRef.current.material.opacity = 0.1;
       gridRef.current.material.transparent = true;
       gridRef.current.rotateX(Math.PI / 2);
     }
