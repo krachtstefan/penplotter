@@ -21,9 +21,7 @@ import dynamic from "next/dynamic";
 const svgFile = preval`module.exports = require("fs").readFileSync("./assets/example.svg", "utf8")`;
 const parsedSvg = new PenPlotter(svgFile);
 
-const Controls = dynamic(() => import("./Controls"), {
-  ssr: false,
-});
+const Controls = dynamic(() => import("./Controls"), { ssr: false });
 
 const elementsToDraw = parsedSvg
   .returnSupportedElements()
