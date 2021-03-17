@@ -89,6 +89,7 @@ export const returnPointsFromElement = (element) => {
         [x + width, y],
         [x + width, y + height],
         [x, y + height],
+        [x, y],
       ];
     default:
       return [];
