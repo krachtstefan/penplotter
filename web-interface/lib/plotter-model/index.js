@@ -175,6 +175,4 @@ export const move = (arrOfPointArrays, { top, left }) =>
     ])
   );
 
-// add porjection /
-
 export default PenPlotter;
