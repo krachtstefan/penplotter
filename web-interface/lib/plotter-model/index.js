@@ -5,13 +5,19 @@ const TYPES = {
   polyline: "polyline",
   polygon: "polygon",
   line: "line",
+  rect: "rect",
 };
 
 class PenPlotter {
   constructor(svg) {
     const svgObj = parse(svg);
     this.elements = this._getAllElements(svgObj);
-    this.supportedTypes = [TYPES.polyline, TYPES.polygon, TYPES.line];
+    this.supportedTypes = [
+      TYPES.polyline,
+      TYPES.polygon,
+      TYPES.line,
+      TYPES.rect,
+    ];
   }
 
   returnElementsByTagName = function (tagnames) {
@@ -75,6 +81,14 @@ export const returnPointsFromElement = (element) => {
       return [
         [x1, y1],
         [x2, y2],
+      ];
+    case TYPES.rect:
+      const { x, y, width, height } = element.properties;
+      return [
+        [x, y],
+        [x + width, y],
+        [x + width, y + height],
+        [x, y + height],
       ];
     default:
       return [];
