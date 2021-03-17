@@ -1,11 +1,12 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<svg width="504px" height="462px" viewBox="0 0 504 462" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
+<svg width="520px" height="528px" viewBox="0 0 520 528" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
     <title>example</title>
-    <g id="Page-1" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
-        <g id="example" transform="translate(1.000000, 0.000000)" stroke="#979797">
-            <polygon id="Path" points="67.7695312 129.289063 114.347656 355.4375 284.230469 253.636719 244.5625 121.730469 427.160156 0.871094 58.8125 28.7031252 0.578125 101.726563"></polygon>
-            <polyline id="Path-2" points="342.410156 298.171875 336.679687 415.878906 262.632813 460.945313"></polyline>
-            <line x1="501.722656" y1="105.222656" x2="501.722656" y2="366.59375" id="Path-2"></line>
+    <g id="Page-2" stroke="none" stroke-width="1" fill="none" fill-rule="evenodd">
+        <g id="example" stroke="#979797">
+            <polygon id="Path" points="84.7695312 195.289063 131.347656 421.4375 301.230469 319.636719 261.5625 187.730469 444.160156 66.871094 75.8125 94.7031252 17.578125 167.726563"></polygon>
+            <polyline id="Path-2" points="359.410156 364.171875 353.679687 481.878906 279.632813 526.945313"></polyline>
+            <line x1="518.722656" y1="171.222656" x2="518.722656" y2="432.59375" id="Path-2"></line>
+            <rect id="Rectangle" x="0.5" y="0.5" width="187" height="102"></rect>
         </g>
     </g>
 </svg>
