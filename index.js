@@ -81,19 +81,37 @@ board.on("ready", () => {
     pen.to(180);
   };
 
+  const rotateRight = (degree) =>
+    new Promise((resolve, reject) => {
+      console.log(`started right ${degree}`);
+      stepperRight
+        .rpm(degree)
+        .cw()
+        .step(1600, () => {
+          console.log(`finished right ${degree}`);
+          resolve();
+        });
+    });
+
+  const rotateLeft = (degree) =>
+    new Promise((resolve, reject) => {
+      console.log(`started left ${degree}`);
+      stepperLeft
+        .rpm(degree)
+        .ccw()
+        .step(1600, () => {
+          console.log(`finished left ${degree}`);
+          resolve();
+        });
+    });
+
   liftPen();
 
-  stepperRight
-    .rpm(180)
-    .cw()
-    .step(1600, () => {
-      attachPen();
-    });
-
-  stepperLeft
-    .rpm(180)
-    .ccw()
-    .step(1600, () => {
-      attachPen();
-    });
+  instructionSequence.reduce(
+    (promise, coordinate) =>
+      promise.then((_) =>
+        Promise.all([rotateLeft(coordinate[0]), rotateRight(coordinate[1])])
+      ),
+    Promise.resolve()
+  );
 });
