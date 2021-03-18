@@ -86,7 +86,7 @@ board.on("ready", () => {
       console.log(`started right ${degree}`);
       stepperRight
         .rpm(degree)
-        .cw()
+        .direction(degree > 0 ? 1 : 0)
         .step(1600, () => {
           console.log(`finished right ${degree}`);
           resolve();
@@ -98,7 +98,7 @@ board.on("ready", () => {
       console.log(`started left ${degree}`);
       stepperLeft
         .rpm(degree)
-        .ccw()
+        .direction(degree > 0 ? 1 : 0)
         .step(1600, () => {
           console.log(`finished left ${degree}`);
           resolve();
