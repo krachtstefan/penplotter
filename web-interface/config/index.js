@@ -1,19 +1,19 @@
 const config = {
   cylinder: {
-    distance: 365,
+    distance: 747,
     circumference: 40,
   },
   paper: {
     width: 210,
     height: 297,
-    topDistance: 210,
+    topDistance: 450,
   },
   board: {
-    width: 410,
-    height: 510,
+    width: 800,
+    height: 1170,
   },
   pen: {
-    topDistance: 210,
+    topDistance: 450,
   },
 };
 
