@@ -1,4 +1,7 @@
 const { Board, Stepper, Servo } = require("johnny-five");
+
+const BigDecimal = require("decimal.js");
+
 const board = new Board();
 
 const hardware = {
@@ -86,15 +89,20 @@ board.on("ready", () => {
 
   const rotate = (motor, degree) =>
     new Promise((resolve, reject) => {
-      console.log(`started right ${degree}`);
+      console.log(`started ${degree}`);
+      const steps = new BigDecimal(degree)
+        .abs()
+        .div(new BigDecimal(360))
+        .times(hardware.stepper.stepsPerRotation)
+        .toNumber();
       motor.step(
         {
           rpm: 180,
-          steps: hardware.stepper.stepsPerRotation,
+          steps,
           direction: degree > 0 ? 1 : 0,
         },
         () => {
-          console.log(`finished left ${degree}`);
+          console.log(`finished ${degree}`);
           resolve();
         }
       );
