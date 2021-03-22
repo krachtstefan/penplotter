@@ -90,11 +90,13 @@ board.on("ready", () => {
   const rotate = (motor, degree) =>
     new Promise((resolve, reject) => {
       console.log(`started ${degree}`);
-      const steps = new BigDecimal(degree)
-        .abs()
-        .div(new BigDecimal(360))
-        .times(hardware.stepper.stepsPerRotation)
-        .toNumber();
+      const steps = Math.round(
+        new BigDecimal(degree)
+          .abs()
+          .div(new BigDecimal(360))
+          .times(hardware.stepper.stepsPerRotation)
+          .toNumber()
+      );
       motor.step(
         {
           rpm: 180,
