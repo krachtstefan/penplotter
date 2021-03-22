@@ -102,12 +102,14 @@ board.on("ready", () => {
 
   liftPen();
 
-  rotate(stepperRight);
-  // instructionSequence.reduce(
-  //   (promise, coordinate) =>
-  //     promise.then((_) =>
-  //       Promise.all([rotateLeft(coordinate[0]), rotateRight(coordinate[1])])
-  //     ),
-  //   Promise.resolve()
-  // );
+  instructionSequence.reduce(
+    (promise, coordinate) =>
+      promise.then((_) =>
+        Promise.all([
+          rotate(stepperLeft, coordinate[0]),
+          rotate(stepperRight, coordinate[1]),
+        ])
+      ),
+    Promise.resolve()
+  );
 });
