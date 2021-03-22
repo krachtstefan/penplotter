@@ -5,6 +5,9 @@ const hardware = {
   pen: {
     pin: 11,
   },
+  stepper: {
+    stepsPerRotation: 1600,
+  },
 };
 
 const instructionSequence = [
@@ -87,7 +90,7 @@ board.on("ready", () => {
       motor.step(
         {
           rpm: 180,
-          steps: 1600,
+          steps: hardware.stepper.stepsPerRotation,
           direction: degree > 0 ? 1 : 0,
         },
         () => {
