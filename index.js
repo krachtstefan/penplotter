@@ -81,37 +81,30 @@ board.on("ready", () => {
     pen.to(180);
   };
 
-  const rotateRight = (degree) =>
+  const rotate = (motor, degree) =>
     new Promise((resolve, reject) => {
       console.log(`started right ${degree}`);
-      stepperRight
-        .rpm(degree)
-        .direction(degree > 0 ? 1 : 0)
-        .step(1600, () => {
-          console.log(`finished right ${degree}`);
-          resolve();
-        });
-    });
-
-  const rotateLeft = (degree) =>
-    new Promise((resolve, reject) => {
-      console.log(`started left ${degree}`);
-      stepperLeft
-        .rpm(degree)
-        .direction(degree > 0 ? 1 : 0)
-        .step(1600, () => {
+      motor.step(
+        {
+          rpm: 180,
+          steps: 1600,
+          direction: degree > 0 ? 1 : 0,
+        },
+        () => {
           console.log(`finished left ${degree}`);
           resolve();
-        });
+        }
+      );
     });
 
   liftPen();
 
-  instructionSequence.reduce(
-    (promise, coordinate) =>
-      promise.then((_) =>
-        Promise.all([rotateLeft(coordinate[0]), rotateRight(coordinate[1])])
-      ),
-    Promise.resolve()
-  );
+  rotate(stepperRight);
+  // instructionSequence.reduce(
+  //   (promise, coordinate) =>
+  //     promise.then((_) =>
+  //       Promise.all([rotateLeft(coordinate[0]), rotateRight(coordinate[1])])
+  //     ),
+  //   Promise.resolve()
+  // );
 });
