@@ -36,7 +36,7 @@ const Penplotter = () => {
   const { gridEnabled } = useControls("Settings", {
     gridEnabled: {
       value: true,
-      label: "grid",
+      label: "show grid",
     },
   });
   const { boardWidth, boardHeight } = useControls("Board", {
