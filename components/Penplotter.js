@@ -34,17 +34,20 @@ const elementsToDraw = parsedSvg
 const { width, height } = getDimensions(elementsToDraw);
 
 const Penplotter = () => {
-  const {
-    gridEnabled,
-    boardWidth,
-    boardHeight,
-    cylinderDistance,
-    paperCustomWidth,
-    paperCustomHeight,
-    paperTopDistance,
-    paperPresets,
-    paperPadding,
-  } = useControls({
+  const [
+    {
+      gridEnabled,
+      boardWidth,
+      boardHeight,
+      cylinderDistance,
+      paperCustomWidth,
+      paperCustomHeight,
+      paperTopDistance,
+      paperPresets,
+      paperPadding,
+    },
+    set,
+  ] = useControls(() => ({
     Settings: folder({
       gridEnabled: {
         value: true,
@@ -114,7 +117,7 @@ const Penplotter = () => {
     "": folder({
       "copy penplotter intructions": button(() => setCopied()),
     }),
-  });
+  }));
 
   const paperWidth =
     paperPresets && paperPresets.width ? paperPresets.width : paperCustomWidth;
