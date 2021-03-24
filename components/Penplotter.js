@@ -52,14 +52,12 @@ const Penplotter = () => {
     Board: folder({
       boardWidth: {
         value: config.board.width,
-        min: 0,
-        max: 1500,
+        ...config.board.range.width,
         label: "width",
       },
       boardHeight: {
         value: config.board.height,
-        min: 0,
-        max: 1500,
+        ...config.board.range.height,
         label: "height",
       },
       paperTopDistance: {
@@ -79,10 +77,7 @@ const Penplotter = () => {
       paperPresets: {
         label: "presets",
         options: {
-          "a4 portrait": { width: 210, height: 297 },
-          "a4 landscape": { width: 297, height: 210 },
-          "a3 portrait": { width: 420, height: 594 },
-          "a3 landscape": { width: 594, height: 420 },
+          ...config.paper.presets,
           custom: null,
         },
       },
@@ -171,7 +166,7 @@ const Penplotter = () => {
         camera={{ position: [20 * 10, 0, 75 * 10] }}
         onCreated={({ gl }) => gl.setClearColor("white")}
       >
-        <group position={[0, paperHeight, 0]}>
+        <group position={[0, 500, 0]}>
           <Material
             width={boardWidth}
             height={boardHeight}
