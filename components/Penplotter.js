@@ -39,6 +39,20 @@ const Penplotter = () => {
       label: "grid",
     },
   });
+  const { boardWidth, boardHeight } = useControls("Board", {
+    boardWidth: {
+      value: config.board.width,
+      min: 0,
+      max: 1500,
+      label: "width",
+    },
+    boardHeight: {
+      value: config.board.height,
+      min: 0,
+      max: 1500,
+      label: "height",
+    },
+  });
   const { cylinderDistance } = useControls("Cylinder", {
     cylinderDistance: {
       value: config.cylinder.distance,
@@ -131,9 +145,9 @@ const Penplotter = () => {
       >
         <group position={[0, paperHeight, 0]}>
           <Material
-            width={config.board.width}
-            height={config.board.height}
-            center={[0, -config.board.height / 2, 0]}
+            width={boardWidth}
+            height={boardHeight}
+            center={[0, -boardHeight / 2, 0]}
             zPosition={-2}
             color={"#e1e4e8"}
           />
