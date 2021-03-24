@@ -62,19 +62,27 @@ const Penplotter = () => {
         max: 1500,
         label: "height",
       },
-    }),
-    Cylinder: folder({
+      paperTopDistance: {
+        value: config.paper.topDistance,
+        min: 0,
+        max: 500,
+        label: "paper distance",
+      },
       cylinderDistance: {
         value: config.cylinder.distance,
         min: 0,
         max: 1000,
-        label: "distance",
+        label: "cylinder distance",
       },
     }),
     Paper: folder({
       paperPresets: {
+        label: "presets",
         options: {
-          a4: { width: 210, height: 297 },
+          "a4 portrait": { width: 210, height: 297 },
+          "a4 landscape": { width: 297, height: 210 },
+          "a3 portrait": { width: 420, height: 594 },
+          "a3 landscape": { width: 594, height: 420 },
           custom: null,
         },
       },
@@ -91,12 +99,6 @@ const Penplotter = () => {
         max: 500,
         label: "height",
         render: (get) => get("Paper.paperPresets") === null,
-      },
-      paperTopDistance: {
-        value: config.paper.topDistance,
-        min: 0,
-        max: 500,
-        label: "distance",
       },
     }),
   });
