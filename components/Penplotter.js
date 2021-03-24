@@ -44,12 +44,14 @@ const Penplotter = () => {
       value: config.board.width,
       min: 0,
       max: 1500,
+      suffix: "mm",
       label: "width",
     },
     boardHeight: {
       value: config.board.height,
       min: 0,
       max: 1500,
+      suffix: "mm",
       label: "height",
     },
   });
@@ -58,6 +60,7 @@ const Penplotter = () => {
       value: config.cylinder.distance,
       min: 0,
       max: 1000,
+      suffix: "mm",
       label: "distance",
     },
   });
@@ -66,18 +69,21 @@ const Penplotter = () => {
       value: config.paper.width,
       min: 0,
       max: 500,
+      suffix: "mm",
       label: "width",
     },
     paperHeight: {
       value: config.paper.height,
       min: 0,
       max: 500,
+      suffix: "mm",
       label: "height",
     },
     paperTopDistance: {
       value: config.paper.topDistance,
       min: 0,
       max: 500,
+      suffix: "mm",
       label: "distance",
     },
   });
