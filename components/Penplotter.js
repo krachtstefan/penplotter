@@ -42,6 +42,7 @@ const Penplotter = () => {
     paperCustomHeight,
     paperTopDistance,
     paperPresets,
+    paperPadding,
   } = useControls({
     Settings: folder({
       gridEnabled: {
@@ -95,6 +96,12 @@ const Penplotter = () => {
         label: "height",
         render: (get) => get("Paper.paperPresets") === null,
       },
+      paperPadding: {
+        value: 0,
+        min: 0,
+        max: 50,
+        label: "padding",
+      },
     }),
   });
 
@@ -107,8 +114,12 @@ const Penplotter = () => {
 
   const scaling = Math.min(
     ...[
-      new BigDecimal(paperWidth).div(new BigDecimal(width)).toNumber(),
-      new BigDecimal(paperHeight).div(new BigDecimal(height)).toNumber(),
+      new BigDecimal(paperWidth - paperPadding * 2)
+        .div(new BigDecimal(width))
+        .toNumber(),
+      new BigDecimal(paperHeight - paperPadding * 2)
+        .div(new BigDecimal(height))
+        .toNumber(),
     ]
   );
 
