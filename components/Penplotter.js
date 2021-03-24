@@ -1,5 +1,6 @@
 import * as THREE from "three";
 
+import { Leva, useControls } from "leva";
 import PenPlotter, {
   getDimensions,
   getLenghtByPoints,
@@ -18,7 +19,6 @@ import Material from "./Material";
 import React from "react";
 import config from "../config";
 import dynamic from "next/dynamic";
-import { useControls } from "leva";
 
 const svgFile = preval`module.exports = require("fs").readFileSync("./assets/example.svg", "utf8")`;
 const parsedSvg = new PenPlotter(svgFile);
@@ -185,6 +185,7 @@ const Penplotter = () => {
         </group>
         <Controls />
       </Canvas>
+      <Leva hideCopyButton={true} />
     </>
   );
 };
