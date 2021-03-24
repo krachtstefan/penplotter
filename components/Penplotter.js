@@ -53,22 +53,19 @@ const Penplotter = () => {
     Board: folder({
       boardWidth: {
         value: config.board.width,
+        step: 1,
         ...config.board.range.width,
         label: "width",
       },
       boardHeight: {
         value: config.board.height,
+        step: 1,
         ...config.board.range.height,
         label: "height",
       },
-      paperTopDistance: {
-        value: config.paper.topDistance,
-        min: 0,
-        max: 800,
-        label: "paper distance",
-      },
       cylinderDistance: {
         value: config.cylinder.distance,
+        step: 1,
         min: 0,
         max: 1000,
         label: "cylinder distance",
@@ -84,6 +81,7 @@ const Penplotter = () => {
       },
       paperCustomWidth: {
         value: config.paper.width,
+        step: 1,
         min: 0,
         max: 500,
         label: "width",
@@ -91,6 +89,7 @@ const Penplotter = () => {
       },
       paperCustomHeight: {
         value: config.paper.height,
+        step: 1,
         min: 0,
         max: 500,
         label: "height",
@@ -98,9 +97,17 @@ const Penplotter = () => {
       },
       paperPadding: {
         value: 0,
+        step: 1,
         min: 0,
         max: 50,
         label: "padding",
+      },
+      paperTopDistance: {
+        value: config.paper.topDistance,
+        step: 1,
+        min: 0,
+        max: 800,
+        label: "paper distance",
       },
     }),
   });
