@@ -103,7 +103,7 @@ board.on("ready", () => {
       );
       motor.step(
         {
-          rpm: 180,
+          rpm: 90,
           steps,
           direction: degree > 0 ? 1 : 0,
         },
