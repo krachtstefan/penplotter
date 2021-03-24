@@ -162,7 +162,7 @@ const Penplotter = () => {
   );
 
   const rotationDegSequence = lengthChangeSequence.map((x) => [
-    x[0].div(config.cylinder.circumference).times(360).toNumber(),
+    -x[0].div(config.cylinder.circumference).times(360).toNumber(),
     x[1].div(config.cylinder.circumference).times(360).toNumber(),
   ]);
 
