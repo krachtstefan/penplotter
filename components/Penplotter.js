@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { Leva, useControls } from "leva";
+import { Leva, folder, useControls } from "leva";
 import PenPlotter, {
   getDimensions,
   getLenghtByPoints,
@@ -33,59 +33,63 @@ const elementsToDraw = parsedSvg
 const { width, height } = getDimensions(elementsToDraw);
 
 const Penplotter = () => {
-  const { gridEnabled } = useControls("Settings", {
-    gridEnabled: {
-      value: true,
-      label: "show grid",
-    },
-  });
-  const { boardWidth, boardHeight } = useControls("Board", {
-    boardWidth: {
-      value: config.board.width,
-      min: 0,
-      max: 1500,
-      suffix: "mm",
-      label: "width",
-    },
-    boardHeight: {
-      value: config.board.height,
-      min: 0,
-      max: 1500,
-      suffix: "mm",
-      label: "height",
-    },
-  });
-  const { cylinderDistance } = useControls("Cylinder", {
-    cylinderDistance: {
-      value: config.cylinder.distance,
-      min: 0,
-      max: 1000,
-      suffix: "mm",
-      label: "distance",
-    },
-  });
-  const { paperWidth, paperHeight, paperTopDistance } = useControls("Paper", {
-    paperWidth: {
-      value: config.paper.width,
-      min: 0,
-      max: 500,
-      suffix: "mm",
-      label: "width",
-    },
-    paperHeight: {
-      value: config.paper.height,
-      min: 0,
-      max: 500,
-      suffix: "mm",
-      label: "height",
-    },
-    paperTopDistance: {
-      value: config.paper.topDistance,
-      min: 0,
-      max: 500,
-      suffix: "mm",
-      label: "distance",
-    },
+  const {
+    gridEnabled,
+    boardWidth,
+    boardHeight,
+    cylinderDistance,
+    paperWidth,
+    paperHeight,
+    paperTopDistance,
+  } = useControls({
+    Settings: folder({
+      gridEnabled: {
+        value: true,
+        label: "show grid",
+      },
+    }),
+    Board: folder({
+      boardWidth: {
+        value: config.board.width,
+        min: 0,
+        max: 1500,
+        label: "width",
+      },
+      boardHeight: {
+        value: config.board.height,
+        min: 0,
+        max: 1500,
+        label: "height",
+      },
+    }),
+    Cylinder: folder({
+      cylinderDistance: {
+        value: config.cylinder.distance,
+        min: 0,
+        max: 1000,
+        label: "distance",
+      },
+    }),
+    Paper: folder({
+      paperWidth: {
+        value: config.paper.width,
+        min: 0,
+        max: 500,
+        label: "width",
+      },
+      paperHeight: {
+        value: config.paper.height,
+        min: 0,
+        max: 500,
+        label: "height",
+      },
+      paperTopDistance: {
+        value: config.paper.topDistance,
+        min: 0,
+        max: 500,
+        label: "distance",
+      },
+    }),
   });
 
   const scaling = Math.min(
