@@ -63,7 +63,7 @@ const Penplotter = () => {
       paperTopDistance: {
         value: config.paper.topDistance,
         min: 0,
-        max: 500,
+        max: 800,
         label: "paper distance",
       },
       cylinderDistance: {
