@@ -10,6 +10,7 @@ const hardware = {
   },
   stepper: {
     stepsPerRotation: 1600,
+    pauseBetweenInstructions: 500,
   },
 };
 
@@ -92,11 +93,11 @@ board.on("ready", () => {
     pen.to(180);
   };
 
-  const rotate = (motor, degree) =>
+  const rotate = ({ name, motor, rotation }) =>
     new Promise((resolve, reject) => {
-      console.log(`started ${degree}`);
+      console.time(`${name} ${rotation}°`);
       const steps = Math.round(
-        new BigDecimal(degree)
+        new BigDecimal(rotation)
           .abs()
           .div(new BigDecimal(360))
           .times(hardware.stepper.stepsPerRotation)
@@ -106,11 +107,11 @@ board.on("ready", () => {
         {
           rpm: 90,
           steps,
-          direction: degree > 0 ? 1 : 0,
+          direction: rotation > 0 ? 1 : 0,
         },
         () => {
-          console.log(`finished ${degree}`);
-          resolve();
+          console.timeEnd(`${name} ${rotation}°`);
+          setTimeout(resolve, hardware.stepper.pauseBetweenInstructions);
         }
       );
     });
@@ -121,8 +122,16 @@ board.on("ready", () => {
     (promise, coordinate) =>
       promise.then((_) =>
         Promise.all([
-          rotate(stepperLeft, coordinate[0]),
-          rotate(stepperRight, coordinate[1]),
+          rotate({
+            name: "stepper left",
+            motor: stepperLeft,
+            rotation: coordinate[0],
+          }),
+          rotate({
+            name: "stepper right",
+            motor: stepperRight,
+            rotation: coordinate[1],
+          }),
         ])
       ),
     Promise.resolve()
