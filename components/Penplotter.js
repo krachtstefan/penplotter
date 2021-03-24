@@ -38,9 +38,10 @@ const Penplotter = () => {
     boardWidth,
     boardHeight,
     cylinderDistance,
-    paperWidth,
-    paperHeight,
+    paperCustomWidth,
+    paperCustomHeight,
     paperTopDistance,
+    paperPresets,
   } = useControls({
     Settings: folder({
       gridEnabled: {
@@ -71,17 +72,25 @@ const Penplotter = () => {
       },
     }),
     Paper: folder({
-      paperWidth: {
+      paperPresets: {
+        options: {
+          a4: { width: 210, height: 297 },
+          custom: null,
+        },
+      },
+      paperCustomWidth: {
         value: config.paper.width,
         min: 0,
         max: 500,
         label: "width",
+        render: (get) => get("Paper.paperPresets") === null,
       },
-      paperHeight: {
+      paperCustomHeight: {
         value: config.paper.height,
         min: 0,
         max: 500,
         label: "height",
+        render: (get) => get("Paper.paperPresets") === null,
       },
       paperTopDistance: {
         value: config.paper.topDistance,
@@ -91,6 +100,13 @@ const Penplotter = () => {
       },
     }),
   });
+
+  const paperWidth =
+    paperPresets && paperPresets.width ? paperPresets.width : paperCustomWidth;
+  const paperHeight =
+    paperPresets && paperPresets.height
+      ? paperPresets.height
+      : paperCustomHeight;
 
   const scaling = Math.min(
     ...[
