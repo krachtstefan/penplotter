@@ -93,9 +93,9 @@ board.on("ready", () => {
     pen.to(180);
   };
 
-  const rotate = ({ name, motor, rotation }) =>
+  const rotate = ({ name, motor, rotation, throttle }) =>
     new Promise((resolve, reject) => {
-      console.time(`${name} ${rotation}°`);
+      console.time(`${name} ${rotation}° (${throttle})`);
       const steps = Math.round(
         new BigDecimal(rotation)
           .abs()
@@ -105,12 +105,12 @@ board.on("ready", () => {
       );
       motor.step(
         {
-          rpm: 90,
+          rpm: 180 * throttle,
           steps,
           direction: rotation > 0 ? 1 : 0,
         },
         () => {
-          console.timeEnd(`${name} ${rotation}°`);
+          console.timeEnd(`${name} ${rotation}° (${throttle})`);
           setTimeout(resolve, hardware.stepper.pauseBetweenInstructions);
         }
       );
@@ -120,20 +120,32 @@ board.on("ready", () => {
 
   instructionSequence.reduce(
     (promise, coordinate) =>
-      promise.then((_) =>
-        Promise.all([
+      promise.then((_) => {
+        const throttleRight = Math.abs(coordinate[1]) < Math.abs(coordinate[0]);
+        const throttleLeft = Math.abs(coordinate[0]) < Math.abs(coordinate[1]);
+        return Promise.all([
           rotate({
             name: "stepper left",
             motor: stepperLeft,
             rotation: coordinate[0],
+            throttle: throttleLeft
+              ? new BigDecimal(Math.abs(coordinate[0]))
+                  .div(Math.abs(coordinate[1]))
+                  .toNumber()
+              : 1,
           }),
           rotate({
             name: "stepper right",
             motor: stepperRight,
             rotation: coordinate[1],
+            throttle: throttleRight
+              ? new BigDecimal(Math.abs(coordinate[1]))
+                  .div(Math.abs(coordinate[0]))
+                  .toNumber()
+              : 1,
           }),
-        ])
-      ),
+        ]);
+      }),
     Promise.resolve()
   );
 });
