@@ -97,7 +97,7 @@ const Penplotter = () => {
         render: (get) => get("Paper.paperPresets") === null,
       },
       paperPadding: {
-        value: 0,
+        value: 25,
         step: 1,
         min: 0,
         max: 50,
