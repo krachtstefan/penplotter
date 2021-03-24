@@ -1,6 +1,6 @@
 import * as THREE from "three";
 
-import { Leva, folder, useControls } from "leva";
+import { Leva, button, folder, useControls } from "leva";
 import PenPlotter, {
   getDimensions,
   getLenghtByPoints,
@@ -19,6 +19,7 @@ import Material from "./Material";
 import React from "react";
 import config from "../config";
 import dynamic from "next/dynamic";
+import useClipboard from "react-use-clipboard";
 
 const svgFile = preval`module.exports = require("fs").readFileSync("./assets/example.svg", "utf8")`;
 const parsedSvg = new PenPlotter(svgFile);
@@ -110,6 +111,9 @@ const Penplotter = () => {
         label: "paper distance",
       },
     }),
+    "": folder({
+      "copy penplotter intructions": button(() => setCopied()),
+    }),
   });
 
   const paperWidth =
@@ -177,6 +181,12 @@ const Penplotter = () => {
     }),
     delay: 1000,
   });
+
+  const [_, setCopied] = useClipboard(
+    `/*generated at ${new Date().toLocaleString()}*/\n${JSON.stringify(
+      rotationDegSequence
+    )}`
+  );
 
   return (
     <>
