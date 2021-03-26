@@ -7,6 +7,7 @@ const board = new Board();
 const hardware = {
   pen: {
     pin: 11,
+    duration: 1000,
   },
   stepper: {
     stepsPerRotation: 1600,
@@ -86,12 +87,18 @@ board.on("ready", () => {
     range: [0, 180],
     startAt: 0,
   });
-  const liftPen = () => {
-    pen.to(0);
-  };
-  const attachPen = () => {
-    pen.to(180);
-  };
+
+  const liftPen = () =>
+    new Promise((resolve) => {
+      pen.to(90, hardware.pen.duration);
+      setTimeout(resolve, hardware.pen.duration + 100);
+    });
+
+  const attachPen = () =>
+    new Promise((resolve) => {
+      pen.to(0, hardware.pen.duration);
+      setTimeout(resolve, hardware.pen.duration + 100);
+    });
 
   const rotate = ({ name, motor, rotation, throttle }) =>
     new Promise((resolve, reject) => {
@@ -116,7 +123,15 @@ board.on("ready", () => {
       );
     });
 
-  liftPen();
+  liftPen().then(() => {
+    attachPen().then(() => {
+      liftPen().then(() => {
+        attachPen().then(() => {
+          console.log("DONE!!!🥳");
+        });
+      });
+    });
+  });
 
   instructionSequence.reduce(
     (promise, coordinate) =>
