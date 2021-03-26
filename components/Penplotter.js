@@ -153,23 +153,27 @@ const Penplotter = () => {
 
   const penPositions = moved.flat();
 
-  const lengthSequence = penPositions.map((pos) => [
-    getLenghtByPoints(upperLeft, pos),
-    getLenghtByPoints(upperRight, pos),
-  ]);
-
-  const lengthChangeSequence = lengthSequence.map((co, i, srcArr) =>
-    i > 0
-      ? [srcArr[i - 1][0].minus(co[0]), srcArr[i - 1][1].minus(co[1])]
-      : [new BigDecimal(0), new BigDecimal(0)]
+  const lengthSequence = moved.map((posArray) =>
+    posArray.map((pos) => [
+      getLenghtByPoints(upperLeft, pos),
+      getLenghtByPoints(upperRight, pos),
+    ])
   );
 
-  const rotationDegSequence = lengthChangeSequence.map((x) => [
-    -x[0].div(config.cylinder.circumference).times(360).toNumber(),
-    x[1].div(config.cylinder.circumference).times(360).toNumber(),
-  ]);
+  const lengthChangeSequence = lengthSequence.map((s) =>
+    s.map((co, i, srcArr) =>
+      i > 0
+        ? [srcArr[i - 1][0].minus(co[0]), srcArr[i - 1][1].minus(co[1])]
+        : [new BigDecimal(0), new BigDecimal(0)]
+    )
+  );
 
-  console.log(rotationDegSequence);
+  const rotationDegSequence = lengthChangeSequence.map((s) =>
+    s.map((x) => [
+      -x[0].div(config.cylinder.circumference).times(360).toNumber(),
+      x[1].div(config.cylinder.circumference).times(360).toNumber(),
+    ])
+  );
 
   const { penPositionX, penPositionY } = useSpring({
     from: {
