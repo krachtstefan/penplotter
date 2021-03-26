@@ -161,11 +161,13 @@ const Penplotter = () => {
   );
 
   const lengthChangeSequence = lengthSequence.map((s) =>
-    s.map((co, i, srcArr) =>
-      i > 0
-        ? [srcArr[i - 1][0].minus(co[0]), srcArr[i - 1][1].minus(co[1])]
-        : [new BigDecimal(0), new BigDecimal(0)]
-    )
+    s
+      .map((co, i, srcArr) =>
+        i > 0
+          ? [srcArr[i - 1][0].minus(co[0]), srcArr[i - 1][1].minus(co[1])]
+          : [new BigDecimal(0), new BigDecimal(0)]
+      )
+      .filter((res) => !(res[0].eq(0) && res[1].eq(0)))
   );
 
   const rotationDegSequence = lengthChangeSequence.map((s) =>
