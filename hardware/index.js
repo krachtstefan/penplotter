@@ -123,44 +123,47 @@ board.on("ready", () => {
       );
     });
 
-  liftPen().then(() => {
-    attachPen().then(() => {
-      liftPen().then(() => {
-        attachPen().then(() => {
-          console.log("DONE!!!🥳");
-        });
+  instructionSequence.reduce(
+    (strokePromise, stroke) => {
+      return strokePromise.then(() => {
+        return stroke.reduce((movementPromise, coordinate, index, src) => {
+          const stokeBeginns = index === 0;
+          const strokeEnds = index === src.length - 1;
+          return movementPromise.then(() => {
+            const throttleRight =
+              Math.abs(coordinate[1]) < Math.abs(coordinate[0]);
+            const throttleLeft =
+              Math.abs(coordinate[0]) < Math.abs(coordinate[1]);
+            return (() =>
+              stokeBeginns ? liftPen() : Promise.resolve())().then(() =>
+              Promise.all([
+                rotate({
+                  name: "stepper left",
+                  motor: stepperLeft,
+                  rotation: coordinate[0],
+                  throttle: throttleLeft
+                    ? new BigDecimal(Math.abs(coordinate[0]))
+                        .div(Math.abs(coordinate[1]))
+                        .toNumber()
+                    : 1,
+                }),
+                rotate({
+                  name: "stepper right",
+                  motor: stepperRight,
+                  rotation: coordinate[1],
+                  throttle: throttleRight
+                    ? new BigDecimal(Math.abs(coordinate[1]))
+                        .div(Math.abs(coordinate[0]))
+                        .toNumber()
+                    : 1,
+                }),
+              ]).then(() => (strokeEnds ? attachPen() : Promise.resolve()))
+            );
+          });
+        }, Promise.resolve());
       });
-    });
-  });
+    },
 
-  // instructionSequence.reduce(
-  //   (promise, coordinate) =>
-  //     promise.then((_) => {
-  //       const throttleRight = Math.abs(coordinate[1]) < Math.abs(coordinate[0]);
-  //       const throttleLeft = Math.abs(coordinate[0]) < Math.abs(coordinate[1]);
-  //       return Promise.all([
-  //         rotate({
-  //           name: "stepper left",
-  //           motor: stepperLeft,
-  //           rotation: coordinate[0],
-  //           throttle: throttleLeft
-  //             ? new BigDecimal(Math.abs(coordinate[0]))
-  //                 .div(Math.abs(coordinate[1]))
-  //                 .toNumber()
-  //             : 1,
-  //         }),
-  //         rotate({
-  //           name: "stepper right",
-  //           motor: stepperRight,
-  //           rotation: coordinate[1],
-  //           throttle: throttleRight
-  //             ? new BigDecimal(Math.abs(coordinate[1]))
-  //                 .div(Math.abs(coordinate[0]))
-  //                 .toNumber()
-  //             : 1,
-  //         }),
-  //       ]);
-  //     }),
-  //   Promise.resolve()
-  // );
+    Promise.resolve()
+  );
 });
