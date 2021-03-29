@@ -128,7 +128,7 @@ board.on("ready", () => {
       return strokePromise.then(() => {
         return stroke.reduce((movementPromise, coordinate, index, src) => {
           const stokeBeginns = index === 0;
-          const strokeEnds = index === src.length - 1;
+          const strokeEnds = index === 0;
           return movementPromise.then(() => {
             const throttleRight =
               Math.abs(coordinate[1]) < Math.abs(coordinate[0]);
