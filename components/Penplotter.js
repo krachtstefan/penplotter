@@ -160,14 +160,28 @@ const Penplotter = () => {
     ])
   );
 
-  const lengthChangeSequence = lengthSequence.map((s) =>
-    s
-      .map((co, i, srcArr) =>
-        i > 0
-          ? [srcArr[i - 1][0].minus(co[0]), srcArr[i - 1][1].minus(co[1])]
-          : [new BigDecimal(0), new BigDecimal(0)]
-      )
-      .filter((res) => !(res[0].eq(0) && res[1].eq(0)))
+  const penHome = [
+    getLenghtByPoints(upperLeft, [0, paperTopDistance]),
+    getLenghtByPoints(upperRight, [0, paperTopDistance]),
+  ];
+
+  const lengthChangeSequence = lengthSequence.map((line, elementIndex) =>
+    line.map((co, i, srcArr) => {
+      let prevPoint = srcArr[i - 1];
+      // when a new line begins
+      if (i === 0) {
+        prevPoint =
+          // the line draws from the pens homing position
+          elementIndex === 0
+            ? penHome
+            : // or from the previous line
+              [
+                lengthSequence[elementIndex - 1].slice(-1)[0][0],
+                lengthSequence[elementIndex - 1].slice(-1)[0][1],
+              ];
+      }
+      return [prevPoint[0].minus(co[0]), prevPoint[1].minus(co[1])];
+    })
   );
 
   const rotationDegSequence = lengthChangeSequence.map((s) =>
