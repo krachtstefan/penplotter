@@ -191,6 +191,20 @@ const Penplotter = () => {
     ])
   );
 
+  const plotterInstructions = rotationDegSequence.reduce(
+    (acc, curr) => [
+      ...acc,
+      ...curr.map((movement, index) => {
+        return {
+          left: movement[0],
+          right: movement[1],
+          pen: index === 0 ? "up" : "down",
+        };
+      }),
+    ],
+    []
+  );
+
   const { penPositionX, penPositionY } = useSpring({
     from: {
       penPositionX: [penPositions[0][0]],
@@ -207,7 +221,7 @@ const Penplotter = () => {
 
   const [_, setCopied] = useClipboard(
     `/*generated at ${new Date().toLocaleString()}*/\n${JSON.stringify(
-      rotationDegSequence
+      plotterInstructions
     )}`
   );
 
