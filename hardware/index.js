@@ -1,6 +1,6 @@
 const { Board, Stepper, Servo } = require("johnny-five");
-
 const BigDecimal = require("decimal.js");
+const moment = require("moment");
 const instructionSequence = require("./instrucions.js");
 const board = new Board();
 
@@ -74,9 +74,25 @@ board.on("ready", () => {
       );
     });
 
+  const startDate = moment();
   instructionSequence.reduce(
-    (promise, coordinate) =>
+    (promise, coordinate, index, srcArray) =>
       promise.then((_) => {
+        const progress = new BigDecimal(index + 1)
+          .div(srcArray.length)
+          .times(100);
+        const secondsGone = new BigDecimal(moment().diff(startDate, "seconds"));
+        const durationTotalSec = new BigDecimal(100)
+          .div(progress)
+          .times(secondsGone);
+        const eta = startDate.clone().add(durationTotalSec, "seconds");
+        console.log({
+          startedAt: startDate.format("LT"),
+          eta: eta.format("LT"),
+          progress: progress.toFixed(2),
+          formNow: eta.fromNow(),
+        });
+
         const throttleRight = Math.abs(coordinate[1]) < Math.abs(coordinate[0]);
         const throttleLeft = Math.abs(coordinate[0]) < Math.abs(coordinate[1]);
 
