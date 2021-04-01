@@ -7,7 +7,8 @@ const board = new Board();
 const hardware = {
   pen: {
     pin: 11,
-    duration: 1000,
+    durationUp: 1000,
+    durationDown: 2000,
   },
   stepper: {
     stepsPerRotation: 1600,
@@ -41,14 +42,14 @@ board.on("ready", () => {
 
   const liftPen = () =>
     new Promise((resolve) => {
-      pen.to(90, hardware.pen.duration);
-      setTimeout(resolve, hardware.pen.duration + 100);
+      pen.to(90, hardware.pen.durationUp);
+      setTimeout(resolve, hardware.pen.durationUp + 100);
     });
 
   const attachPen = () =>
     new Promise((resolve) => {
-      pen.to(0, hardware.pen.duration);
-      setTimeout(resolve, hardware.pen.duration + 100);
+      pen.to(0, hardware.pen.durationDown);
+      setTimeout(resolve, hardware.pen.durationDown + 100);
     });
 
   const rotate = ({ name, motor, rotation, throttle }) =>
