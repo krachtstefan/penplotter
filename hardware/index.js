@@ -76,7 +76,7 @@ board.on("ready", () => {
 
   const startDate = moment();
   instructionSequence.reduce(
-    (promise, coordinate, index, srcArray) =>
+    (promise, instruction, index, srcArray) =>
       promise.then((_) => {
         const progress = new BigDecimal(index + 1)
           .div(srcArray.length)
@@ -93,31 +93,36 @@ board.on("ready", () => {
           formNow: eta.fromNow(),
         });
 
-        const throttleRight = Math.abs(coordinate[1]) < Math.abs(coordinate[0]);
-        const throttleLeft = Math.abs(coordinate[0]) < Math.abs(coordinate[1]);
+        const throttleRight =
+          Math.abs(instruction.right) < Math.abs(instruction.left);
+        const throttleLeft =
+          Math.abs(instruction.left) < Math.abs(instruction.right);
 
-        return Promise.all([
-          rotate({
-            name: "stepper left",
-            motor: stepperLeft,
-            rotation: coordinate[0],
-            throttle: throttleLeft
-              ? new BigDecimal(Math.abs(coordinate[0]))
-                  .div(Math.abs(coordinate[1]))
-                  .toNumber()
-              : 1,
-          }),
-          rotate({
-            name: "stepper right",
-            motor: stepperRight,
-            rotation: coordinate[1],
-            throttle: throttleRight
-              ? new BigDecimal(Math.abs(coordinate[1]))
-                  .div(Math.abs(coordinate[0]))
-                  .toNumber()
-              : 1,
-          }),
-        ]);
+        return (() =>
+          instruction.pen === "up" ? liftPen() : attachPen())().then(() =>
+          Promise.all([
+            rotate({
+              name: "stepper left",
+              motor: stepperLeft,
+              rotation: instruction.left,
+              throttle: throttleLeft
+                ? new BigDecimal(Math.abs(instruction.left))
+                    .div(Math.abs(instruction.right))
+                    .toNumber()
+                : 1,
+            }),
+            rotate({
+              name: "stepper right",
+              motor: stepperRight,
+              rotation: instruction.right,
+              throttle: throttleRight
+                ? new BigDecimal(Math.abs(instruction.right))
+                    .div(Math.abs(instruction.left))
+                    .toNumber()
+                : 1,
+            }),
+          ])
+        );
       }),
     Promise.resolve()
   );
