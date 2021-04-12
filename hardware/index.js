@@ -1,20 +1,11 @@
 const { Board, Stepper, Servo } = require("johnny-five");
 const BigDecimal = require("decimal.js");
 const moment = require("moment");
+const config = require("./config");
 const instructionSequence = require("./instrucions.js");
-const board = new Board();
+const { hardware } = config;
 
-const hardware = {
-  pen: {
-    pin: 11,
-    durationUp: 1000,
-    durationDown: 2000,
-  },
-  stepper: {
-    stepsPerRotation: 1600,
-    pauseBetweenInstructions: 500,
-  },
-};
+const board = new Board();
 
 board.on("ready", () => {
   const stepperLeft = new Stepper({
