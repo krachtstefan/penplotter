@@ -21,13 +21,7 @@ import config from "../config";
 import dynamic from "next/dynamic";
 import useClipboard from "react-use-clipboard";
 
-// const svgFile = preval`module.exports = require("fs").readFileSync("./assets/lala.svg", "utf8")`;
-// const svgFile = preval`module.exports = require("fs").readFileSync("./assets/UNIKORN.svg", "utf8")`;
-
-const svgFile = preval`module.exports = require("fs").readFileSync("./assets/example3.svg", "utf8")`; //
-
-// const svgFile = preval`module.exports = require("fs").readFileSync("./assets/example2.svg", "utf8")`;
-// const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/path-horizontal.svg", "utf8")`;
+const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/path-horizontal.svg", "utf8")`;
 const parsedSvg = new PenPlotter(svgFile);
 
 const Controls = dynamic(() => import("./Controls"), { ssr: false });
