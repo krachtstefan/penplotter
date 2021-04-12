@@ -167,10 +167,9 @@ const Penplotter = () => {
   );
 
   const penHome = [
-    getLenghtByPoints(upperLeft, [0, paperTopDistance]),
-    getLenghtByPoints(upperRight, [0, paperTopDistance]),
+    getLenghtByPoints(upperLeft, [0, config.pen.topDistance]),
+    getLenghtByPoints(upperRight, [0, config.pen.topDistance]),
   ];
-
   const lengthChangeSequence = lengthSequence.map((line, elementIndex) =>
     line.map((co, i, srcArr) => {
       let prevPoint = srcArr[i - 1];
