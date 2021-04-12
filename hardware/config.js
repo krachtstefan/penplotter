@@ -10,4 +10,7 @@ module.exports = {
       pauseBetweenInstructions: 500,
     },
   },
+  websocket: {
+    port: 8080,
+  },
 };

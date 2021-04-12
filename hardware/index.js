@@ -1,11 +1,13 @@
 const { Board, Stepper, Servo } = require("johnny-five");
 const BigDecimal = require("decimal.js");
 const moment = require("moment");
+const WebSocket = require("ws");
 const config = require("./config");
 const instructionSequence = require("./instrucions.js");
-const { hardware } = config;
+const { hardware, websocket } = config;
 
 const board = new Board();
+const wss = new WebSocket.Server({ port: websocket.port });
 
 board.on("ready", () => {
   const stepperLeft = new Stepper({
@@ -67,6 +69,16 @@ board.on("ready", () => {
     });
 
   const startDate = moment();
+
+  wss.on("connection", function connection(ws) {
+    ws.on("message", function incoming(message) {
+      console.log("received: %s", message);
+    });
+    liftPen();
+    console.log(1);
+    ws.send("something");
+  });
+
   instructionSequence.reduce(
     (promise, instruction, index, srcArray) =>
       promise.then((_) => {
