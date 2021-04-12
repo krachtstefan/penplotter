@@ -6,7 +6,7 @@ const config = {
   paper: {
     width: 210,
     height: 297,
-    topDistance: 650 - 25,
+    topDistance: 700 - 20,
     presets: {
       "a4 portrait": { width: 210, height: 297 },
       "a4 landscape": { width: 297, height: 210 },
@@ -23,7 +23,7 @@ const config = {
     },
   },
   pen: {
-    topDistance: 450,
+    topDistance: 300 - 20,
   },
 };
 
