@@ -6,7 +6,7 @@ import {
 import React from "react";
 
 const ControlPanel = () => {
-  const { connected } = usePenplotterContext();
+  const { connected, pen } = usePenplotterContext();
   const penplotterDispatch = usePenplotterDispatch();
   return (
     <div>
@@ -26,6 +26,9 @@ const ControlPanel = () => {
       >
         pen down
       </button>
+      Pen is up? {pen.isUp === true ? "YES" : ""}
+      {pen.isUp === false ? "NO" : ""}
+      {pen.isUp === null ? "unknown" : ""}
     </div>
   );
 };
