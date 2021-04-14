@@ -2,6 +2,9 @@ import React, { createContext, useContext, useReducer } from "react";
 
 const defaultState = {
   connected: false,
+  pen: {
+    isUp: null,
+  },
 };
 
 const PenplotterStateContext = createContext(defaultState);
@@ -9,12 +12,16 @@ const PenplotterDispatchContext = createContext(null);
 
 const ActionTypes = {
   SET_PLOTTER_CONNECTED: "SET_PLOTTER_CONNECTED",
+  SET_PEN_IS_UP: "SET_PEN_IS_UP",
 };
 
 const penplotterReducer = (state, action) => {
   switch (action.type) {
     case ActionTypes.SET_PLOTTER_CONNECTED: {
       return { ...state, connected: action.payload };
+    }
+    case ActionTypes.SET_PEN_IS_UP: {
+      return { ...state, pen: { ...state.pen, isUp: action.payload } };
     }
     default: {
       throw new Error(`Unhandled action type`);
