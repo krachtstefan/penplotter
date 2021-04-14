@@ -1,10 +1,10 @@
 import { ActionTypes, usePenplotterDispatch } from "../contexts/Penplotter";
-import React, { useEffect } from "react";
 
 import config from "../config";
+import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 
-const PlotterConnection = ({ children }) => {
+const PlotterConnection = () => {
   const socketUrl = config.websocket.address;
   const penplotterDispatch = usePenplotterDispatch();
   const { readyState } = useWebSocket(socketUrl, {
@@ -27,7 +27,7 @@ const PlotterConnection = ({ children }) => {
     }
   }, [isReady]);
 
-  return <>{children}</>;
+  return null;
 };
 
 export default PlotterConnection;
