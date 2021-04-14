@@ -36,12 +36,32 @@ board.on("ready", () => {
     new Promise((resolve) => {
       pen.to(90, hardware.pen.durationUp);
       setTimeout(resolve, hardware.pen.durationUp + 100);
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(
+            JSON.stringify({
+              type: "SET_PEN_IS_UP",
+              payload: true,
+            })
+          );
+        }
+      });
     });
 
   const attachPen = () =>
     new Promise((resolve) => {
       pen.to(0, hardware.pen.durationDown);
       setTimeout(resolve, hardware.pen.durationDown + 100);
+      wss.clients.forEach((client) => {
+        if (client.readyState === WebSocket.OPEN) {
+          client.send(
+            JSON.stringify({
+              type: "SET_PEN_IS_UP",
+              payload: false,
+            })
+          );
+        }
+      });
     });
 
   const rotate = ({ name, motor, rotation, throttle }) =>
