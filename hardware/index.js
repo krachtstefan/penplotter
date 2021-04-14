@@ -3,7 +3,6 @@ const BigDecimal = require("decimal.js");
 const moment = require("moment");
 const WebSocket = require("ws");
 const config = require("./config");
-const instructionSequence = require("./instrucions.js");
 const { hardware, websocket } = config;
 
 const board = new Board();
@@ -79,7 +78,7 @@ board.on("ready", () => {
     ws.send("something");
   });
 
-  instructionSequence.reduce(
+  [].reduce(
     (promise, instruction, index, srcArray) =>
       promise.then((_) => {
         const progress = new BigDecimal(index + 1)
