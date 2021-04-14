@@ -4,7 +4,7 @@ import config from "../config";
 import dynamic from "next/dynamic";
 import useWebSocket from "react-use-websocket";
 
-const PenPlotter = dynamic(() => import("../components/PenPlotter"), {
+const PlotterPreview = dynamic(() => import("../components/PlotterPreview"), {
   ssr: false,
 });
 
@@ -45,7 +45,7 @@ const Home = () => {
       >
         Send Message
       </button>
-      <PenPlotter />
+      <PlotterPreview />
     </PenplotterProvider>
   );
 };

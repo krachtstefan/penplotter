@@ -9,7 +9,7 @@ import PenPlotter, {
   move,
   returnPointsArrFromElement,
   scale,
-} from "../lib/plotter-model";
+} from "../../lib/plotter-model";
 import { animated, useSpring } from "react-spring/three.cjs";
 
 import BigDecimal from "decimal.js";
@@ -17,7 +17,7 @@ import { Canvas } from "react-three-fiber";
 import Grid from "./Grid";
 import Material from "./Material";
 import React from "react";
-import config from "../config";
+import config from "../../config";
 import dynamic from "next/dynamic";
 import useClipboard from "react-use-clipboard";
 
