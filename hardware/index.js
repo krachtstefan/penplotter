@@ -91,8 +91,28 @@ board.on("ready", () => {
 
   wss.on("connection", function connection(ws) {
     ws.on("message", function incoming(message) {
-      console.log("received: %s", JSON.parse(message));
-      ws.send(JSON.stringify({ something: "cool" }));
+      const { type, payload } = JSON.parse(message);
+      console.log(message);
+      if (type && payload) {
+        console.log(type, payload);
+        switch (type) {
+          case "MOVE_PEN": {
+            if (payload === "DOWN") {
+              penDown();
+              return;
+            }
+            if (payload === "UP") {
+              penUp();
+              return;
+            }
+            console.error("unsupported pen movement", payload);
+            return;
+          }
+          default: {
+            console.error("unsupported action", type);
+          }
+        }
+      }
     });
 
     console.log("client connected");

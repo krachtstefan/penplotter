@@ -1,34 +1,33 @@
-import {
-  usePenplotterContext,
-  usePenplotterDispatch,
-} from "../contexts/Penplotter";
-
 import React from "react";
+import config from "../config";
+import { usePenplotterContext } from "../contexts/Penplotter";
+import useWebSocket from "react-use-websocket";
 
 const ControlPanel = () => {
-  const { connected, pen } = usePenplotterContext();
-  const penplotterDispatch = usePenplotterDispatch();
+  const { sendJsonMessage } = useWebSocket(config.websocket.address);
+  const {
+    connected,
+    pen: { isUp: penIsUp },
+  } = usePenplotterContext();
+
+  const penPositionUnkown = penIsUp === null;
+  const penLifted = penIsUp === true;
+  const penNotLifted = penIsUp === false;
   return (
     <div>
       <button
-        disabled={!connected}
+        disabled={!connected || penPositionUnkown}
         onClick={() => {
-          penplotterDispatch({ type: "1", payload: { payload: true } });
+          sendJsonMessage({
+            type: "MOVE_PEN",
+            payload: penLifted === true ? "DOWN" : "UP",
+          });
         }}
       >
-        pen up
+        {penPositionUnkown === true ? "pen position unknown" : ""}
+        {penLifted === true ? "attach pen" : ""}
+        {penNotLifted === true ? "lift pen" : ""}
       </button>
-      <button
-        disabled={!connected}
-        onClick={() => {
-          penplotterDispatch({ type: "1", payload: { payload: true } });
-        }}
-      >
-        pen down
-      </button>
-      Pen is up? {pen.isUp === true ? "YES" : ""}
-      {pen.isUp === false ? "NO" : ""}
-      {pen.isUp === null ? "unknown" : ""}
     </div>
   );
 };
