@@ -1,3 +1,4 @@
+import { PenplotterProvider } from "../contexts/Penplotter";
 import React from "react";
 import config from "../config";
 import dynamic from "next/dynamic";
@@ -36,7 +37,7 @@ const Home = () => {
   );
 
   return (
-    <>
+    <PenplotterProvider>
       <button
         onClick={() => {
           sendJsonMessage({ cool: "message" });
@@ -45,7 +46,7 @@ const Home = () => {
         Send Message
       </button>
       <PenPlotter />
-    </>
+    </PenplotterProvider>
   );
 };
 
