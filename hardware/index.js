@@ -71,11 +71,12 @@ board.on("ready", () => {
 
   wss.on("connection", function connection(ws) {
     ws.on("message", function incoming(message) {
-      console.log("received: %s", message);
+      console.log("received: %s", JSON.parse(message));
+      ws.send(JSON.stringify({ something: "cool" }));
     });
+
+    console.log("client connected");
     liftPen();
-    console.log(1);
-    ws.send("something");
   });
 
   [].reduce(
