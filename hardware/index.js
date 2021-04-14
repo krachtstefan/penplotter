@@ -16,7 +16,6 @@ board.on("ready", () => {
     new Promise((resolve) => {
       pen.to(90, hardware.pen.durationUp);
       setTimeout(resolve, hardware.pen.durationUp + 100);
-
       websockets.populate({
         type: "SET_PEN_IS_UP",
         payload: true,
