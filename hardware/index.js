@@ -1,12 +1,12 @@
 const { Board, Stepper, Servo } = require("johnny-five");
 const BigDecimal = require("decimal.js");
 const moment = require("moment");
-const WebSocket = require("ws");
 const config = require("./config");
-const { hardware, websocket } = config;
+const websockets = require("./websockets");
+
+const { hardware } = config;
 
 const board = new Board();
-const wss = new WebSocket.Server({ port: websocket.port });
 
 board.on("ready", () => {
   const stepperLeft = new Stepper({
@@ -36,15 +36,10 @@ board.on("ready", () => {
     new Promise((resolve) => {
       pen.to(90, hardware.pen.durationUp);
       setTimeout(resolve, hardware.pen.durationUp + 100);
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(
-            JSON.stringify({
-              type: "SET_PEN_IS_UP",
-              payload: true,
-            })
-          );
-        }
+
+      websockets.populate({
+        type: "SET_PEN_IS_UP",
+        payload: true,
       });
     });
 
@@ -52,15 +47,9 @@ board.on("ready", () => {
     new Promise((resolve) => {
       pen.to(0, hardware.pen.durationDown);
       setTimeout(resolve, hardware.pen.durationDown + 100);
-      wss.clients.forEach((client) => {
-        if (client.readyState === WebSocket.OPEN) {
-          client.send(
-            JSON.stringify({
-              type: "SET_PEN_IS_UP",
-              payload: false,
-            })
-          );
-        }
+      websockets.populate({
+        type: "SET_PEN_IS_UP",
+        payload: false,
       });
     });
 
@@ -89,7 +78,7 @@ board.on("ready", () => {
 
   const startDate = moment();
 
-  wss.on("connection", function connection(ws) {
+  websockets.server.on("connection", function connection(ws) {
     ws.on("message", function incoming(message) {
       const { type, payload } = JSON.parse(message);
       console.log(message);
