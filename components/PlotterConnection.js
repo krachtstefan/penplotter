@@ -5,9 +5,8 @@ import { useEffect } from "react";
 import useWebSocket from "react-use-websocket";
 
 const PlotterConnection = () => {
-  const socketUrl = config.websocket.address;
   const penplotterDispatch = usePenplotterDispatch();
-  const { readyState } = useWebSocket(socketUrl, {
+  const { readyState } = useWebSocket(config.websocket.address, {
     shouldReconnect: () => true,
     onMessage: (message) => {
       const messageJson = JSON.parse(message.data);
