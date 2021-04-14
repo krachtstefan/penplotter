@@ -25,6 +25,9 @@ const config = {
   pen: {
     topDistance: 300 - 20,
   },
+  websocket: {
+    address: "ws://localhost:8080",
+  },
 };
 
 export default config;
