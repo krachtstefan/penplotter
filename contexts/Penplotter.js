@@ -16,6 +16,7 @@ const ActionTypes = {
 };
 
 const penplotterReducer = (state, action) => {
+  console.log("received action", action);
   switch (action.type) {
     case ActionTypes.SET_PLOTTER_CONNECTED: {
       return { ...state, connected: action.payload };
