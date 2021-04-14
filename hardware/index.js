@@ -1,36 +1,16 @@
 const { Board, Stepper, Servo } = require("johnny-five");
 const BigDecimal = require("decimal.js");
 const moment = require("moment");
-const config = require("./config");
+const { hardware } = require("./config");
+const devices = require("./devices");
 const websockets = require("./websockets");
-
-const { hardware } = config;
 
 const board = new Board();
 
 board.on("ready", () => {
-  const stepperLeft = new Stepper({
-    type: Stepper.TYPE.DRIVER,
-    stepsPerRev: 200,
-    pins: {
-      step: 2,
-      dir: 5,
-    },
-  });
-  const stepperRight = new Stepper({
-    type: Stepper.TYPE.DRIVER,
-    stepsPerRev: 200,
-    pins: {
-      step: 3,
-      dir: 6,
-    },
-  });
-
-  const pen = new Servo({
-    pin: hardware.pen.pin,
-    range: [0, 180],
-    startAt: 0,
-  });
+  const stepperLeft = new Stepper(devices.stepperLeft);
+  const stepperRight = new Stepper(devices.stepperRight);
+  const pen = new Servo(devices.pen);
 
   const penUp = () =>
     new Promise((resolve) => {
