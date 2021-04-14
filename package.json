@@ -5,7 +5,8 @@
   "scripts": {
     "dev": "next dev",
     "build": "next build",
-    "start": "next start"
+    "start": "next start",
+    "penplotter": "node hardware/index.js"
   },
   "dependencies": {
     "bignumber.js": "^9.0.1",
