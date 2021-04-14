@@ -12,7 +12,7 @@ const PlotterConnection = () => {
       const messageJson = JSON.parse(message.data);
       if (
         Object.keys(ActionTypes).includes(messageJson.type) &&
-        messageJson.payload
+        messageJson.payload !== undefined
       ) {
         penplotterDispatch({
           type: messageJson.type,
