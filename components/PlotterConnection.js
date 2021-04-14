@@ -9,6 +9,20 @@ const PlotterConnection = () => {
   const penplotterDispatch = usePenplotterDispatch();
   const { readyState } = useWebSocket(socketUrl, {
     shouldReconnect: () => true,
+    onMessage: (message) => {
+      const messageJson = JSON.parse(message.data);
+      if (
+        Object.keys(ActionTypes).includes(messageJson.type) &&
+        messageJson.payload
+      ) {
+        penplotterDispatch({
+          type: messageJson.type,
+          payload: messageJson.payload,
+        });
+      } else {
+        console.error("unknown message format for message", messageJson);
+      }
+    },
   });
 
   const isReady = readyState === 1 ? true : false;
