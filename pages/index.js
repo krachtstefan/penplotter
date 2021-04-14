@@ -1,8 +1,7 @@
-import React, { useState } from "react";
-import useWebSocket, { ReadyState } from "react-use-websocket";
-
+import React from "react";
 import config from "../config";
 import dynamic from "next/dynamic";
+import useWebSocket from "react-use-websocket";
 
 const PenPlotter = dynamic(() => import("../components/PenPlotter"), {
   ssr: false,
@@ -11,17 +10,15 @@ const PenPlotter = dynamic(() => import("../components/PenPlotter"), {
 const Home = () => {
   const socketUrl = config.websocket.address;
 
-  const {
-    sendJsonMessage,
-    lastJsonMessage,
-    readyState,
-    getWebSocket,
-  } = useWebSocket(socketUrl, {
-    onOpen: () => console.log("opened"),
-    onClose: () => console.log("closed"),
-    onError: () => console.log("error"),
-    shouldReconnect: () => true,
-  });
+  const { sendJsonMessage, lastJsonMessage, readyState } = useWebSocket(
+    socketUrl,
+    {
+      onOpen: () => console.log("opened"),
+      onClose: () => console.log("closed"),
+      onError: () => console.log("error"),
+      shouldReconnect: () => true,
+    }
+  );
 
   const connectionStatus = {
     [0]: "Connecting",
