@@ -4,8 +4,11 @@ const moment = require("moment");
 const { hardware } = require("./config");
 const devices = require("./devices");
 const websockets = require("./websockets");
+const store = require("./redux");
 
 const board = new Board();
+
+console.log(store.getState().penplotter);
 
 board.on("ready", () => {
   const stepperLeft = new Stepper(devices.stepperLeft);
