@@ -8,11 +8,14 @@ const PenplotterStateContext = createContext(defaultState);
 const PenplotterDispatchContext = createContext(null);
 
 const ActionTypes = {
-  SEND_PLOTTER_JOB: "SEND_PLOTTER_JOB",
+  SET_PLOTTER_CONNECTED: "SET_PLOTTER_CONNECTED",
 };
 
 const penplotterReducer = (state, action) => {
   switch (action.type) {
+    case ActionTypes.SET_PLOTTER_CONNECTED: {
+      return { ...state, connected: action.payload };
+    }
     default: {
       throw new Error(`Unhandled action type`);
     }
