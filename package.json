@@ -9,6 +9,7 @@
     "penplotter": "node hardware/index.js"
   },
   "dependencies": {
+    "@reduxjs/toolkit": "^1.5.1",
     "bignumber.js": "^9.0.1",
     "decimal.js": "^10.2.1",
     "johnny-five": "^2.0.0",
