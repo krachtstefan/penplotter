@@ -105,8 +105,14 @@ board.on("ready", () => {
         }
       }
     });
-
     console.log("client connected");
+    websockets.populate({
+      type: "UPDATE_PLOTTER_STATE",
+      payload: {
+        path: "penplotter",
+        data: store.getState().penplotter,
+      },
+    });
   });
 
   readPenPosition();
