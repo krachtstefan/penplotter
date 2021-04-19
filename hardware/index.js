@@ -5,10 +5,13 @@ const { hardware } = require("./config");
 const devices = require("./devices");
 const websockets = require("./websockets");
 const store = require("./redux");
+const {
+  penPositions,
+  finishPenMovement,
+  startPenMovement,
+} = require("./redux/penplotter");
 
 const board = new Board();
-
-console.log(store.getState().penplotter);
 
 board.on("ready", () => {
   const stepperLeft = new Stepper(devices.stepperLeft);
@@ -17,23 +20,40 @@ board.on("ready", () => {
 
   const penUp = () =>
     new Promise((resolve) => {
+      store.dispatch(startPenMovement(penPositions.UP));
       pen.to(90, hardware.pen.durationUp);
       setTimeout(resolve, hardware.pen.durationUp + 100);
       websockets.populate({
         type: "SET_PEN_IS_UP",
         payload: true,
       });
+    }).then(() => {
+      store.dispatch(finishPenMovement(penPositions.UP));
+      return Promise.resolve();
     });
 
   const penDown = () =>
     new Promise((resolve) => {
+      store.dispatch(startPenMovement(penPositions.DOWN));
       pen.to(0, hardware.pen.durationDown);
       setTimeout(resolve, hardware.pen.durationDown + 100);
       websockets.populate({
         type: "SET_PEN_IS_UP",
         payload: false,
       });
+    }).then(() => {
+      store.dispatch(finishPenMovement(penPositions.DOWN));
+      return Promise.resolve();
     });
+
+  const readPenPosition = () => {
+    if (pen.value === 0) {
+      store.dispatch(finishPenMovement(penPositions.DOWN));
+    }
+    if (pen.value === 90) {
+      store.dispatch(finishPenMovement(penPositions.DOWN));
+    }
+  };
 
   const rotate = ({ name, motor, rotation, throttle }) =>
     new Promise((resolve, reject) => {
@@ -87,8 +107,9 @@ board.on("ready", () => {
     });
 
     console.log("client connected");
-    penUp();
   });
+
+  readPenPosition();
 
   [].reduce(
     (promise, instruction, index, srcArray) =>
