@@ -1,4 +1,4 @@
-import { ActionTypes, usePenplotterDispatch } from "../contexts/Penplotter";
+import { actionTypes, usePenplotterDispatch } from "../contexts/Penplotter";
 
 import config from "../config";
 import { useEffect } from "react";
@@ -11,7 +11,7 @@ const PlotterConnection = () => {
     onMessage: (message) => {
       const messageJson = JSON.parse(message.data);
       if (
-        Object.keys(ActionTypes).includes(messageJson.type) &&
+        Object.keys(actionTypes).includes(messageJson.type) &&
         messageJson.payload !== undefined
       ) {
         penplotterDispatch({
@@ -29,12 +29,12 @@ const PlotterConnection = () => {
   useEffect(() => {
     if (isReady === true) {
       penplotterDispatch({
-        type: ActionTypes.SET_PLOTTER_CONNECTED,
+        type: actionTypes.SET_PLOTTER_CONNECTED,
         payload: true,
       });
     } else {
       penplotterDispatch({
-        type: ActionTypes.SET_PLOTTER_CONNECTED,
+        type: actionTypes.SET_PLOTTER_CONNECTED,
         payload: false,
       });
     }
