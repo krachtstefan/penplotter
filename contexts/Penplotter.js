@@ -25,7 +25,7 @@ const penplotterReducer = (state, action) => {
       return { ...state, pen: { ...state.pen, isUp: action.payload } };
     }
     default: {
-      throw new Error(`Unhandled action type`);
+      throw new Error(`Unhandled action type ${action.type}`);
     }
   }
 };
