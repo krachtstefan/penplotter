@@ -9,6 +9,14 @@ const penPositions = {
   UNKNOWN: "UNKNOWN",
 };
 
+const updateMapping = [
+  {
+    actions: [actionTypes.START_PEN_MOVEMENT, actionTypes.FINISH_PEN_MOVEMENT],
+    path: "penplotter.pen",
+    state: (state) => state.penplotter.pen,
+  },
+];
+
 const DEFAULT_PENPLOTTER_STATE = {
   pen: {
     position: penPositions.UNKNOWN,
@@ -49,4 +57,5 @@ module.exports = {
   penPositions,
   startPenMovement,
   finishPenMovement,
+  updateMapping,
 };
