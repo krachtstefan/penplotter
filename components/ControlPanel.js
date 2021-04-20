@@ -40,7 +40,7 @@ const ControlPanel = () => {
         🖊 👇
       </button>
       <br />
-      <strong>Pen is busy? {penIsBusy === true ? 1 : 0}</strong>
+      <strong>Pen is busy? {penIsBusy === true ? "👍" : "👎"}</strong>
       <br />
       <strong>
         Current pen position? {penLifted ? "👆" : ""} {penNotLifted ? "👇" : ""}{" "}
