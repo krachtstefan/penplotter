@@ -1,18 +1,25 @@
 import React, { createContext, useContext, useReducer } from "react";
 
-const defaultState = {
+const penPositions = {
+  UP: "UP",
+  DOWN: "DOWN",
+  UNKNOWN: "UNKNOWN",
+};
+
+const DEFAULT_PENPLOTTER_STATE = {
   connected: false,
   pen: {
-    isUp: null,
+    position: penPositions.UNKNOWN,
+    isBusy: false,
   },
 };
 
-const PenplotterStateContext = createContext(defaultState);
+const PenplotterStateContext = createContext(DEFAULT_PENPLOTTER_STATE);
 const PenplotterDispatchContext = createContext(null);
 
 const actionTypes = {
   SET_PLOTTER_CONNECTED: "SET_PLOTTER_CONNECTED",
-  SET_PEN_IS_UP: "SET_PEN_IS_UP",
+  UPDATE_PLOTTER_STATE: "UPDATE_PLOTTER_STATE",
 };
 
 const penplotterReducer = (state, action) => {
@@ -21,8 +28,17 @@ const penplotterReducer = (state, action) => {
     case actionTypes.SET_PLOTTER_CONNECTED: {
       return { ...state, connected: action.payload };
     }
-    case actionTypes.SET_PEN_IS_UP: {
-      return { ...state, pen: { ...state.pen, isUp: action.payload } };
+    case actionTypes.UPDATE_PLOTTER_STATE: {
+      const { path, data } = action.payload;
+      switch (path) {
+        case "penplotter":
+          return { ...state, ...data };
+        default:
+          console.error(
+            `path ${action.type} not implemented in ${action.type}`
+          );
+          return state;
+      }
     }
     default: {
       throw new Error(`Unhandled action type ${action.type}`);
@@ -53,7 +69,7 @@ const usePenplotterDispatch = () => {
 const PenplotterProvider = ({ children }) => {
   const [penplotterState, dispatch] = useReducer(
     penplotterReducer,
-    defaultState
+    DEFAULT_PENPLOTTER_STATE
   );
   return (
     <PenplotterStateContext.Provider value={penplotterState}>
@@ -66,6 +82,7 @@ const PenplotterProvider = ({ children }) => {
 
 export {
   actionTypes,
+  penPositions,
   PenplotterProvider,
   usePenplotterContext,
   usePenplotterDispatch,
