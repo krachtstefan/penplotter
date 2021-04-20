@@ -86,7 +86,6 @@ board.on("ready", () => {
       const { type, payload } = JSON.parse(message);
       console.log(message);
       if (type && payload) {
-        console.log(type, payload);
         switch (type) {
           case "MOVE_PEN": {
             if (payload === "DOWN") {
