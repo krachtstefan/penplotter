@@ -3,29 +3,23 @@ import { chunk, flattenDeep } from "lodash";
 
 import BigDecimal from "decimal.js";
 
-const TYPES = {
-  polyline: "polyline",
-  polygon: "polygon",
-  line: "line",
-  rect: "rect",
-  path: "path",
-};
+export enum ElementType {
+  polyline = "polyline",
+  polygon = "polygon",
+  line = "line",
+  rect = "rect",
+  path = "path",
+}
 
 interface NestedArray<T> extends Array<T | NestedArray<T>> {}
 
 class PenPlotter {
   elements: (RootNode | Node)[];
-  // supportedTypes:
+  supportedTypes: ElementType[];
   constructor(svg: string) {
     const svgObj = parse(svg);
     this.elements = this._getAllElements(svgObj);
-    this.supportedTypes = [
-      TYPES.polyline,
-      TYPES.polygon,
-      TYPES.line,
-      TYPES.rect,
-      TYPES.path,
-    ];
+    this.supportedTypes = Object.values(ElementType);
   }
 
   returnElementsByTagName = function (tagnames) {
@@ -185,9 +179,9 @@ export const translatePathString = (pathString) =>
 
 export const returnPointsArrFromElement = (element) => {
   switch (element.tagName) {
-    case TYPES.polyline:
+    case ElementType.polyline:
       return [translateSVGPoints(element.properties.points)];
-    case TYPES.polygon:
+    case ElementType.polygon:
       /**
        * polygon is like polyline, except the path is closed,
        * we need to copy the first coordinates
@@ -201,7 +195,7 @@ export const returnPointsArrFromElement = (element) => {
         ),
       ];
 
-    case TYPES.line:
+    case ElementType.line:
       const { x1, x2, y1, y2 } = element.properties;
       return [
         [
@@ -209,7 +203,7 @@ export const returnPointsArrFromElement = (element) => {
           [new BigDecimal(x2), new BigDecimal(y2)],
         ],
       ];
-    case TYPES.rect:
+    case ElementType.rect:
       const { x: xAttr, y: yAttr, width, height } = element.properties;
       const x = new BigDecimal(xAttr ? xAttr : 0);
       const y = new BigDecimal(yAttr ? yAttr : 0);
@@ -222,7 +216,7 @@ export const returnPointsArrFromElement = (element) => {
           [x, y],
         ],
       ];
-    case TYPES.path:
+    case ElementType.path:
       return translatePathString(element.properties.d);
     default:
       return [];
