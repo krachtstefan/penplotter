@@ -1,4 +1,4 @@
-import { ElementNode, Node, RootNode, parse } from "svg-parser";
+import { Node, RootNode, parse } from "svg-parser";
 import { chunk, flattenDeep } from "lodash";
 
 import BigDecimal from "decimal.js";
