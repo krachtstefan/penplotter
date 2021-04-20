@@ -22,14 +22,14 @@ class PenPlotter {
     this.supportedTypes = Object.values(ElementType);
   }
 
-  returnElementsByTagName = function (tagnames) {
+  returnElementsByTagName(tagnames: ElementType | ElementType[]) {
     const tagnamesArr = typeof tagnames === "string" ? [tagnames] : tagnames;
     return this.elements.filter((e) => tagnamesArr.includes(e.tagName));
-  };
+  }
 
-  returnSupportedElements = function () {
+  returnSupportedElements() {
     return this.returnElementsByTagName(this.supportedTypes);
-  };
+  }
 
   _getAllElements = (obj: RootNode | Node): (RootNode | Node)[] => {
     const getChildren = (o: RootNode | Node): NestedArray<RootNode | Node> =>
