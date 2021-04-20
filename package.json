@@ -14,6 +14,7 @@
     "decimal.js": "^10.2.1",
     "johnny-five": "^2.0.0",
     "leva": "^0.8.0",
+    "lodash": "^4.17.21",
     "lodash.chunk": "^4.2.0",
     "moment": "^2.29.1",
     "next": "10.0.7",
