@@ -1,33 +1,51 @@
+import { penPositions, usePenplotterContext } from "../contexts/Penplotter";
+
 import React from "react";
 import config from "../config";
-import { usePenplotterContext } from "../contexts/Penplotter";
 import useWebSocket from "react-use-websocket";
 
 const ControlPanel = () => {
   const { sendJsonMessage } = useWebSocket(config.websocket.address);
   const {
     connected,
-    pen: { isUp: penIsUp },
+    pen: { position: penPosition, isBusy: penIsBusy },
   } = usePenplotterContext();
 
-  const penPositionUnkown = penIsUp === null;
-  const penLifted = penIsUp === true;
-  const penNotLifted = penIsUp === false;
+  const penPositionUnkown = penPosition === penPositions.UNKNOWN;
+  const penLifted = penPosition === penPositions.UP;
+  const penNotLifted = penPosition === penPositions.DOWN;
+  const disableButton = !connected || penPositionUnkown || penIsBusy;
   return (
     <div>
       <button
-        disabled={!connected || penPositionUnkown}
+        disabled={disableButton || penLifted}
         onClick={() => {
           sendJsonMessage({
             type: "MOVE_PEN",
-            payload: penLifted === true ? "DOWN" : "UP",
+            payload: "UP",
           });
         }}
       >
-        {penPositionUnkown === true ? "pen position unknown" : ""}
-        {penLifted === true ? "attach pen" : ""}
-        {penNotLifted === true ? "lift pen" : ""}
+        🖊 👆
+      </button>{" "}
+      <button
+        disabled={disableButton || penNotLifted}
+        onClick={() => {
+          sendJsonMessage({
+            type: "MOVE_PEN",
+            payload: "DOWN",
+          });
+        }}
+      >
+        🖊 👇
       </button>
+      <br />
+      <strong>Pen is busy? {penIsBusy === true ? 1 : 0}</strong>
+      <br />
+      <strong>
+        Current pen position? {penLifted ? "👆" : ""} {penNotLifted ? "👇" : ""}{" "}
+        {penPositionUnkown ? "🤷‍♂️" : ""}
+      </strong>
     </div>
   );
 };
