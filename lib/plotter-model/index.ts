@@ -14,7 +14,7 @@ const TYPES = {
 interface NestedArray<T> extends Array<T | NestedArray<T>> {}
 
 class PenPlotter {
-  // elements: number;
+  elements: (RootNode | Node)[];
   // supportedTypes:
   constructor(svg: string) {
     const svgObj = parse(svg);
@@ -37,11 +37,12 @@ class PenPlotter {
     return this.returnElementsByTagName(this.supportedTypes);
   };
 
-  _getAllElements = (obj: RootNode): (RootNode | Node)[] => {
+  _getAllElements = (obj: RootNode | Node): (RootNode | Node)[] => {
     const getChildren = (o: RootNode | Node): NestedArray<RootNode | Node> =>
       o.type !== "text" && o.children
         ? [{ ...o }, ...o.children.map((x) => getChildren(x))]
         : [o];
+
     return flattenDeep(getChildren(obj));
   };
 }
