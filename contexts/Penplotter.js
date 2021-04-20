@@ -33,10 +33,10 @@ const penplotterReducer = (state, action) => {
       switch (path) {
         case "penplotter":
           return { ...state, ...data };
+        case "penplotter.pen":
+          return { ...state, pen: { ...state.pen, ...data } };
         default:
-          console.error(
-            `path ${action.type} not implemented in ${action.type}`
-          );
+          console.error(`path ${path} not implemented in ${action.type}`);
           return state;
       }
     }
