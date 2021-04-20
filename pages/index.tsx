@@ -8,7 +8,7 @@ const PlotterPreview = dynamic(() => import("../components/PlotterPreview"), {
   ssr: false,
 });
 
-const Home = () => (
+const Home: React.FC = () => (
   <PenplotterProvider>
     <PlotterConnection />
     <ControlPanel />
