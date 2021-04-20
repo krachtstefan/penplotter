@@ -23,10 +23,6 @@ board.on("ready", () => {
       store.dispatch(startPenMovement(penPositions.UP));
       pen.to(90, hardware.pen.durationUp);
       setTimeout(resolve, hardware.pen.durationUp + 100);
-      websockets.populate({
-        type: "SET_PEN_IS_UP",
-        payload: true,
-      });
     }).then(() => {
       store.dispatch(finishPenMovement(penPositions.UP));
       return Promise.resolve();
@@ -37,10 +33,6 @@ board.on("ready", () => {
       store.dispatch(startPenMovement(penPositions.DOWN));
       pen.to(0, hardware.pen.durationDown);
       setTimeout(resolve, hardware.pen.durationDown + 100);
-      websockets.populate({
-        type: "SET_PEN_IS_UP",
-        payload: false,
-      });
     }).then(() => {
       store.dispatch(finishPenMovement(penPositions.DOWN));
       return Promise.resolve();
