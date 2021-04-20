@@ -40,6 +40,8 @@ const ControlPanel = () => {
         🖊 👇
       </button>
       <br />
+      <strong>Plotter is online? {connected === true ? "👍" : "👎"}</strong>
+      <br />
       <strong>Pen is busy? {penIsBusy === true ? "👍" : "👎"}</strong>
       <br />
       <strong>
