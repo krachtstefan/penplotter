@@ -54,11 +54,13 @@ board.on("ready", () => {
   };
 
   const readPenPosition = () => {
-    if (pen.value === 0) {
-      store.dispatch(finishPenMovement(penPositions.DOWN));
-    }
-    if (pen.value === 90) {
-      store.dispatch(finishPenMovement(penPositions.DOWN));
+    const position = Object.keys(hardware.pen.positions).find(
+      (p) => hardware.pen.positions[p].position === pen.value
+    );
+    if (position) {
+      store.dispatch(finishPenMovement(position));
+    } else {
+      console.error(`no matching pen position with value ${pen.value}`);
     }
   };
 
