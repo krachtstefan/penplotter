@@ -18,11 +18,16 @@ board.on("ready", () => {
   const stepperRight = new Stepper(devices.stepperRight);
   const pen = new Servo(devices.pen);
 
+  // TODO 🚨 add a penMove method
   const penUp = () =>
     new Promise((resolve) => {
       store.dispatch(startPenMovement(penPositions.UP));
-      pen.to(90, hardware.pen.durationUp);
-      setTimeout(resolve, hardware.pen.durationUp + 100);
+      if (pen.value !== 90) {
+        pen.to(90, hardware.pen.durationUp);
+        setTimeout(resolve, hardware.pen.durationUp + 100);
+      } else {
+        resolve();
+      }
     }).then(() => {
       store.dispatch(finishPenMovement(penPositions.UP));
       return Promise.resolve();
@@ -31,8 +36,12 @@ board.on("ready", () => {
   const penDown = () =>
     new Promise((resolve) => {
       store.dispatch(startPenMovement(penPositions.DOWN));
-      pen.to(0, hardware.pen.durationDown);
-      setTimeout(resolve, hardware.pen.durationDown + 100);
+      if (pen.value !== 0) {
+        pen.to(0, hardware.pen.durationDown);
+        setTimeout(resolve, hardware.pen.durationDown + 100);
+      } else {
+        resolve();
+      }
     }).then(() => {
       store.dispatch(finishPenMovement(penPositions.DOWN));
       return Promise.resolve();
