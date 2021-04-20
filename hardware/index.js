@@ -18,34 +18,40 @@ board.on("ready", () => {
   const stepperRight = new Stepper(devices.stepperRight);
   const pen = new Servo(devices.pen);
 
-  // TODO 🚨 add a penMove method
-  const penUp = () =>
-    new Promise((resolve) => {
-      store.dispatch(startPenMovement(penPositions.UP));
-      if (pen.value !== 90) {
-        pen.to(90, hardware.pen.durationUp);
-        setTimeout(resolve, hardware.pen.durationUp + 100);
-      } else {
-        resolve();
-      }
-    }).then(() => {
-      store.dispatch(finishPenMovement(penPositions.UP));
-      return Promise.resolve();
-    });
+  const movePen = (direction) => {
+    let targetValue = 0;
+    let movementDuration = 0;
 
-  const penDown = () =>
-    new Promise((resolve) => {
-      store.dispatch(startPenMovement(penPositions.DOWN));
-      if (pen.value !== 0) {
-        pen.to(0, hardware.pen.durationDown);
-        setTimeout(resolve, hardware.pen.durationDown + 100);
+    switch (direction) {
+      case penPositions.UP: {
+        targetValue = 90;
+        movementDuration = hardware.pen.durationUp;
+        break;
+      }
+      case penPositions.DOWN: {
+        targetValue = 0;
+        movementDuration = hardware.pen.durationDown;
+        break;
+      }
+      default: {
+        console.error(`unsupported pen direction ${direction}`);
+        return Promise.resolve();
+      }
+    }
+
+    return new Promise((resolve) => {
+      store.dispatch(startPenMovement(direction));
+      if (pen.value !== targetValue) {
+        pen.to(targetValue, movementDuration);
+        setTimeout(resolve, movementDuration + 100);
       } else {
         resolve();
       }
     }).then(() => {
-      store.dispatch(finishPenMovement(penPositions.DOWN));
+      store.dispatch(finishPenMovement(direction));
       return Promise.resolve();
     });
+  };
 
   const readPenPosition = () => {
     if (pen.value === 0) {
@@ -88,12 +94,8 @@ board.on("ready", () => {
       if (type && payload) {
         switch (type) {
           case "MOVE_PEN": {
-            if (payload === penPositions.DOWN) {
-              penDown();
-              return;
-            }
-            if (payload === penPositions.UP) {
-              penUp();
+            if ([penPositions.DOWN, penPositions.UP].includes(payload)) {
+              movePen(payload);
               return;
             }
             console.error("unsupported pen movement", payload);
@@ -101,6 +103,7 @@ board.on("ready", () => {
           }
           default: {
             console.error("unsupported action", type);
+            return;
           }
         }
       }
@@ -140,30 +143,32 @@ board.on("ready", () => {
         const throttleLeft =
           Math.abs(instruction.left) < Math.abs(instruction.right);
 
-        return (() => (instruction.pen === "up" ? penUp() : penDown()))().then(
-          () =>
-            Promise.all([
-              rotate({
-                name: "stepper left",
-                motor: stepperLeft,
-                rotation: instruction.left,
-                throttle: throttleLeft
-                  ? new BigDecimal(Math.abs(instruction.left))
-                      .div(Math.abs(instruction.right))
-                      .toNumber()
-                  : 1,
-              }),
-              rotate({
-                name: "stepper right",
-                motor: stepperRight,
-                rotation: instruction.right,
-                throttle: throttleRight
-                  ? new BigDecimal(Math.abs(instruction.right))
-                      .div(Math.abs(instruction.left))
-                      .toNumber()
-                  : 1,
-              }),
-            ])
+        return (() =>
+          instruction.pen === "up"
+            ? movePen(penPositions.UP)
+            : movePen(penPositions.DOWN))().then(() =>
+          Promise.all([
+            rotate({
+              name: "stepper left",
+              motor: stepperLeft,
+              rotation: instruction.left,
+              throttle: throttleLeft
+                ? new BigDecimal(Math.abs(instruction.left))
+                    .div(Math.abs(instruction.right))
+                    .toNumber()
+                : 1,
+            }),
+            rotate({
+              name: "stepper right",
+              motor: stepperRight,
+              rotation: instruction.right,
+              throttle: throttleRight
+                ? new BigDecimal(Math.abs(instruction.right))
+                    .div(Math.abs(instruction.left))
+                    .toNumber()
+                : 1,
+            }),
+          ])
         );
       }),
     Promise.resolve()
