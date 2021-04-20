@@ -35,7 +35,6 @@ const finishPenMovement = (position) => ({
 });
 
 const reducer = (state = DEFAULT_PENPLOTTER_STATE, action) => {
-  console.log("penplotter reducer calles", action, state);
   switch (action.type) {
     case actionTypes.START_PEN_MOVEMENT:
     case actionTypes.FINISH_PEN_MOVEMENT: {
