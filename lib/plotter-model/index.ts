@@ -1,6 +1,7 @@
+import { ElementNode, Node, RootNode, parse } from "svg-parser";
+import { chunk, flattenDeep } from "lodash";
+
 import BigDecimal from "decimal.js";
-import { chunk } from "lodash";
-import { parse } from "svg-parser";
 
 const TYPES = {
   polyline: "polyline",
@@ -10,8 +11,12 @@ const TYPES = {
   path: "path",
 };
 
+interface NestedArray<T> extends Array<T | NestedArray<T>> {}
+
 class PenPlotter {
-  constructor(svg) {
+  // elements: number;
+  // supportedTypes:
+  constructor(svg: string) {
     const svgObj = parse(svg);
     this.elements = this._getAllElements(svgObj);
     this.supportedTypes = [
@@ -32,12 +37,12 @@ class PenPlotter {
     return this.returnElementsByTagName(this.supportedTypes);
   };
 
-  _getAllElements = (obj) => {
-    const getChildren = (o) =>
-      o.children
-        ? [{ ...o, children: null }, ...o.children.map((x) => getChildren(x))]
-        : o;
-    return getChildren(obj).flat(99);
+  _getAllElements = (obj: RootNode): (RootNode | Node)[] => {
+    const getChildren = (o: RootNode | Node): NestedArray<RootNode | Node> =>
+      o.type !== "text" && o.children
+        ? [{ ...o }, ...o.children.map((x) => getChildren(x))]
+        : [o];
+    return flattenDeep(getChildren(obj));
   };
 }
 
