@@ -1,9 +1,19 @@
+const { penPositions } = require("./redux/penplotter");
+
 module.exports = {
   hardware: {
     pen: {
       pin: 11,
-      durationUp: 1000,
-      durationDown: 2000,
+      positions: {
+        [penPositions.UP]: {
+          position: 90,
+          duration: 1000,
+        },
+        [penPositions.DOWN]: {
+          position: 0,
+          duration: 2000,
+        },
+      },
     },
     stepper: {
       stepsPerRotation: 1600,

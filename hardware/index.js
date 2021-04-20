@@ -24,13 +24,13 @@ board.on("ready", () => {
 
     switch (direction) {
       case penPositions.UP: {
-        targetValue = 90;
-        movementDuration = hardware.pen.durationUp;
+        targetValue = hardware.pen.positions[penPositions.UP].position;
+        movementDuration = hardware.pen.positions[penPositions.UP].duration;
         break;
       }
       case penPositions.DOWN: {
-        targetValue = 0;
-        movementDuration = hardware.pen.durationDown;
+        targetValue = hardware.pen.positions[penPositions.DOWN].position;
+        movementDuration = hardware.pen.positions[penPositions.DOWN].duration;
         break;
       }
       default: {
