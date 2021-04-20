@@ -88,11 +88,11 @@ board.on("ready", () => {
       if (type && payload) {
         switch (type) {
           case "MOVE_PEN": {
-            if (payload === "DOWN") {
+            if (payload === penPositions.DOWN) {
               penDown();
               return;
             }
-            if (payload === "UP") {
+            if (payload === penPositions.UP) {
               penUp();
               return;
             }
