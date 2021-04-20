@@ -7,7 +7,7 @@ const penPositions = {
 };
 
 const DEFAULT_PENPLOTTER_STATE = {
-  connected: false,
+  connected: false, // TODO: 🚨 this must be part of penplotters hardware state too (or remove it)
   pen: {
     position: penPositions.UNKNOWN,
     isBusy: false,
