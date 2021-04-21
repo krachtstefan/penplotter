@@ -15,11 +15,21 @@ const ControlPanel = () => {
   const penPositionUnkown = penPosition === penPositions.UNKNOWN;
   const penLifted = penPosition === penPositions.UP;
   const penNotLifted = penPosition === penPositions.DOWN;
-  const disableButton = !connected || penPositionUnkown || penIsBusy;
+  const disablePenButton =
+    !connected || penPositionUnkown || penIsBusy || plotterIsBusy;
+  const disableDrawButton = !connected || plotterIsBusy || disablePenButton;
   return (
     <div>
+      <h2>Pen</h2>
+      <strong>Pen is busy? {penIsBusy === true ? "👍" : "👎"}</strong>
+      <br />
+      <strong>
+        Current pen position? {penLifted ? "👆" : ""} {penNotLifted ? "👇" : ""}{" "}
+        {penPositionUnkown ? "🤷‍♂️" : ""}
+      </strong>
+      <br />
       <button
-        disabled={disableButton || penLifted}
+        disabled={disablePenButton || penLifted}
         onClick={() => {
           sendJsonMessage({
             type: "MOVE_PEN",
@@ -30,7 +40,7 @@ const ControlPanel = () => {
         🖊 👆
       </button>{" "}
       <button
-        disabled={disableButton || penNotLifted}
+        disabled={disablePenButton || penNotLifted}
         onClick={() => {
           sendJsonMessage({
             type: "MOVE_PEN",
@@ -40,19 +50,22 @@ const ControlPanel = () => {
       >
         🖊 👇
       </button>
-      <h2>Pen</h2>
-      <strong>Pen is busy? {penIsBusy === true ? "👍" : "👎"}</strong>
-      <br />
-      <strong>
-        Current pen position? {penLifted ? "👆" : ""} {penNotLifted ? "👇" : ""}{" "}
-        {penPositionUnkown ? "🤷‍♂️" : ""}
-      </strong>
       <h2>Plotter</h2>
       <strong>Plotter is online? {connected === true ? "👍" : "👎"}</strong>
       <br />
-      <strong>Plotter is busy? {plotterIsBusy === true ? "👍" : "👎"}</strong>
-      <br />
       <strong>Drawing instructions? {instructions.length}</strong>
+      <br />
+      <button
+        disabled={disableDrawButton}
+        onClick={() => {
+          sendJsonMessage({
+            type: "START_DRAWING",
+            payload: null,
+          });
+        }}
+      >
+        {plotterIsBusy === false ? "Start drawing" : "Plotter is drawing"}
+      </button>
     </div>
   );
 };
