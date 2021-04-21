@@ -11,6 +11,8 @@ export enum ElementType {
   path = "path",
 }
 
+type Point2D = [BigDecimal, BigDecimal];
+
 interface NestedArray<T> extends Array<T | NestedArray<T>> {}
 
 const isNodeElement = (_: any): _ is Node => {
@@ -71,16 +73,17 @@ export const translateSVGPoints = (pointString: string) =>
  * returns
  * [[3,5], [7,10]]
  */
-const convertPointsRelToAbs = (startPnt, arrOfPoints) =>
+const convertPointsRelToAbs = (startPnt: Point2D, arrOfPoints: Point2D[]) =>
   arrOfPoints
     .reduce(
-      (acc, curr) => [
-        ...acc,
-        [
+      (acc, curr) => {
+        const add: Point2D = [
           new BigDecimal(acc.slice(-1)[0][0]).add(curr[0]),
           new BigDecimal(acc.slice(-1)[0][1]).add(curr[1]),
-        ],
-      ],
+        ];
+
+        return [...acc, add];
+      },
       [startPnt]
     )
     .slice(1);
