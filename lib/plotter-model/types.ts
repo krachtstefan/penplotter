@@ -1,3 +1,5 @@
+import { ElementNode, Node, RootNode } from "svg-parser";
+
 import BigDecimal from "decimal.js";
 
 export interface NestedArray<T> extends Array<T | NestedArray<T>> {}
@@ -11,3 +13,7 @@ export enum ElementType {
   rect = "rect",
   path = "path",
 }
+
+export const isElementNode = (
+  node: string | RootNode | Node
+): node is ElementNode => typeof node !== "string" && node.type === "element";

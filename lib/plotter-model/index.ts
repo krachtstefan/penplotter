@@ -1,17 +1,11 @@
 import { ElementNode, Node, RootNode, parse } from "svg-parser";
-import { ElementType, NestedArray, Point2D } from "./types";
+import { ElementType, NestedArray, Point2D, isElementNode } from "./types";
 import { chunk, flattenDeep } from "lodash";
 
 import BigDecimal from "decimal.js";
 
-const isNodeElement = (_: any): _ is Node => {
-  return typeof _ !== "string";
-};
-const test: (Node | string)[] = []; // TODO: remove this line 🚨
-[...test.filter(isNodeElement).map((x) => console.log(x))];
-
 class PenPlotter {
-  elements: (RootNode | Node)[];
+  elements: ElementNode[];
   supportedTypes: ElementType[];
   constructor(svg: string) {
     const svgObj = parse(svg);
@@ -28,13 +22,21 @@ class PenPlotter {
     return this.returnElementsByTagName(this.supportedTypes);
   }
 
-  _getAllElements = (obj: RootNode | Node): (RootNode | Node)[] => {
-    const getChildren = (o: RootNode | Node): NestedArray<RootNode | Node> =>
-      o.type !== "text" && o.children
-        ? [o, ...o.children.filter(isNodeElement).map((x) => getChildren(x))]
+  _getAllElements = (obj: RootNode | Node): ElementNode[] => {
+    const getChildren = (
+      o: RootNode | Node | string
+    ): NestedArray<RootNode | Node> => {
+      if (typeof o === "string") {
+        return [];
+      }
+      return o.type !== "text" && o.children
+        ? [o, ...o.children.filter(isElementNode).map((x) => getChildren(x))]
         : [o];
+    };
 
-    return flattenDeep(getChildren(obj));
+    return flattenDeep(getChildren(obj))
+      .filter(isElementNode)
+      .map((x) => x);
   };
 }
 
