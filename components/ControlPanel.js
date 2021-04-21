@@ -80,7 +80,6 @@ const ControlPanel = () => {
       <strong>eta {etaMs ? moment(etaMs).format("LT") : "unknown"}</strong>
       <br />
       <strong>
-        progress <br />
         <div
           style={{
             width: 200,
@@ -103,9 +102,7 @@ const ControlPanel = () => {
               fontSize: 11,
               paddingTop: 3,
             }}
-          >
-            {progress}
-          </div>
+          ></div>
           <div
             style={{
               width: `${progress}%`,
