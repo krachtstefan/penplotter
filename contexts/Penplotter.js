@@ -35,6 +35,16 @@ const penplotterReducer = (state, action) => {
           return { ...state, ...data };
         case "penplotter.pen":
           return { ...state, pen: { ...state.pen, ...data } };
+        case "penplotter.drawing.isBusy":
+          return {
+            ...state,
+            drawing: { ...state.drawing, isBusy: data },
+          };
+        case "penplotter.drawing.instructions":
+          return {
+            ...state,
+            drawing: { ...state.drawing, instructions: data },
+          };
         default:
           console.error(`path ${path} not implemented in ${action.type}`);
           return state;
