@@ -80,35 +80,36 @@ const convertPointsRelToAbs = (startPnt: Point2D, arrOfPoints: Point2D[]) =>
     )
     .slice(1);
 
-const numberArrToPoint2D = (arr: [number, number]): Point2D => [
+const createPoint2D = (arr: [any, any]): Point2D => [
   new BigDecimal(arr[0]),
   new BigDecimal(arr[1]),
 ];
 
 const arrayofNumberArrToPoint2D = (arr: [number, number][]) =>
-  arr.map((numericArr) => numberArrToPoint2D(numericArr));
+  arr.map((numericArr) => createPoint2D(numericArr));
 
 // current implementations:
 // M35,0.75 L34.09375,2.5625
 // M 382.49999 494.99999 L 384.55374 496.87223
-export const translatePathString = (pathString) =>
+export const translatePathString = (pathString: string): Point2D[][] =>
   pathString
     .split(/ (?=[a-z|A-Z])/) // split by whitespaces that are followed by a character
     .reduce((acc, curr) => {
       const command = curr.slice(0, 1);
       // trim optional whitespace between command and split at whitespaces or commas
       const args = curr.slice(1).trim().split(/[,| ]/);
-      let result = acc;
+      let result = [...acc];
       const currentLine = acc.slice(-1)[0];
       const previouseLines = acc.slice(0, -1);
+
       switch (`${command}`) {
         case "M": // create a new element
         case "m": // relative version of M
           const newStartingPoint =
             command === "M"
-              ? [numberArrToPoint2D(args)]
+              ? [createPoint2D([args[0], args[1]])]
               : convertPointsRelToAbs(currentLine.slice(-1)[0], [
-                  numberArrToPoint2D(args),
+                  createPoint2D([args[0], args[1]]),
                 ]);
 
           result = [...acc, newStartingPoint];
@@ -124,7 +125,7 @@ export const translatePathString = (pathString) =>
           ) {
             result = [
               ...previouseLines,
-              [...currentLine, numberArrToPoint2D(fistPoint)],
+              [...currentLine, createPoint2D(fistPoint)],
             ];
           } else {
             console.warn(
@@ -157,7 +158,9 @@ export const translatePathString = (pathString) =>
               ? [...args, refCoordinate[1]]
               : [refCoordinate[0], ...args];
 
-          let newHorLineSegment = [numberArrToPoint2D(targetCoordinate)];
+          let newHorLineSegment = [
+            createPoint2D([targetCoordinate[0], targetCoordinate[1]]),
+          ];
           if (isRelative) {
             newHorLineSegment = convertPointsRelToAbs(
               currentLine.slice(-1)[0],
@@ -174,9 +177,8 @@ export const translatePathString = (pathString) =>
           result = acc;
           break;
       }
-
       return result;
-    }, []);
+    }, [] as Point2D[][]);
 
 export const returnPointsArrFromElement = (
   element: ElementNode
@@ -237,7 +239,7 @@ export const returnPointsArrFromElement = (
           ],
         ];
       case ElementType.path:
-        return translatePathString(element.properties.d);
+        return translatePathString(`${element.properties.d}`);
       default:
         return [];
     }
