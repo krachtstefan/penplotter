@@ -10,6 +10,7 @@ const {
   finishPenMovement,
   startPenMovement,
   addDrawingJob,
+  startDrawing,
 } = require("./redux/penplotter");
 
 const board = new Board();
@@ -94,7 +95,7 @@ board.on("ready", () => {
     ws.on("message", function incoming(message) {
       const { type, payload } = JSON.parse(message);
       console.log(message);
-      if (type && payload) {
+      if (type) {
         switch (type) {
           case "MOVE_PEN": {
             if ([penPositions.DOWN, penPositions.UP].includes(payload)) {
@@ -106,6 +107,10 @@ board.on("ready", () => {
           }
           case "SEND_DRAW_JOB": {
             store.dispatch(addDrawingJob(payload));
+            return;
+          }
+          case "START_DRAWING": {
+            store.dispatch(startDrawing());
             return;
           }
           default: {

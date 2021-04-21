@@ -58,10 +58,7 @@ const ControlPanel = () => {
       <button
         disabled={disableDrawButton}
         onClick={() => {
-          sendJsonMessage({
-            type: "START_DRAWING",
-            payload: null,
-          });
+          sendJsonMessage({ type: "START_DRAWING" });
         }}
       >
         {plotterIsBusy === false ? "Start drawing" : "Plotter is drawing"}

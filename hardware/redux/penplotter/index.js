@@ -60,12 +60,10 @@ const addDrawingJob = (instructions) => ({
 
 const startDrawing = () => ({
   type: actionTypes.START_DRAWING,
-  payload: null,
 });
 
 const stopDrawing = () => ({
   type: actionTypes.STOP_DRAWING,
-  payload: null,
 });
 
 const reducer = (state = DEFAULT_PENPLOTTER_STATE, action) => {
