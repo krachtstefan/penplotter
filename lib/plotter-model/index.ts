@@ -15,7 +15,9 @@ class PenPlotter {
 
   returnElementsByTagName(tagnames: ElementType | ElementType[]) {
     const tagnamesArr = typeof tagnames === "string" ? [tagnames] : tagnames;
-    return this.elements.filter((e) => tagnamesArr.includes(e.tagName));
+    return this.elements.filter((e) =>
+      tagnamesArr.some((x) => x === e.tagName)
+    );
   }
 
   returnSupportedElements() {
