@@ -77,16 +77,13 @@ const convertPointsRelToAbs = (startPnt: Point2D, arrOfPoints: Point2D[]) =>
     )
     .slice(1);
 
-const mapCoordinatesToBigDec = (arr) =>
-  arr.map((numeric) => new BigDecimal(numeric));
+const numberArrToPoint2D = (arr: [number, number]): Point2D => [
+  new BigDecimal(arr[0]),
+  new BigDecimal(arr[1]),
+];
 
-const mapArrOfCoordinatesToBigDec = (arr) =>
-  arr.map((numericArr) => mapCoordinatesToBigDec(numericArr));
-
-export const mapBigDecToCoordinates = (arr) => arr.map((bd) => bd.toNumber());
-
-export const mapArrOfBigDecToCoordinates = (arr) =>
-  arr.map((bdArr) => mapBigDecToCoordinates(bdArr));
+const arrayofNumberArrToPoint2D = (arr: [number, number][]) =>
+  arr.map((numericArr) => numberArrToPoint2D(numericArr));
 
 // current implementations:
 // M35,0.75 L34.09375,2.5625
@@ -106,9 +103,9 @@ export const translatePathString = (pathString) =>
         case "m": // relative version of M
           const newStartingPoint =
             command === "M"
-              ? [mapCoordinatesToBigDec(args)]
+              ? [numberArrToPoint2D(args)]
               : convertPointsRelToAbs(currentLine.slice(-1)[0], [
-                  mapCoordinatesToBigDec(args),
+                  numberArrToPoint2D(args),
                 ]);
 
           result = [...acc, newStartingPoint];
@@ -124,7 +121,7 @@ export const translatePathString = (pathString) =>
           ) {
             result = [
               ...previouseLines,
-              [...currentLine, mapCoordinatesToBigDec(fistPoint)],
+              [...currentLine, numberArrToPoint2D(fistPoint)],
             ];
           } else {
             console.warn(
@@ -134,7 +131,7 @@ export const translatePathString = (pathString) =>
           break;
         case "L": // L (line) command draws to a new coordinate
         case "l": // relative version of L
-          let newLineSegment = mapArrOfCoordinatesToBigDec(chunk(args, 2));
+          let newLineSegment = arrayofNumberArrToPoint2D(chunk(args, 2));
           if (command === "l") {
             newLineSegment = convertPointsRelToAbs(
               currentLine.slice(-1)[0],
@@ -157,7 +154,7 @@ export const translatePathString = (pathString) =>
               ? [...args, refCoordinate[1]]
               : [refCoordinate[0], ...args];
 
-          let newHorLineSegment = [mapCoordinatesToBigDec(targetCoordinate)];
+          let newHorLineSegment = [numberArrToPoint2D(targetCoordinate)];
           if (isRelative) {
             newHorLineSegment = convertPointsRelToAbs(
               currentLine.slice(-1)[0],
