@@ -19,7 +19,7 @@ import Material from "./Material";
 import React from "react";
 import config from "../../config";
 import dynamic from "next/dynamic";
-import useClipboard from "react-use-clipboard";
+import useWebSocket from "react-use-websocket";
 
 const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/path-horizontal.svg", "utf8")`;
 const parsedSvg = new PenPlotter(svgFile);
@@ -34,6 +34,13 @@ const elementsToDraw = parsedSvg
 const { width, height } = getDimensions(elementsToDraw);
 
 const Penplotter = () => {
+  const { sendJsonMessage } = useWebSocket(config.websocket.address);
+  const sendDrawJob = () => {
+    sendJsonMessage({
+      type: "SEND_DRAW_JOB",
+      payload: plotterInstructions,
+    });
+  };
   const [
     {
       gridEnabled,
@@ -115,7 +122,7 @@ const Penplotter = () => {
       },
     }),
     "": folder({
-      "copy penplotter intructions": button(() => setCopied()),
+      "Send draw instructions to Penplotter": button(() => sendDrawJob()),
     }),
   }));
 
@@ -217,12 +224,6 @@ const Penplotter = () => {
     }),
     delay: 1000,
   });
-
-  const [_, setCopied] = useClipboard(
-    `/*generated at ${new Date().toLocaleString()}*/\n${JSON.stringify(
-      plotterInstructions
-    )}`
-  );
 
   return (
     <>
