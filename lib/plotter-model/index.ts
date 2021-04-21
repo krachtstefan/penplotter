@@ -1,5 +1,5 @@
+import { ElementNode, Node, RootNode, parse } from "svg-parser";
 import { ElementType, NestedArray, Point2D } from "./types";
-import { Node, RootNode, parse } from "svg-parser";
 import { chunk, flattenDeep } from "lodash";
 
 import BigDecimal from "decimal.js";
@@ -50,10 +50,13 @@ export const getLenghtByPoints = (
   return a.add(b).sqrt();
 };
 
-export const translateSVGPoints = (pointString: string) =>
+export const translateSVGPoints = (pointString: string): Point2D[] =>
   pointString
     .split(" ")
-    .map((string) => string.split(",").map((x) => new BigDecimal(x)));
+    .map((str) => [
+      new BigDecimal(str.split(",")[0]),
+      new BigDecimal(str.split(",")[1]),
+    ]);
 
 /**
  * example:
@@ -175,55 +178,76 @@ export const translatePathString = (pathString) =>
       return result;
     }, []);
 
-export const returnPointsArrFromElement = (element) => {
-  switch (element.tagName) {
-    case ElementType.polyline:
-      return [translateSVGPoints(element.properties.points)];
-    case ElementType.polygon:
-      /**
-       * polygon is like polyline, except the path is closed,
-       * we need to copy the first coordinates
-       */
-      return [
-        translateSVGPoints(
-          `${element.properties.points} ${element.properties.points
-            .split(" ")
-            .slice(0, 2)
-            .join(" ")}`
-        ),
-      ];
-
-    case ElementType.line:
-      const { x1, x2, y1, y2 } = element.properties;
-      return [
-        [
-          [new BigDecimal(x1), new BigDecimal(y1)],
-          [new BigDecimal(x2), new BigDecimal(y2)],
-        ],
-      ];
-    case ElementType.rect:
-      const { x: xAttr, y: yAttr, width, height } = element.properties;
-      const x = new BigDecimal(xAttr ? xAttr : 0);
-      const y = new BigDecimal(yAttr ? yAttr : 0);
-      return [
-        [
-          [x, y],
-          [x.add(width), y],
-          [x.add(width), y.add(height)],
-          [x, y.add(height)],
-          [x, y],
-        ],
-      ];
-    case ElementType.path:
-      return translatePathString(element.properties.d);
-    default:
-      return [];
+export const returnPointsArrFromElement = (
+  element: ElementNode
+): Point2D[][] => {
+  if (element.properties) {
+    switch (element.tagName) {
+      case ElementType.polyline:
+      case ElementType.polygon:
+        if (element.properties && element.properties.points) {
+          return element.tagName === ElementType.polyline
+            ? [translateSVGPoints(`${element.properties.points}`)]
+            : /**
+               * polygon is like polyline, except the path is closed,
+               * we need to copy the first coordinates
+               */
+              [
+                translateSVGPoints(
+                  `${
+                    element.properties.points
+                  } ${element.properties.points
+                    .toString()
+                    .split(" ")
+                    .slice(0, 2)
+                    .join(" ")}`
+                ),
+              ];
+        }
+        console.error(`points are missing for ${element.tagName}`);
+        return [];
+      case ElementType.line:
+        const { x1, x2, y1, y2 } = element.properties;
+        if (
+          x1 !== undefined &&
+          x2 !== undefined &&
+          y1 !== undefined &&
+          y2 !== undefined
+        ) {
+          return [
+            [
+              [new BigDecimal(x1), new BigDecimal(y1)],
+              [new BigDecimal(x2), new BigDecimal(y2)],
+            ],
+          ];
+        }
+        console.error(`coordinates are missing for ${element.tagName}`);
+        return [];
+      case ElementType.rect:
+        const { x: xAttr, y: yAttr, width, height } = element.properties;
+        const x = new BigDecimal(xAttr ? xAttr : 0);
+        const y = new BigDecimal(yAttr ? yAttr : 0);
+        return [
+          [
+            [x, y],
+            [x.add(width), y],
+            [x.add(width), y.add(height)],
+            [x, y.add(height)],
+            [x, y],
+          ],
+        ];
+      case ElementType.path:
+        return translatePathString(element.properties.d);
+      default:
+        return [];
+    }
   }
+  console.error(`properties are missing for ${element.tagName}`);
+  return [];
 };
 
 // TODO: use BigDecimal instead of number on all functions below 🚨
 export const getPosition = (arrOfPointArrays: [number, number][][]) => {
-  console.log(arrOfPointArrays);
   const allX = arrOfPointArrays.flat().map((p) => p[0]);
   const allY = arrOfPointArrays.flat().map((p) => p[1]);
   return {
