@@ -221,16 +221,18 @@ export const returnPointsArrFromElement = (element) => {
   }
 };
 
-export const getPosition = (arrOfPointArrays) => {
+// TODO: use BigDecimal instead of number on all functions below 🚨
+export const getPosition = (arrOfPointArrays: [number, number][][]) => {
+  console.log(arrOfPointArrays);
   const allX = arrOfPointArrays.flat().map((p) => p[0]);
   const allY = arrOfPointArrays.flat().map((p) => p[1]);
   return {
     top: Math.max(...allY),
-    left: Math.min(...allX),
+    left: Math.min(...allX), // convert top left objects in this file to coordinates 🚨
   };
 };
 
-export const getDimensions = (arrOfPointArrays) => {
+export const getDimensions = (arrOfPointArrays: [number, number][][]) => {
   const allX = arrOfPointArrays.flat().map((p) => p[0]);
   const allY = arrOfPointArrays.flat().map((p) => p[1]);
   return {
@@ -239,7 +241,7 @@ export const getDimensions = (arrOfPointArrays) => {
   };
 };
 
-export const scale = (arrOfPointArrays, factor) =>
+export const scale = (arrOfPointArrays: [number, number][][], factor: number) =>
   arrOfPointArrays.map((pA) =>
     pA.map(([x, y]) => [
       new BigDecimal(x).times(factor || 0).toNumber(),
@@ -247,13 +249,16 @@ export const scale = (arrOfPointArrays, factor) =>
     ])
   );
 
-export const mirrorX = (arrOfPointArrays) =>
+export const mirrorX = (arrOfPointArrays: [number, number][][]) =>
   arrOfPointArrays.map((pA) => pA.map(([x, y]) => [-x, y]));
 
-export const mirrorY = (arrOfPointArrays) =>
+export const mirrorY = (arrOfPointArrays: [number, number][][]) =>
   arrOfPointArrays.map((pA) => pA.map(([x, y]) => [x, -y]));
 
-export const move = (arrOfPointArrays, { top, left }) =>
+export const move = (
+  arrOfPointArrays: [number, number][][],
+  { top, left }: { top: number; left: number }
+) =>
   arrOfPointArrays.map((pA) =>
     pA.map(([x, y]) => [
       new BigDecimal(x).add(left || 0).toNumber(),
