@@ -85,7 +85,7 @@ const createPoint2D = (arr: [any, any]): Point2D => [
   new BigDecimal(arr[1]),
 ];
 
-const arrayofNumberArrToPoint2D = (arr: [number, number][]) =>
+const arrayofNumberArrToPoint2D = (arr: [any, any][]) =>
   arr.map((numericArr) => createPoint2D(numericArr));
 
 // current implementations:
@@ -135,7 +135,9 @@ export const translatePathString = (pathString: string): Point2D[][] =>
           break;
         case "L": // L (line) command draws to a new coordinate
         case "l": // relative version of L
-          let newLineSegment = arrayofNumberArrToPoint2D(chunk(args, 2));
+          let newLineSegment = arrayofNumberArrToPoint2D(
+            chunk(args, 2).map((x) => [x[0], x[1]])
+          );
           if (command === "l") {
             newLineSegment = convertPointsRelToAbs(
               currentLine.slice(-1)[0],
