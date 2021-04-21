@@ -9,6 +9,7 @@ const {
   penPositions,
   finishPenMovement,
   startPenMovement,
+  addDrawingJob,
 } = require("./redux/penplotter");
 
 const board = new Board();
@@ -101,6 +102,10 @@ board.on("ready", () => {
               return;
             }
             console.error("unsupported pen movement", payload);
+            return;
+          }
+          case "SEND_DRAW_JOB": {
+            store.dispatch(addDrawingJob(payload));
             return;
           }
           default: {
