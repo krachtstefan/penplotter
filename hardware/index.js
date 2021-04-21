@@ -11,6 +11,7 @@ const {
   startPenMovement,
   addDrawingJob,
   startDrawing,
+  updateProgress,
 } = require("./redux/penplotter");
 
 const board = new Board();
@@ -112,11 +113,18 @@ board.on("ready", () => {
             formNow: eta.fromNow(),
           });
 
+          store.dispatch(
+            updateProgress({
+              startedAtMs: startDate.valueOf(),
+              etaMs: eta.valueOf(),
+              progress: progress.toNumber(),
+            })
+          );
+
           const throttleRight =
             Math.abs(instruction.right) < Math.abs(instruction.left);
           const throttleLeft =
             Math.abs(instruction.left) < Math.abs(instruction.right);
-
           return (() =>
             instruction.pen === "up"
               ? movePen(penPositions.UP)

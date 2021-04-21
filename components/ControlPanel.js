@@ -2,6 +2,7 @@ import { penPositions, usePenplotterContext } from "../contexts/Penplotter";
 
 import React from "react";
 import config from "../config";
+import moment from "moment";
 import useWebSocket from "react-use-websocket";
 
 const ControlPanel = () => {
@@ -9,7 +10,11 @@ const ControlPanel = () => {
   const {
     connected,
     pen: { position: penPosition, isBusy: penIsBusy },
-    drawing: { instructions, isBusy: plotterIsBusy },
+    drawing: {
+      instructions,
+      isBusy: plotterIsBusy,
+      progress: { startedAtMs, etaMs, progress },
+    },
   } = usePenplotterContext();
 
   const penPositionUnkown = penPosition === penPositions.UNKNOWN;
@@ -23,7 +28,7 @@ const ControlPanel = () => {
     disablePenButton ||
     instructions.length === 0;
   return (
-    <div>
+    <div style={{ padding: 10 }}>
       <h2>Pen</h2>
       <strong>Pen is busy? {penIsBusy === true ? "👍" : "👎"}</strong>
       <br />
@@ -67,6 +72,50 @@ const ControlPanel = () => {
       >
         {plotterIsBusy === false ? "Start drawing" : "Plotter is drawing"}
       </button>
+      <h2>Progress</h2>
+      <strong>
+        started at {startedAtMs ? moment(startedAtMs).format("LT") : "unknown"}
+      </strong>
+      <br />
+      <strong>eta {etaMs ? moment(etaMs).format("LT") : "unknown"}</strong>
+      <br />
+      <strong>
+        progress <br />
+        <div
+          style={{
+            width: 200,
+            border: "1px solid green",
+            padding: 1,
+            position: "relative",
+            height: 20,
+            marginTop: 5,
+            borderRadius: 2,
+            display: "grid",
+          }}
+        >
+          <div
+            style={{
+              position: "absolute",
+              width: "100%",
+              height: "100%",
+              fontFamily: "sans-serif",
+              textAlign: "center",
+              fontSize: 11,
+              paddingTop: 3,
+            }}
+          >
+            {progress}
+          </div>
+          <div
+            style={{
+              width: `${progress}%`,
+              height: "100%",
+              background: "green",
+              transition: "width 1s",
+            }}
+          ></div>
+        </div>
+      </strong>
     </div>
   );
 };

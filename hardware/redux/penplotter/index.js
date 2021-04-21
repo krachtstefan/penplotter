@@ -4,6 +4,7 @@ const actionTypes = {
   ADD_DRAWING_JOB: "ADD_DRAWING_JOB",
   START_DRAWING: "START_DRAWING",
   STOP_DRAWING: "STOP_DRAWING",
+  UPDATE_PROGRESS: "UPDATE_PROGRESS",
 };
 
 const penPositions = {
@@ -28,6 +29,11 @@ const updateMapping = [
     path: "penplotter.drawing.isBusy",
     state: (state) => state.penplotter.drawing.isBusy,
   },
+  {
+    actions: [actionTypes.UPDATE_PROGRESS],
+    path: "penplotter.drawing.progress",
+    state: (state) => state.penplotter.drawing.progress,
+  },
 ];
 
 const DEFAULT_PENPLOTTER_STATE = {
@@ -39,7 +45,11 @@ const DEFAULT_PENPLOTTER_STATE = {
   drawing: {
     isBusy: false,
     instructions: [],
-    progress: {},
+    progress: {
+      startedAtMs: null,
+      etaMs: null,
+      progress: 0,
+    },
   },
 };
 
@@ -64,6 +74,11 @@ const startDrawing = () => ({
 
 const stopDrawing = () => ({
   type: actionTypes.STOP_DRAWING,
+});
+
+const updateProgress = (payload) => ({
+  type: actionTypes.UPDATE_PROGRESS,
+  payload,
 });
 
 const reducer = (state = DEFAULT_PENPLOTTER_STATE, action) => {
@@ -106,6 +121,17 @@ const reducer = (state = DEFAULT_PENPLOTTER_STATE, action) => {
         },
       };
     }
+    case actionTypes.UPDATE_PROGRESS: {
+      return {
+        ...state,
+        drawing: {
+          ...state.drawing,
+          progress: {
+            ...action.payload,
+          },
+        },
+      };
+    }
   }
   return state;
 };
@@ -118,5 +144,6 @@ module.exports = {
   addDrawingJob,
   startDrawing,
   stopDrawing,
+  updateProgress,
   updateMapping,
 };

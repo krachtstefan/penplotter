@@ -15,7 +15,11 @@ const DEFAULT_PENPLOTTER_STATE = {
   drawing: {
     isBusy: false,
     instructions: [],
-    progress: {},
+    progress: {
+      startedAtMs: null,
+      etaMS: null,
+      progress: 0,
+    },
   },
 };
 
@@ -49,6 +53,11 @@ const penplotterReducer = (state, action) => {
           return {
             ...state,
             drawing: { ...state.drawing, instructions: data },
+          };
+        case "penplotter.drawing.progress":
+          return {
+            ...state,
+            drawing: { ...state.drawing, progress: data },
           };
         default:
           console.error(`path ${path} not implemented in ${action.type}`);
