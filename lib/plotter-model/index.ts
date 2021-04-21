@@ -1,19 +1,8 @@
+import { ElementType, NestedArray, Point2D } from "./types";
 import { Node, RootNode, parse } from "svg-parser";
 import { chunk, flattenDeep } from "lodash";
 
 import BigDecimal from "decimal.js";
-
-export enum ElementType {
-  polyline = "polyline",
-  polygon = "polygon",
-  line = "line",
-  rect = "rect",
-  path = "path",
-}
-
-type Point2D = [BigDecimal, BigDecimal];
-
-interface NestedArray<T> extends Array<T | NestedArray<T>> {}
 
 const isNodeElement = (_: any): _ is Node => {
   return typeof _ !== "string";
