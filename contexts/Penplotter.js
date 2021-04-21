@@ -12,6 +12,11 @@ const DEFAULT_PENPLOTTER_STATE = {
     position: penPositions.UNKNOWN,
     isBusy: false,
   },
+  drawing: {
+    isBusy: false,
+    instructions: [],
+    progress: {},
+  },
 };
 
 const PenplotterStateContext = createContext(DEFAULT_PENPLOTTER_STATE);
