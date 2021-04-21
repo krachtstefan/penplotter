@@ -7,7 +7,7 @@ const penPositions = {
 };
 
 const DEFAULT_PENPLOTTER_STATE = {
-  connected: false, // TODO: 🚨 this must be part of penplotters hardware state too (or remove it)
+  connected: false, // will be set with the initial update from the plotter
   pen: {
     position: penPositions.UNKNOWN,
     isBusy: false,
@@ -18,15 +18,15 @@ const PenplotterStateContext = createContext(DEFAULT_PENPLOTTER_STATE);
 const PenplotterDispatchContext = createContext(null);
 
 const actionTypes = {
-  SET_PLOTTER_CONNECTED: "SET_PLOTTER_CONNECTED",
+  NO_CONNECTION: "NO_CONNECTION",
   UPDATE_PLOTTER_STATE: "UPDATE_PLOTTER_STATE",
 };
 
 const penplotterReducer = (state, action) => {
   console.log("received action", action);
   switch (action.type) {
-    case actionTypes.SET_PLOTTER_CONNECTED: {
-      return { ...state, connected: action.payload };
+    case actionTypes.NO_CONNECTION: {
+      return { ...state, connected: false };
     }
     case actionTypes.UPDATE_PLOTTER_STATE: {
       const { path, data } = action.payload;

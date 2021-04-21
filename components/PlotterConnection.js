@@ -24,21 +24,15 @@ const PlotterConnection = () => {
     },
   });
 
-  const isReady = readyState === 1 ? true : false;
+  const noConnection = readyState !== 1 ? true : false;
 
   useEffect(() => {
-    if (isReady === true) {
+    if (noConnection === true) {
       penplotterDispatch({
-        type: actionTypes.SET_PLOTTER_CONNECTED,
-        payload: true,
-      });
-    } else {
-      penplotterDispatch({
-        type: actionTypes.SET_PLOTTER_CONNECTED,
-        payload: false,
+        type: actionTypes.NO_CONNECTION,
       });
     }
-  }, [isReady]);
+  }, [noConnection]);
 
   return null;
 };

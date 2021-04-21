@@ -31,6 +31,7 @@ const updateMapping = [
 ];
 
 const DEFAULT_PENPLOTTER_STATE = {
+  connected: true,
   pen: {
     position: penPositions.UNKNOWN,
     isBusy: false,
