@@ -17,7 +17,11 @@ const ControlPanel = () => {
   const penNotLifted = penPosition === penPositions.DOWN;
   const disablePenButton =
     !connected || penPositionUnkown || penIsBusy || plotterIsBusy;
-  const disableDrawButton = !connected || plotterIsBusy || disablePenButton;
+  const disableDrawButton =
+    !connected ||
+    plotterIsBusy ||
+    disablePenButton ||
+    instructions.length === 0;
   return (
     <div>
       <h2>Pen</h2>
