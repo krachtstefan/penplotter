@@ -50,13 +50,16 @@ class PenPlotter {
 /**
  *  Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2));
  */
-export const getLenghtByPoints = ([x1, y1], [x2, y2]) => {
+export const getLenghtByPoints = (
+  [x1, y1]: [number | BigDecimal, number | BigDecimal],
+  [x2, y2]: [number | BigDecimal, number | BigDecimal]
+) => {
   const a = new BigDecimal(x1).sub(x2).abs().pow(2);
   const b = new BigDecimal(y1).sub(y2).abs().pow(2);
   return a.add(b).sqrt();
 };
 
-export const translateSVGPoints = (pointString) =>
+export const translateSVGPoints = (pointString: string) =>
   pointString
     .split(" ")
     .map((string) => string.split(",").map((x) => new BigDecimal(x)));
