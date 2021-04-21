@@ -13,6 +13,12 @@ export enum ElementType {
 
 interface NestedArray<T> extends Array<T | NestedArray<T>> {}
 
+const isNodeElement = (_: any): _ is Node => {
+  return typeof _ !== "string";
+};
+const test: (Node | string)[] = []; // TODO: remove this line 🚨
+[...test.filter(isNodeElement).map((x) => console.log(x))];
+
 class PenPlotter {
   elements: (RootNode | Node)[];
   supportedTypes: ElementType[];
@@ -34,7 +40,7 @@ class PenPlotter {
   _getAllElements = (obj: RootNode | Node): (RootNode | Node)[] => {
     const getChildren = (o: RootNode | Node): NestedArray<RootNode | Node> =>
       o.type !== "text" && o.children
-        ? [{ ...o }, ...o.children.map((x) => getChildren(x))]
+        ? [o, ...o.children.filter(isNodeElement).map((x) => getChildren(x))]
         : [o];
 
     return flattenDeep(getChildren(obj));
