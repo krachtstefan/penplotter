@@ -12,6 +12,7 @@ const {
   addDrawingJob,
   startDrawing,
   updateProgress,
+  stopDrawing,
 } = require("./redux/penplotter");
 
 const board = new Board();
@@ -93,68 +94,75 @@ board.on("ready", () => {
   const draw = () => {
     const startDate = moment();
     const { instructions } = store.getState().penplotter.drawing;
-    instructions.reduce(
-      (promise, instruction, index, srcArray) =>
-        promise.then((_) => {
-          const progress = new BigDecimal(index + 1)
-            .div(srcArray.length)
-            .times(100);
-          const secondsGone = new BigDecimal(
-            moment().diff(startDate, "seconds")
-          );
-          const durationTotalSec = new BigDecimal(100)
-            .div(progress)
-            .times(secondsGone);
-          const eta = startDate.clone().add(durationTotalSec, "seconds");
-          console.log({
-            startedAt: startDate.format("LT"),
-            eta: eta.format("LT"),
-            progress: progress.toFixed(2),
-            formNow: eta.fromNow(),
-          });
 
-          store.dispatch(
-            updateProgress({
-              startedAtMs: startDate.valueOf(),
-              etaMs: eta.valueOf(),
-              progress: progress.toNumber(),
-            })
-          );
+    movePen(penPositions.UP)
+      .then(() =>
+        instructions.reduce(
+          (promise, instruction, index, srcArray) =>
+            promise.then((_) => {
+              const progress = new BigDecimal(index + 1)
+                .div(srcArray.length)
+                .times(100);
+              const secondsGone = new BigDecimal(
+                moment().diff(startDate, "seconds")
+              );
+              const durationTotalSec = new BigDecimal(100)
+                .div(progress)
+                .times(secondsGone);
+              const eta = startDate.clone().add(durationTotalSec, "seconds");
+              console.log({
+                startedAt: startDate.format("LT"),
+                eta: eta.format("LT"),
+                progress: progress.toFixed(2),
+                formNow: eta.fromNow(),
+              });
 
-          const throttleRight =
-            Math.abs(instruction.right) < Math.abs(instruction.left);
-          const throttleLeft =
-            Math.abs(instruction.left) < Math.abs(instruction.right);
-          return (() =>
-            instruction.pen === "up"
-              ? movePen(penPositions.UP)
-              : movePen(penPositions.DOWN))().then(() =>
-            Promise.all([
-              rotate({
-                name: "stepper left",
-                motor: stepperLeft,
-                rotation: instruction.left,
-                throttle: throttleLeft
-                  ? new BigDecimal(Math.abs(instruction.left))
-                      .div(Math.abs(instruction.right))
-                      .toNumber()
-                  : 1,
-              }),
-              rotate({
-                name: "stepper right",
-                motor: stepperRight,
-                rotation: instruction.right,
-                throttle: throttleRight
-                  ? new BigDecimal(Math.abs(instruction.right))
-                      .div(Math.abs(instruction.left))
-                      .toNumber()
-                  : 1,
-              }),
-            ])
-          );
-        }),
-      Promise.resolve()
-    );
+              store.dispatch(
+                updateProgress({
+                  startedAtMs: startDate.valueOf(),
+                  etaMs: eta.valueOf(),
+                  progress: progress.toNumber(),
+                })
+              );
+
+              const throttleRight =
+                Math.abs(instruction.right) < Math.abs(instruction.left);
+              const throttleLeft =
+                Math.abs(instruction.left) < Math.abs(instruction.right);
+              return (() =>
+                instruction.pen === "up"
+                  ? movePen(penPositions.UP)
+                  : movePen(penPositions.DOWN))().then(() =>
+                Promise.all([
+                  rotate({
+                    name: "stepper left",
+                    motor: stepperLeft,
+                    rotation: instruction.left,
+                    throttle: throttleLeft
+                      ? new BigDecimal(Math.abs(instruction.left))
+                          .div(Math.abs(instruction.right))
+                          .toNumber()
+                      : 1,
+                  }),
+                  rotate({
+                    name: "stepper right",
+                    motor: stepperRight,
+                    rotation: instruction.right,
+                    throttle: throttleRight
+                      ? new BigDecimal(Math.abs(instruction.right))
+                          .div(Math.abs(instruction.left))
+                          .toNumber()
+                      : 1,
+                  }),
+                ])
+              );
+            }),
+          Promise.resolve()
+        )
+      )
+      .then(() => {
+        store.dispatch(stopDrawing());
+      });
   };
 
   websockets.server.on("connection", function connection(ws) {
