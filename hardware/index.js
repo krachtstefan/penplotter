@@ -89,7 +89,65 @@ board.on("ready", () => {
       );
     });
 
-  const startDate = moment();
+  const draw = () => {
+    const startDate = moment();
+    const { instructions } = store.getState().penplotter.drawing;
+    instructions.reduce(
+      (promise, instruction, index, srcArray) =>
+        promise.then((_) => {
+          const progress = new BigDecimal(index + 1)
+            .div(srcArray.length)
+            .times(100);
+          const secondsGone = new BigDecimal(
+            moment().diff(startDate, "seconds")
+          );
+          const durationTotalSec = new BigDecimal(100)
+            .div(progress)
+            .times(secondsGone);
+          const eta = startDate.clone().add(durationTotalSec, "seconds");
+          console.log({
+            startedAt: startDate.format("LT"),
+            eta: eta.format("LT"),
+            progress: progress.toFixed(2),
+            formNow: eta.fromNow(),
+          });
+
+          const throttleRight =
+            Math.abs(instruction.right) < Math.abs(instruction.left);
+          const throttleLeft =
+            Math.abs(instruction.left) < Math.abs(instruction.right);
+
+          return (() =>
+            instruction.pen === "up"
+              ? movePen(penPositions.UP)
+              : movePen(penPositions.DOWN))().then(() =>
+            Promise.all([
+              rotate({
+                name: "stepper left",
+                motor: stepperLeft,
+                rotation: instruction.left,
+                throttle: throttleLeft
+                  ? new BigDecimal(Math.abs(instruction.left))
+                      .div(Math.abs(instruction.right))
+                      .toNumber()
+                  : 1,
+              }),
+              rotate({
+                name: "stepper right",
+                motor: stepperRight,
+                rotation: instruction.right,
+                throttle: throttleRight
+                  ? new BigDecimal(Math.abs(instruction.right))
+                      .div(Math.abs(instruction.left))
+                      .toNumber()
+                  : 1,
+              }),
+            ])
+          );
+        }),
+      Promise.resolve()
+    );
+  };
 
   websockets.server.on("connection", function connection(ws) {
     ws.on("message", function incoming(message) {
@@ -111,6 +169,7 @@ board.on("ready", () => {
           }
           case "START_DRAWING": {
             store.dispatch(startDrawing());
+            draw();
             return;
           }
           default: {
@@ -129,60 +188,5 @@ board.on("ready", () => {
       },
     });
   });
-
   readPenPosition();
-
-  [].reduce(
-    (promise, instruction, index, srcArray) =>
-      promise.then((_) => {
-        const progress = new BigDecimal(index + 1)
-          .div(srcArray.length)
-          .times(100);
-        const secondsGone = new BigDecimal(moment().diff(startDate, "seconds"));
-        const durationTotalSec = new BigDecimal(100)
-          .div(progress)
-          .times(secondsGone);
-        const eta = startDate.clone().add(durationTotalSec, "seconds");
-        console.log({
-          startedAt: startDate.format("LT"),
-          eta: eta.format("LT"),
-          progress: progress.toFixed(2),
-          formNow: eta.fromNow(),
-        });
-
-        const throttleRight =
-          Math.abs(instruction.right) < Math.abs(instruction.left);
-        const throttleLeft =
-          Math.abs(instruction.left) < Math.abs(instruction.right);
-
-        return (() =>
-          instruction.pen === "up"
-            ? movePen(penPositions.UP)
-            : movePen(penPositions.DOWN))().then(() =>
-          Promise.all([
-            rotate({
-              name: "stepper left",
-              motor: stepperLeft,
-              rotation: instruction.left,
-              throttle: throttleLeft
-                ? new BigDecimal(Math.abs(instruction.left))
-                    .div(Math.abs(instruction.right))
-                    .toNumber()
-                : 1,
-            }),
-            rotate({
-              name: "stepper right",
-              motor: stepperRight,
-              rotation: instruction.right,
-              throttle: throttleRight
-                ? new BigDecimal(Math.abs(instruction.right))
-                    .div(Math.abs(instruction.left))
-                    .toNumber()
-                : 1,
-            }),
-          ])
-        );
-      }),
-    Promise.resolve()
-  );
 });
