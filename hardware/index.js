@@ -115,7 +115,7 @@ board.on("ready", () => {
         }
       }
     });
-    console.log("client connected");
+    console.log("new client connected");
     websockets.populate({
       type: "UPDATE_PLOTTER_STATE",
       payload: {
