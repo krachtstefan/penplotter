@@ -5,7 +5,7 @@ import config from "../config";
 import moment from "moment";
 import useWebSocket from "react-use-websocket";
 
-const ControlPanel = () => {
+const ControlPanel: React.FC = () => {
   const { sendJsonMessage } = useWebSocket(config.websocket.address);
   const {
     connected,
