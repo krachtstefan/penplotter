@@ -1,4 +1,4 @@
-import { PenState } from "../contexts/types";
+import { PenState } from "../contexts/Penplotter/types";
 import React from "react";
 import config from "../config";
 import moment from "moment";
