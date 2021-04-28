@@ -45,12 +45,9 @@ class PenPlotter {
 /**
  *  Math.sqrt(Math.pow(Math.abs(x1 - x2), 2) + Math.pow(Math.abs(y1 - y2), 2));
  */
-export const getLenghtByPoints = (
-  [x1, y1]: [number | BigDecimal, number | BigDecimal],
-  [x2, y2]: [number | BigDecimal, number | BigDecimal]
-) => {
-  const a = new BigDecimal(x1).sub(x2).abs().pow(2);
-  const b = new BigDecimal(y1).sub(y2).abs().pow(2);
+export const getLenghtByPoints = ([x1, y1]: Point2D, [x2, y2]: Point2D) => {
+  const a = x1.sub(x2).abs().pow(2);
+  const b = y1.sub(y2).abs().pow(2);
   return a.add(b).sqrt();
 };
 
@@ -254,47 +251,49 @@ export const returnPointsArrFromElement = (
   return [];
 };
 
-// TODO: use BigDecimal instead of number on all functions below 🚨
-export const getPosition = (arrOfPointArrays: [number, number][][]) => {
-  const allX = arrOfPointArrays.flat().map((p) => p[0]);
-  const allY = arrOfPointArrays.flat().map((p) => p[1]);
+export const getPosition = (arrOfPointArrays: Point2D[][]): Point2D => {
+  const allX = arrOfPointArrays.flat().map((p) => p[0].toNumber());
+  const allY = arrOfPointArrays.flat().map((p) => p[1].toNumber());
+  return [new BigDecimal(Math.max(...allY)), new BigDecimal(Math.min(...allX))];
+};
+
+export const getDimensions = (arrOfPointArrays: Point2D[][]) => {
+  const allX = arrOfPointArrays.flat().map((p) => p[0].toNumber());
+  const allY = arrOfPointArrays.flat().map((p) => p[1].toNumber());
   return {
-    top: Math.max(...allY),
-    left: Math.min(...allX), // convert top left objects in this file to coordinates 🚨
+    width: new BigDecimal(Math.max(...allX)).minus(Math.min(...allX)),
+    height: new BigDecimal(Math.max(...allY)).minus(Math.min(...allY)),
   };
 };
 
-export const getDimensions = (arrOfPointArrays: [number, number][][]) => {
-  const allX = arrOfPointArrays.flat().map((p) => p[0]);
-  const allY = arrOfPointArrays.flat().map((p) => p[1]);
-  return {
-    width: Math.max(...allX) - Math.min(...allX),
-    height: Math.max(...allY) - Math.min(...allY),
-  };
-};
-
-export const scale = (arrOfPointArrays: [number, number][][], factor: number) =>
+export const scale = (
+  arrOfPointArrays: Point2D[][],
+  factor: number
+): Point2D[][] =>
   arrOfPointArrays.map((pA) =>
     pA.map(([x, y]) => [
-      new BigDecimal(x).times(factor || 0).toNumber(),
-      new BigDecimal(y).times(factor || 0).toNumber(),
+      new BigDecimal(x).times(factor || 0),
+      new BigDecimal(y).times(factor || 0),
     ])
   );
 
-export const mirrorX = (arrOfPointArrays: [number, number][][]) =>
-  arrOfPointArrays.map((pA) => pA.map(([x, y]) => [-x, y]));
+export const mirrorX = (arrOfPointArrays: Point2D[][]): Point2D[][] =>
+  arrOfPointArrays.map((pA) => pA.map(([x, y]) => [x.times(-1), y]));
 
-export const mirrorY = (arrOfPointArrays: [number, number][][]) =>
-  arrOfPointArrays.map((pA) => pA.map(([x, y]) => [x, -y]));
+export const mirrorY = (arrOfPointArrays: Point2D[][]): Point2D[][] =>
+  arrOfPointArrays.map((pA) => pA.map(([x, y]) => [x, y.times(-1)]));
 
 export const move = (
-  arrOfPointArrays: [number, number][][],
-  { top, left }: { top: number; left: number }
-) =>
+  arrOfPointArrays: Point2D[][],
+  {
+    top = new BigDecimal(0),
+    left = new BigDecimal(0),
+  }: { top: BigDecimal; left: BigDecimal }
+): Point2D[][] =>
   arrOfPointArrays.map((pA) =>
     pA.map(([x, y]) => [
-      new BigDecimal(x).add(left || 0).toNumber(),
-      new BigDecimal(y).add(top || 0).toNumber(),
+      new BigDecimal(x).add(left || 0),
+      new BigDecimal(y).add(top || 0),
     ])
   );
 
