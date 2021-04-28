@@ -9,7 +9,7 @@ export interface PenplotterState {
     instructions: PenplotterInstruction[];
     progress: {
       startedAtMs?: number;
-      etaMS?: number;
+      etaMs?: number;
       progress: number;
     };
   };

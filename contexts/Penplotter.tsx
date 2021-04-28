@@ -24,7 +24,7 @@ const DEFAULT_PENPLOTTER_STATE: PenplotterState = {
     instructions: [],
     progress: {
       startedAtMs: undefined,
-      etaMS: undefined,
+      etaMs: undefined,
       progress: 0,
     },
   },
