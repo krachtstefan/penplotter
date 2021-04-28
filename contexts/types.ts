@@ -28,7 +28,7 @@ export enum PenState {
 }
 
 export enum ActionTypes {
-  NO_CONNECTION = "UPDATE_PLOTTER_STATE",
+  NO_CONNECTION = "NO_CONNECTION",
   UPDATE_PLOTTER_STATE = "UPDATE_PLOTTER_STATE",
 }
 
