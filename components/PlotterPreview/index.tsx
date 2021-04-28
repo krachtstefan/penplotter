@@ -239,8 +239,6 @@ const Penplotter: React.FC = () => {
     [] as PenplotterInstruction[]
   );
 
-  console.log(plotterInstructions);
-
   const { penPositionX, penPositionY } = useSpring({
     from: {
       penPositionX: [penPositions[0][0].toNumber()],
@@ -302,7 +300,8 @@ const Penplotter: React.FC = () => {
                   upperLeft[1].toNumber(),
                   3
                 ),
-                // new THREE.Vector3(penX, penPositionY., 3),
+                new THREE.Vector3(penX, 0, 3),
+                // new THREE.Vector3(penX, penPositionY.payload[0].value, 3),
                 new THREE.Vector3(
                   upperRight[0].toNumber(),
                   upperRight[1].toNumber(),
