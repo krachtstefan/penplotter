@@ -36,5 +36,38 @@ export interface NoConnectionAction {
   type: typeof ActionTypes.NO_CONNECTION;
 }
 
-// 🚨 check naming: PenplotterActionTypes and ActionTypes
-export type PenplotterActionTypes = NoConnectionAction;
+export interface UpdatePlotterStateAction {
+  type: typeof ActionTypes.UPDATE_PLOTTER_STATE;
+  payload:
+    | UpdatePpPayload
+    | UpdatePpPenPayload
+    | UpdatePpDrawingBusyPayload
+    | UpdatePpDrawingInstructionsPayload
+    | UpdatePpDrawingProgressPayload;
+}
+
+export interface UpdatePpPayload {
+  path: "penplotter";
+  data: PenplotterState;
+}
+
+export interface UpdatePpPenPayload {
+  path: "penplotter.pen";
+  data: PenplotterState["pen"];
+}
+
+export interface UpdatePpDrawingBusyPayload {
+  path: "penplotter.drawing.isBusy";
+  data: PenplotterState["drawing"]["isBusy"];
+}
+
+export interface UpdatePpDrawingInstructionsPayload {
+  path: "penplotter.drawing.instructions";
+  data: PenplotterState["drawing"]["instructions"];
+}
+export interface UpdatePpDrawingProgressPayload {
+  path: "penplotter.drawing.progress";
+  data: PenplotterState["drawing"]["progress"];
+}
+
+export type PenplotterActions = UpdatePlotterStateAction | NoConnectionAction;

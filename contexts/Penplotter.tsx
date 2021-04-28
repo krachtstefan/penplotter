@@ -1,7 +1,7 @@
 import {
   ActionTypes,
   PenState,
-  PenplotterActionTypes,
+  PenplotterActions,
   PenplotterState,
 } from "./types";
 import React, { createContext, useContext, useReducer } from "react";
@@ -33,48 +33,48 @@ const DEFAULT_PENPLOTTER_STATE: PenplotterState = {
 const PenplotterStateContext = createContext<PenplotterState>(
   DEFAULT_PENPLOTTER_STATE
 );
-const PenplotterDispatchContext = createContext<React.Dispatch<PenplotterActionTypes> | null>(
+const PenplotterDispatchContext = createContext<React.Dispatch<PenplotterActions> | null>(
   null
 );
 
 const penplotterReducer = (
   state: PenplotterState,
-  action: PenplotterActionTypes
-) => {
+  action: PenplotterActions
+): PenplotterState => {
   console.log("received action", action);
   switch (action.type) {
     case ActionTypes.NO_CONNECTION: {
       return { ...state, connected: false };
     }
-    // case ActionTypes.UPDATE_PLOTTER_STATE: {
-    //   const { path, data } = action.payload;
-    //   switch (path) {
-    //     case "penplotter":
-    //       return { ...state, ...data };
-    //     case "penplotter.pen":
-    //       return { ...state, pen: { ...state.pen, ...data } };
-    //     case "penplotter.drawing.isBusy":
-    //       return {
-    //         ...state,
-    //         drawing: { ...state.drawing, isBusy: data },
-    //       };
-    //     case "penplotter.drawing.instructions":
-    //       return {
-    //         ...state,
-    //         drawing: { ...state.drawing, instructions: data },
-    //       };
-    //     case "penplotter.drawing.progress":
-    //       return {
-    //         ...state,
-    //         drawing: { ...state.drawing, progress: data },
-    //       };
-    //     default:
-    //       console.error(`path ${path} not implemented in ${action.type}`);
-    //       return state;
-    //   }
-    // }
+    case ActionTypes.UPDATE_PLOTTER_STATE: {
+      const payload = action.payload;
+      switch (payload.path) {
+        case "penplotter":
+          return { ...state, ...payload.data };
+        case "penplotter.pen":
+          return { ...state, pen: { ...state.pen, ...payload.data } };
+        case "penplotter.drawing.isBusy":
+          return {
+            ...state,
+            drawing: { ...state.drawing, isBusy: payload.data },
+          };
+        case "penplotter.drawing.instructions":
+          return {
+            ...state,
+            drawing: { ...state.drawing, instructions: payload.data },
+          };
+        case "penplotter.drawing.progress":
+          return {
+            ...state,
+            drawing: { ...state.drawing, progress: payload.data },
+          };
+        default:
+          console.error(`path not implemented. ${payload}`);
+          return state;
+      }
+    }
     default: {
-      throw new Error(`Unhandled action type ${action.type}`);
+      throw new Error(`Unhandled action type. ${action}`);
     }
   }
 };
