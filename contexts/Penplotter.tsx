@@ -6,13 +6,6 @@ import {
 } from "./types";
 import React, { createContext, useContext, useReducer } from "react";
 
-// 🚨 remove this
-const penPositions = {
-  UP: "UP",
-  DOWN: "DOWN",
-  UNKNOWN: "UNKNOWN",
-};
-
 const DEFAULT_PENPLOTTER_STATE: PenplotterState = {
   connected: false, // will be set with the initial update from the plotter
   pen: {
@@ -113,9 +106,4 @@ const PenplotterProvider: React.FC = ({ children }) => {
   );
 };
 
-export {
-  penPositions,
-  PenplotterProvider,
-  usePenplotterContext,
-  usePenplotterDispatch,
-};
+export { PenplotterProvider, usePenplotterContext, usePenplotterDispatch };
