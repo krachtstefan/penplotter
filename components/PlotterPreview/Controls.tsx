@@ -1,12 +1,23 @@
 import React, { useRef } from "react";
-import { extend, useFrame, useThree } from "react-three-fiber";
+import { ReactThreeFiber, extend, useFrame, useThree } from "react-three-fiber";
 
 import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 extend({ OrbitControls });
 
+declare global {
+  namespace JSX {
+    interface IntrinsicElements {
+      orbitControls: ReactThreeFiber.Object3DNode<
+        OrbitControls,
+        typeof OrbitControls
+      >;
+    }
+  }
+}
+
 const Controls: React.FC = () => {
-  const ref = useRef();
+  const ref = useRef<OrbitControls>();
   const { camera, gl } = useThree();
   useFrame(() => {
     if (ref && ref.current) {
