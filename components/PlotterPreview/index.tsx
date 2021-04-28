@@ -239,7 +239,7 @@ const Penplotter: React.FC = () => {
     [] as PenplotterInstruction[]
   );
 
-  const { penPositionX, penPositionY } = useSpring({
+  const { penPositionX, penPositionY: _ } = useSpring({
     from: {
       penPositionX: [penPositions[0][0].toNumber()],
       penPositionY: [penPositions[0][1].toNumber()],
