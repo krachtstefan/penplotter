@@ -1,17 +1,17 @@
-import { actionTypes, usePenplotterDispatch } from "../contexts/Penplotter";
-
+import { ActionTypes } from "../contexts/Penplotter/types";
 import config from "../config";
 import { useEffect } from "react";
+import { usePenplotterDispatch } from "../contexts/Penplotter";
 import useWebSocket from "react-use-websocket";
 
-const PlotterConnection = () => {
+const PlotterConnection: React.FC = () => {
   const penplotterDispatch = usePenplotterDispatch();
   const { readyState } = useWebSocket(config.websocket.address, {
     shouldReconnect: () => true,
     onMessage: (message) => {
       const messageJson = JSON.parse(message.data);
       if (
-        Object.keys(actionTypes).includes(messageJson.type) &&
+        Object.keys(ActionTypes).includes(messageJson.type) &&
         messageJson.payload !== undefined
       ) {
         penplotterDispatch({
@@ -29,7 +29,7 @@ const PlotterConnection = () => {
   useEffect(() => {
     if (noConnection === true) {
       penplotterDispatch({
-        type: actionTypes.NO_CONNECTION,
+        type: ActionTypes.NO_CONNECTION,
       });
     }
   }, [noConnection]);
