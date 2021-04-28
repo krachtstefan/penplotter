@@ -5,7 +5,7 @@ import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 extend({ OrbitControls });
 
-const Controls = () => {
+const Controls: React.FC = () => {
   const ref = useRef();
   const { camera, gl } = useThree();
   useFrame(() => {

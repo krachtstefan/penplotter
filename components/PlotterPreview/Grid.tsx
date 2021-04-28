@@ -1,6 +1,6 @@
 import React, { useEffect, useRef } from "react";
 
-const Grid = ({ size }) => {
+const Grid: React.FC = ({ size }) => {
   const gridRef = useRef();
 
   useEffect(() => {

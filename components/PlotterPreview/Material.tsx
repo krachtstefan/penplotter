@@ -8,7 +8,7 @@ const Paper = ({
   center = [0, 0, 0],
   zPosition = 0,
   color = "white",
-}) => {
+}): React.FC => {
   const f32array = useMemo(() => {
     const vertices = [
       new THREE.Vector3(-width / 2, -height / 2, zPosition),

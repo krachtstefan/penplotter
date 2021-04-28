@@ -33,7 +33,7 @@ const elementsToDraw = parsedSvg
 
 const { width, height } = getDimensions(elementsToDraw);
 
-const Penplotter = () => {
+const Penplotter: React.FC = () => {
   const { sendJsonMessage } = useWebSocket(config.websocket.address);
   const sendDrawJob = () => {
     sendJsonMessage({
