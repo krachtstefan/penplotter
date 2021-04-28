@@ -28,7 +28,7 @@ const ControlPanel: React.FC = () => {
     disablePenButton ||
     instructions.length === 0;
   return (
-    <div style={{ padding: 10 }}>
+    <div style={{ padding: 10, position: "absolute", zIndex: 1000 }}>
       <h2>Pen</h2>
       <strong>Pen is busy? {penIsBusy === true ? "👍" : "👎"}</strong>
       <br />
