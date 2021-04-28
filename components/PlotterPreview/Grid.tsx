@@ -1,10 +1,18 @@
 import React, { useEffect, useRef } from "react";
 
-const Grid: React.FC = ({ size }) => {
-  const gridRef = useRef();
+import { GridHelperProps } from "react-three-fiber";
+
+const Grid: React.FC = () => {
+  const gridRef = useRef<GridHelperProps>();
 
   useEffect(() => {
-    if (gridRef && gridRef.current) {
+    if (
+      gridRef &&
+      gridRef.current &&
+      gridRef.current.material &&
+      !Array.isArray(gridRef.current.material) &&
+      gridRef.current.rotateX
+    ) {
       gridRef.current.material.opacity = 0.1;
       gridRef.current.material.transparent = true;
       gridRef.current.rotateX(Math.PI / 2);
