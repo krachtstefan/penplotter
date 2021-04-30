@@ -6,7 +6,7 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "penplotter": "node hardware/index.js"
+    "penplotter": "node hardware/index.ts"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^1.5.1",
