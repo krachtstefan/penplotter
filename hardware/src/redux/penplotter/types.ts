@@ -46,6 +46,15 @@ export interface UpdateMap {
   state: (state: RootState) => unknown; // 🚨 TODO: kepp this? or can it be typed
 }
 
+export interface PopulateStateAction {
+  // 🚨 TODO: kepp this? or can it be typed
+  type: "UPDATE_PLOTTER_STATE";
+  payload: {
+    path: string;
+    data: unknown;
+  };
+}
+
 export interface StartPenMovementAction {
   type: ActionTypes.START_PEN_MOVEMENT;
   payload: PenState;
