@@ -1,19 +1,26 @@
-import { PenState } from "./redux/penplotter/types";
+import { PenState, PenplotterInstruction } from "./redux/penplotter/types";
+
+const positions: {
+  [key in PenplotterInstruction["pen"]]: {
+    position: number;
+    duration: number;
+  };
+} = {
+  [PenState.UP]: {
+    position: 90,
+    duration: 1000,
+  },
+  [PenState.DOWN]: {
+    position: 0,
+    duration: 2000,
+  },
+};
 
 const config = {
   hardware: {
     pen: {
       pin: 11,
-      positions: {
-        [PenState.UP]: {
-          position: 90,
-          duration: 1000,
-        },
-        [PenState.DOWN]: {
-          position: 0,
-          duration: 2000,
-        },
-      },
+      positions,
     },
     stepper: {
       stepsPerRotation: 1600,
