@@ -60,23 +60,16 @@ board.on("ready", () => {
   };
 
   const readPenPosition = () => {
-    // const position: PenState | undefined = Object.keys(
-    //   hardware.pen.positions
-    // ).find(
-    //   (p: PenState) =>
-    //     hardware.pen.positions &&
-    //     hardware.pen.positions[p] &&
-    //     hardware.pen.positions[p].position &&
-    //     hardware.pen.positions[p].position === pen.value
-    // );
-    // if (position) {
-    //   store.dispatch(finishPenMovement(position));
-
-    store.dispatch(finishPenMovement(PenState.DOWN));
-
-    // } else {
-    //   console.error(`no matching pen position with value ${pen.value}`);
-    // }
+    const position = Object.keys(hardware.pen.positions).find((p) =>
+      p === PenState.UP || p === PenState.DOWN
+        ? hardware.pen.positions[p].position === pen.value
+        : false
+    );
+    if (position === PenState.UP || position === PenState.DOWN) {
+      store.dispatch(finishPenMovement(position));
+    } else {
+      console.error(`no matching pen position with value ${pen.value}`);
+    }
   };
 
   const rotate = ({
