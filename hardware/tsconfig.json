@@ -8,8 +8,15 @@
     "lib": ["es2017"],
     "types": ["node"],
     "typeRoots": ["node_modules/@types", "src/types"],
-    "isolatedModules": false
+    "isolatedModules": false,
+    "skipLibCheck": true,
+    "strict": true,
+    "forceConsistentCasingInFileNames": true,
+    "noUnusedLocals": true,
+    "noImplicitReturns": true,
+    "esModuleInterop": true,
+    "resolveJsonModule": true
   },
-  "include": ["./src/*"],
+  "include": ["./src/**/*.ts"],
   "exclude": ["/node_modules"]
 }
