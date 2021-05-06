@@ -1,7 +1,6 @@
 import { RootState } from "../index";
 
 export interface PenplotterState {
-  connected: boolean;
   pen: {
     position: PenPosition;
     isBusy: boolean;

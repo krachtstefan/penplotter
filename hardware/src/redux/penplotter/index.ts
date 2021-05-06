@@ -38,7 +38,6 @@ export const updateMapping: UpdateMap[] = [
 ];
 
 const DEFAULT_PENPLOTTER_STATE: PenplotterState = {
-  connected: true,
   pen: {
     position: PenPosition.UNKNOWN,
     isBusy: false,
