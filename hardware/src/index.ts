@@ -88,6 +88,7 @@ board.on("ready", () => {
     throttle: number;
   }) =>
     new Promise<void>((resolve) => {
+      console.log(`${name} ${rotation}° (${throttle})`);
       console.time(`${name} ${rotation}° (${throttle})`);
       const steps = Math.round(
         new BigDecimal(rotation)
@@ -173,12 +174,16 @@ board.on("ready", () => {
                         .toNumber()
                     : 1,
                 }),
-              ]).then(() => Promise.resolve())
+              ]).then(() => {
+                console.log("🥳");
+                return Promise.resolve();
+              })
             );
           });
         }, Promise.resolve())
       )
       .then(() => {
+        console.log("🥳 done drawing");
         store.dispatch(stopDrawing());
       });
   };
