@@ -1,6 +1,6 @@
 import {
   ActionTypes,
-  PenState,
+  PenPosition,
   PenplotterActions,
   PenplotterState,
 } from "./types";
@@ -9,7 +9,7 @@ import React, { createContext, useContext, useReducer } from "react";
 const DEFAULT_PENPLOTTER_STATE: PenplotterState = {
   connected: false, // will be set with the initial update from the plotter
   pen: {
-    position: PenState.UNKNOWN,
+    position: PenPosition.UNKNOWN,
     isBusy: false,
   },
   drawing: {

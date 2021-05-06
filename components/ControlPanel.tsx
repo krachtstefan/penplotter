@@ -1,4 +1,4 @@
-import { PenState } from "../contexts/Penplotter/types";
+import { PenPosition } from "../contexts/Penplotter/types";
 import React from "react";
 import config from "../config";
 import moment from "moment";
@@ -17,9 +17,9 @@ const ControlPanel: React.FC = () => {
     },
   } = usePenplotterContext();
 
-  const penPositionUnkown = penPosition === PenState.UNKNOWN;
-  const penLifted = penPosition === PenState.UP;
-  const penNotLifted = penPosition === PenState.DOWN;
+  const penPositionUnkown = penPosition === PenPosition.UNKNOWN;
+  const penLifted = penPosition === PenPosition.UP;
+  const penNotLifted = penPosition === PenPosition.DOWN;
   const disablePenButton =
     !connected || penPositionUnkown || penIsBusy || plotterIsBusy;
   const disableDrawButton =

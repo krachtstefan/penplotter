@@ -11,7 +11,7 @@ import PenPlotter, {
   scale,
 } from "../../lib/plotter-model";
 import {
-  PenState,
+  PenPosition,
   PenplotterInstruction,
 } from "../../contexts/Penplotter/types";
 import { animated, useSpring } from "react-spring/three.cjs";
@@ -228,12 +228,12 @@ const Penplotter: React.FC = () => {
       {
         left: curr[0][0].toNumber(),
         right: curr[0][1].toNumber(),
-        pen: PenState.UP,
+        pen: PenPosition.UP,
       },
       {
         left: curr[1][0].toNumber(),
         right: curr[1][1].toNumber(),
-        pen: PenState.DOWN,
+        pen: PenPosition.DOWN,
       },
     ],
     [] as PenplotterInstruction[]

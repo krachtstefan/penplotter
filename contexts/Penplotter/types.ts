@@ -1,7 +1,7 @@
 export interface PenplotterState {
   connected: boolean;
   pen: {
-    position: PenState;
+    position: PenPosition;
     isBusy: boolean;
   };
   drawing: {
@@ -18,10 +18,10 @@ export interface PenplotterState {
 export interface PenplotterInstruction {
   left: number;
   right: number;
-  pen: PenState.UP | PenState.DOWN;
+  pen: PenPosition.UP | PenPosition.DOWN;
 }
 
-export enum PenState {
+export enum PenPosition {
   UP = "UP",
   DOWN = "DOWN",
   UNKNOWN = "UNKNOWN",

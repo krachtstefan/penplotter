@@ -2,8 +2,8 @@ import {
   ActionTypes,
   AddDrawingJobAction,
   FinishPenMovementAction,
+  PenPosition,
   PenProgress,
-  PenState,
   PenplotterActions,
   PenplotterInstruction,
   PenplotterState,
@@ -40,7 +40,7 @@ export const updateMapping: UpdateMap[] = [
 const DEFAULT_PENPLOTTER_STATE: PenplotterState = {
   connected: true,
   pen: {
-    position: PenState.UNKNOWN,
+    position: PenPosition.UNKNOWN,
     isBusy: false,
   },
   drawing: {
@@ -55,14 +55,14 @@ const DEFAULT_PENPLOTTER_STATE: PenplotterState = {
 };
 
 export const startPenMovement = (
-  position: PenState
+  position: PenPosition
 ): StartPenMovementAction => ({
   type: ActionTypes.START_PEN_MOVEMENT,
   payload: position,
 });
 
 export const finishPenMovement = (
-  position: PenState
+  position: PenPosition
 ): FinishPenMovementAction => ({
   type: ActionTypes.FINISH_PEN_MOVEMENT,
   payload: position,

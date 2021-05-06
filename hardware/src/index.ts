@@ -10,7 +10,7 @@ import {
 import { populate, wss } from "./websockets";
 
 import BigDecimal from "decimal.js";
-import { PenState } from "./redux/penplotter/types";
+import { PenPosition } from "./redux/penplotter/types";
 import config from "./config";
 import devices from "./devices";
 import moment from "moment";
@@ -24,19 +24,19 @@ board.on("ready", () => {
   const stepperRight = new Stepper(devices.stepperRight);
   const pen = new Servo(devices.pen);
 
-  const movePen = (direction: PenState) => {
+  const movePen = (direction: PenPosition) => {
     let targetValue = 0;
     let movementDuration = 0;
 
     switch (direction) {
-      case PenState.UP: {
-        targetValue = hardware.pen.positions[PenState.UP].position;
-        movementDuration = hardware.pen.positions[PenState.UP].duration;
+      case PenPosition.UP: {
+        targetValue = hardware.pen.positions[PenPosition.UP].position;
+        movementDuration = hardware.pen.positions[PenPosition.UP].duration;
         break;
       }
-      case PenState.DOWN: {
-        targetValue = hardware.pen.positions[PenState.DOWN].position;
-        movementDuration = hardware.pen.positions[PenState.DOWN].duration;
+      case PenPosition.DOWN: {
+        targetValue = hardware.pen.positions[PenPosition.DOWN].position;
+        movementDuration = hardware.pen.positions[PenPosition.DOWN].duration;
         break;
       }
       default: {
@@ -61,11 +61,11 @@ board.on("ready", () => {
 
   const readPenPosition = () => {
     const position = Object.keys(hardware.pen.positions).find((p) =>
-      p === PenState.UP || p === PenState.DOWN
+      p === PenPosition.UP || p === PenPosition.DOWN
         ? hardware.pen.positions[p].position === pen.value
         : false
     );
-    if (position === PenState.UP || position === PenState.DOWN) {
+    if (position === PenPosition.UP || position === PenPosition.DOWN) {
       store.dispatch(finishPenMovement(position));
     } else {
       console.error(`no matching pen position with value ${pen.value}`);
@@ -109,7 +109,7 @@ board.on("ready", () => {
     const startDate = moment();
     const { instructions } = store.getState().penplotter.drawing;
 
-    movePen(PenState.UP)
+    movePen(PenPosition.UP)
       .then(() =>
         instructions.reduce((promise, instruction, index, srcArray) => {
           return promise.then((_) => {
@@ -145,9 +145,9 @@ board.on("ready", () => {
             const throttleLeft =
               Math.abs(instruction.left) < Math.abs(instruction.right);
             return (() =>
-              instruction.pen === PenState.UP
-                ? movePen(PenState.UP)
-                : movePen(PenState.DOWN))().then(() =>
+              instruction.pen === PenPosition.UP
+                ? movePen(PenPosition.UP)
+                : movePen(PenPosition.DOWN))().then(() =>
               Promise.all([
                 rotate({
                   name: "stepper left",
@@ -186,7 +186,7 @@ board.on("ready", () => {
       if (type) {
         switch (type) {
           case "MOVE_PEN": {
-            if ([PenState.DOWN, PenState.UP].includes(payload)) {
+            if ([PenPosition.DOWN, PenPosition.UP].includes(payload)) {
               movePen(payload);
               return;
             }

@@ -1,4 +1,4 @@
-import { PenState, PenplotterInstruction } from "./redux/penplotter/types";
+import { PenPosition, PenplotterInstruction } from "./redux/penplotter/types";
 
 const positions: {
   [key in PenplotterInstruction["pen"]]: {
@@ -6,11 +6,11 @@ const positions: {
     duration: number;
   };
 } = {
-  [PenState.UP]: {
+  [PenPosition.UP]: {
     position: 90,
     duration: 1000,
   },
-  [PenState.DOWN]: {
+  [PenPosition.DOWN]: {
     position: 0,
     duration: 2000,
   },

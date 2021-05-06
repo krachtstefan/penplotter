@@ -3,7 +3,7 @@ import { RootState } from "../index";
 export interface PenplotterState {
   connected: boolean;
   pen: {
-    position: PenState; // 🚨 TODO: rename PenState to PenPosition
+    position: PenPosition;
     isBusy: boolean;
   };
   drawing: {
@@ -22,10 +22,10 @@ export interface PenProgress {
 export interface PenplotterInstruction {
   left: number;
   right: number;
-  pen: PenState.UP | PenState.DOWN;
+  pen: PenPosition.UP | PenPosition.DOWN;
 }
 
-export enum PenState {
+export enum PenPosition {
   UP = "UP",
   DOWN = "DOWN",
   UNKNOWN = "UNKNOWN",
@@ -57,12 +57,12 @@ export interface PopulateStateAction {
 
 export interface StartPenMovementAction {
   type: ActionTypes.START_PEN_MOVEMENT;
-  payload: PenState;
+  payload: PenPosition;
 }
 
 export interface FinishPenMovementAction {
   type: ActionTypes.FINISH_PEN_MOVEMENT;
-  payload: PenState;
+  payload: PenPosition;
 }
 
 export interface AddDrawingJobAction {
