@@ -47,7 +47,7 @@ export interface UpdateMap {
 }
 
 export interface PopulateStateAction {
-  // 🚨 TODO: kepp this? or can it be typed
+  // 🚨 TODO: when types can be shared, use UpdatePlotterStateAction type here
   type: "UPDATE_PLOTTER_STATE";
   payload: {
     path: string;
