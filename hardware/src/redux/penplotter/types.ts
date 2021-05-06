@@ -43,7 +43,7 @@ export enum ActionTypes {
 export interface UpdateMap {
   actions: ActionTypes[];
   path: string;
-  state: (state: RootState) => unknown; // 🚨 TODO: kepp this? or can it be typed
+  state: (state: RootState) => unknown;
 }
 
 export interface PopulateStateAction {
