@@ -1,4 +1,4 @@
-import { Board, Servo, Stepper } from "johnny-five";
+import { Board, Stepper } from "johnny-five";
 import {
   addDrawingJob,
   finishPenMovement,
@@ -22,29 +22,29 @@ const { hardware } = config;
 board.on("ready", () => {
   const stepperLeft = new Stepper(devices.stepperLeft);
   const stepperRight = new Stepper(devices.stepperRight);
-  const pen = new Servo(devices.pen);
+  // const pen = new Servo(devices.pen);
 
   const movePen = (direction: PenPosition) => {
-    let targetValue = 0;
-    let movementDuration = 0;
+    // let targetValue = 0;
+    // let movementDuration = 0;
 
     switch (direction) {
-      case PenPosition.UP: {
-        const upPosition = hardware.pen.positions.find(
-          (x) => x.name === PenPosition.UP
-        );
-        targetValue = upPosition?.position || 0;
-        movementDuration = upPosition?.duration || 0;
-        break;
-      }
-      case PenPosition.DOWN: {
-        const downPosition = hardware.pen.positions.find(
-          (x) => x.name === PenPosition.DOWN
-        );
-        targetValue = downPosition?.position || 0;
-        movementDuration = downPosition?.duration || 0;
-        break;
-      }
+      // case PenPosition.UP: {
+      //   const upPosition = hardware.pen.positions.find(
+      //     (x) => x.name === PenPosition.UP
+      //   );
+      //   targetValue = upPosition?.position || 0;
+      //   movementDuration = upPosition?.duration || 0;
+      //   break;
+      // }
+      // case PenPosition.DOWN: {
+      //   const downPosition = hardware.pen.positions.find(
+      //     (x) => x.name === PenPosition.DOWN
+      //   );
+      //   targetValue = downPosition?.position || 0;
+      //   movementDuration = downPosition?.duration || 0;
+      //   break;
+      // }
       default: {
         console.error(`unsupported pen direction ${direction}`);
         return Promise.resolve();
@@ -53,12 +53,12 @@ board.on("ready", () => {
 
     return new Promise<void>((resolve) => {
       store.dispatch(startPenMovement(direction));
-      if (pen.value !== targetValue) {
-        pen.to(targetValue, movementDuration);
-        setTimeout(resolve, movementDuration + 100);
-      } else {
-        resolve();
-      }
+      // if (pen.value !== targetValue) {
+      //   pen.to(targetValue, movementDuration);
+      //   setTimeout(resolve, movementDuration + 100);
+      // } else {
+      resolve();
+      // }
     }).then(() => {
       store.dispatch(finishPenMovement(direction));
       return Promise.resolve();
@@ -66,14 +66,14 @@ board.on("ready", () => {
   };
 
   const readPenPosition = () => {
-    const possiblePositions = hardware.pen.positions.find(
-      (p) => p.position === pen.value
-    );
-    if (possiblePositions) {
-      store.dispatch(finishPenMovement(possiblePositions.name));
-    } else {
-      console.error(`no matching pen position with value ${pen.value}`);
-    }
+    // const possiblePositions = hardware.pen.positions.find(
+    //   (p) => p.position === pen.value
+    // );
+    // if (possiblePositions) {
+    store.dispatch(finishPenMovement(PenPosition.DOWN));
+    // } else {
+    //   console.error(`no matching pen position with value ${pen.value}`);
+    // }
   };
 
   const rotate = ({
