@@ -51,13 +51,19 @@ export const getLenghtByPoints = ([x1, y1]: Point2D, [x2, y2]: Point2D) => {
   return a.add(b).sqrt();
 };
 
-export const translateSVGPoints = (pointString: string): Point2D[] =>
-  pointString
-    .split(" ")
-    .map((str) => [
-      new BigDecimal(str.split(",")[0]),
-      new BigDecimal(str.split(",")[1]),
-    ]);
+// current implementations:
+// 20,20 40,25 60,40 80,120 120,140 200,180
+// 20 20 40 25 60 40 80 120 120 140 200 180
+export const translateSVGPoints = (pointString: string): Point2D[] => {
+  const allPoints = pointString.split(/,| /);
+  if (allPoints.length % 2 !== 0) {
+    console.error("detected uneven pair of points", allPoints);
+  }
+  return chunk(allPoints, 2).map((x) => [
+    new BigDecimal(x[0]),
+    new BigDecimal(x[1]),
+  ]);
+};
 
 /**
  * example:
