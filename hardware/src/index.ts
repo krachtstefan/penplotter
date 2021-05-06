@@ -30,13 +30,19 @@ board.on("ready", () => {
 
     switch (direction) {
       case PenPosition.UP: {
-        targetValue = hardware.pen.positions[PenPosition.UP].position;
-        movementDuration = hardware.pen.positions[PenPosition.UP].duration;
+        const upPosition = hardware.pen.positions.find(
+          (x) => x.name === PenPosition.UP
+        );
+        targetValue = upPosition?.position || 0;
+        movementDuration = upPosition?.duration || 0;
         break;
       }
       case PenPosition.DOWN: {
-        targetValue = hardware.pen.positions[PenPosition.DOWN].position;
-        movementDuration = hardware.pen.positions[PenPosition.DOWN].duration;
+        const downPosition = hardware.pen.positions.find(
+          (x) => x.name === PenPosition.DOWN
+        );
+        targetValue = downPosition?.position || 0;
+        movementDuration = downPosition?.duration || 0;
         break;
       }
       default: {
@@ -60,13 +66,11 @@ board.on("ready", () => {
   };
 
   const readPenPosition = () => {
-    const position = Object.keys(hardware.pen.positions).find((p) =>
-      p === PenPosition.UP || p === PenPosition.DOWN
-        ? hardware.pen.positions[p].position === pen.value
-        : false
+    const possiblePositions = hardware.pen.positions.find(
+      (p) => p.position === pen.value
     );
-    if (position === PenPosition.UP || position === PenPosition.DOWN) {
-      store.dispatch(finishPenMovement(position));
+    if (possiblePositions) {
+      store.dispatch(finishPenMovement(possiblePositions.name));
     } else {
       console.error(`no matching pen position with value ${pen.value}`);
     }
