@@ -256,7 +256,10 @@ const Penplotter: React.FC = () => {
   return (
     <>
       <Canvas
-        camera={{ position: [20 * 10, 0, 75 * 10] }}
+        camera={{
+          position: [20 * 10, 0, 75 * 10],
+          far: 5000,
+        }}
         onCreated={({ gl }) => gl.setClearColor("white")}
       >
         <group position={[0, 500, 0]}>
