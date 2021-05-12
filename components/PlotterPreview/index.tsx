@@ -268,7 +268,7 @@ const Penplotter: React.FC = () => {
           <ambientLight intensity={1} />
           <pointLight position={[0, -boardHeight / 2, boardHeight]} />
           <Cylinder
-            position={[
+            center={[
               -cylinderDistance / 2,
               -config.cylinder.diameter,
               config.cylinder.diameter,
@@ -276,7 +276,7 @@ const Penplotter: React.FC = () => {
             diameter={config.cylinder.diameter}
           />
           <Cylinder
-            position={[
+            center={[
               cylinderDistance / 2,
               -config.cylinder.diameter,
               config.cylinder.diameter,

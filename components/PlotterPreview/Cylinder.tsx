@@ -1,9 +1,9 @@
 import { MeshProps, Vector3 } from "react-three-fiber";
 import React, { useEffect, useRef } from "react";
 
-const Cylinder: React.FC<{ diameter: number; position: Vector3 }> = ({
+const Cylinder: React.FC<{ diameter: number; center: Vector3 }> = ({
   diameter = 100,
-  position = [0, 0, 0],
+  center = [0, 0, 0],
 }) => {
   const cylinderRef = useRef<MeshProps>();
   useEffect(() => {
@@ -12,7 +12,7 @@ const Cylinder: React.FC<{ diameter: number; position: Vector3 }> = ({
     }
   }, []);
   return (
-    <mesh position={position} ref={cylinderRef}>
+    <mesh position={center} ref={cylinderRef}>
       <cylinderBufferGeometry
         attach="geometry"
         args={[diameter, diameter, diameter, 100]}
