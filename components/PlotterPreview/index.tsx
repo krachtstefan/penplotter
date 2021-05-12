@@ -215,7 +215,7 @@ const Penplotter: React.FC = () => {
       })
   );
 
-  const rotationDegSequence: Point2D[][] = lengthChangeSequence.map((s) =>
+  const rotationDegSequence: RotationSeq[][] = lengthChangeSequence.map((s) =>
     s.map((x) => [
       x[0].div(config.cylinder.circumference).times(360).times(-1),
       x[1].div(config.cylinder.circumference).times(360),
@@ -223,22 +223,15 @@ const Penplotter: React.FC = () => {
   );
 
   const plotterInstructions: PenplotterInstruction[] =
-    rotationDegSequence.reduce(
-      (acc, curr) => [
-        ...acc,
-        {
-          left: curr[0][0].toNumber(),
-          right: curr[0][1].toNumber(),
-          pen: PenPosition.UP,
-        },
-        {
-          left: curr[1][0].toNumber(),
-          right: curr[1][1].toNumber(),
-          pen: PenPosition.DOWN,
-        },
-      ],
-      [] as PenplotterInstruction[]
-    );
+    rotationDegSequence.reduce((acc, curr) => {
+      const newLine: PenplotterInstruction[] = curr.map((rotation, i) => ({
+        left: rotation[0].toNumber(),
+        right: rotation[1].toNumber(),
+        pen: i === 0 ? PenPosition.UP : PenPosition.DOWN,
+      }));
+      const rest = [...acc, ...newLine];
+      return rest;
+    }, [] as PenplotterInstruction[]);
 
   // const { penPositionX, penPositionY: _ } = useSpring({
   //   from: {
