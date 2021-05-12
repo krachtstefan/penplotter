@@ -31,6 +31,10 @@ const Controls: React.FC = () => {
       autoRotate={false}
       enableDamping
       dampingFactor={0.05}
+      minPolarAngle={0.5}
+      maxPolarAngle={3}
+      minAzimuthAngle={-1}
+      maxAzimuthAngle={1}
       screenSpacePanning={false}
     />
   );
