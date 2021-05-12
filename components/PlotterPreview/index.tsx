@@ -270,7 +270,7 @@ const Penplotter: React.FC = () => {
             width={boardWidth}
             height={boardHeight}
             center={[0, -boardHeight / 2, -2]}
-            color={"#e1e4e8"}
+            color={"#22272e"}
           />
           <Material
             width={paperWidth}
