@@ -11,6 +11,7 @@ import { populate, wss } from "./websockets";
 
 import BigDecimal from "decimal.js";
 import { PenPosition } from "./redux/penplotter/types";
+import { WakeLock } from "wake-lock";
 import config from "./config";
 import devices from "./devices";
 import moment from "moment";
@@ -114,6 +115,15 @@ board.on("ready", () => {
     const startDate = moment();
     const { instructions } = store.getState().penplotter.drawing;
 
+    let wakeLock: any;
+    try {
+      wakeLock = new WakeLock("polotter plotting");
+    } catch (e) {
+      console.warn(
+        "Couldn't acquire wake lock. Ensure your machine does not sleep during plotting"
+      );
+    }
+
     movePen(PenPosition.UP)
       .then(() =>
         instructions.reduce((promise, instruction, index, srcArray) => {
@@ -184,6 +194,9 @@ board.on("ready", () => {
       )
       .then(() => {
         console.log("🥳 done drawing");
+        if (wakeLock) {
+          wakeLock.release();
+        }
         store.dispatch(stopDrawing());
       });
   };
