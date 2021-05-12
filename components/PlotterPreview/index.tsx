@@ -263,18 +263,18 @@ const Penplotter: React.FC = () => {
         onCreated={({ gl }) => gl.setClearColor("white")}
       >
         <group position={[0, 500, 0]}>
+          <ambientLight intensity={1} />
+          <pointLight position={[0, -boardHeight / 2, boardHeight]} />
           <Material
             width={boardWidth}
             height={boardHeight}
-            center={[0, -boardHeight / 2, 0]}
-            zPosition={-2}
+            center={[0, -boardHeight / 2, -2]}
             color={"#e1e4e8"}
           />
           <Material
             width={paperWidth}
             height={paperHeight}
-            center={[0, -paperHeight / 2 - paperTopDistance, 0]}
-            zPosition={-1}
+            center={[0, -paperHeight / 2 - paperTopDistance, -1]}
             color={"white"}
           />
 
