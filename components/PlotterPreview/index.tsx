@@ -317,7 +317,7 @@ const Penplotter: React.FC = () => {
             <lineBasicMaterial attach="material" color="#444c56" />
           </animated.line>
 
-          {gridEnabled ? <Grid /> : null}
+          {/* {gridEnabled ? <Grid /> : null} */}
         </group>
         <Controls />
       </Canvas>
