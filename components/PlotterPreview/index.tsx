@@ -14,7 +14,6 @@ import {
   PenPosition,
   PenplotterInstruction,
 } from "../../contexts/Penplotter/types";
-import { animated, useSpring } from "react-spring/three.cjs";
 
 import BigDecimal from "decimal.js";
 import { Canvas } from "react-three-fiber";
@@ -176,7 +175,7 @@ const Penplotter: React.FC = () => {
     new BigDecimal(0),
   ];
 
-  const penPositions = moved.flat();
+  // const penPositions = moved.flat();
 
   const lengthSequence = moved.map((posArray) =>
     posArray.map((pos) => [
@@ -241,19 +240,19 @@ const Penplotter: React.FC = () => {
       [] as PenplotterInstruction[]
     );
 
-  const { penPositionX, penPositionY: _ } = useSpring({
-    from: {
-      penPositionX: [penPositions[0][0].toNumber()],
-      penPositionY: [penPositions[0][1].toNumber()],
-    },
-    to: penPositions.slice(1).map((penPosition) => {
-      return {
-        penPositionX: penPosition[0].toNumber(),
-        penPositionY: penPosition[1].toNumber(),
-      };
-    }),
-    delay: 1000,
-  });
+  // const { penPositionX, penPositionY: _ } = useSpring({
+  //   from: {
+  //     penPositionX: [penPositions[0][0].toNumber()],
+  //     penPositionY: [penPositions[0][1].toNumber()],
+  //   },
+  //   to: penPositions.slice(1).map((penPosition) => {
+  //     return {
+  //       penPositionX: penPosition[0].toNumber(),
+  //       penPositionY: penPosition[1].toNumber(),
+  //     };
+  //   }),
+  //   delay: 1000,
+  // });
 
   return (
     <>
