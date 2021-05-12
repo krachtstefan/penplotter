@@ -155,34 +155,24 @@ board.on("ready", () => {
               })
             );
 
-            const throttleRight =
-              Math.abs(instruction.right) < Math.abs(instruction.left);
-            const throttleLeft =
-              Math.abs(instruction.left) < Math.abs(instruction.right);
+            const { pen, left, leftThrottle, right, rightThrottle } =
+              instruction;
             return (() =>
-              instruction.pen === PenPosition.UP
+              pen === PenPosition.UP
                 ? movePen(PenPosition.UP)
                 : movePen(PenPosition.DOWN))().then(() =>
               Promise.all([
                 rotate({
                   name: "stepper left",
                   motor: stepperLeft,
-                  rotation: instruction.left,
-                  throttle: throttleLeft
-                    ? new BigDecimal(Math.abs(instruction.left))
-                        .div(Math.abs(instruction.right))
-                        .toNumber()
-                    : 1,
+                  rotation: left,
+                  throttle: leftThrottle,
                 }),
                 rotate({
                   name: "stepper right",
                   motor: stepperRight,
-                  rotation: instruction.right,
-                  throttle: throttleRight
-                    ? new BigDecimal(Math.abs(instruction.right))
-                        .div(Math.abs(instruction.left))
-                        .toNumber()
-                    : 1,
+                  rotation: right,
+                  throttle: rightThrottle,
                 }),
               ]).then(() => Promise.resolve())
             );

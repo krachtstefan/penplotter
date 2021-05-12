@@ -224,11 +224,20 @@ const Penplotter: React.FC = () => {
 
   const plotterInstructions: PenplotterInstruction[] =
     rotationDegSequence.reduce((acc, curr) => {
-      const newLine: PenplotterInstruction[] = curr.map((rotation, i) => ({
-        left: rotation[0].toNumber(),
-        right: rotation[1].toNumber(),
-        pen: i === 0 ? PenPosition.UP : PenPosition.DOWN,
-      }));
+      const newLine: PenplotterInstruction[] = curr.map((rotation, i) => {
+        const [left, right] = rotation;
+        const throttleRight = right.abs().lessThan(left.abs());
+        const throttleLeft = left.abs().lessThan(right.abs());
+        return {
+          left: left.toNumber(),
+          right: right.toNumber(),
+          leftThrottle:
+            throttleLeft === true ? left.abs().div(right.abs()).toNumber() : 1,
+          rightThrottle:
+            throttleRight === true ? right.abs().div(left.abs()).toNumber() : 1,
+          pen: i === 0 ? PenPosition.UP : PenPosition.DOWN,
+        };
+      });
       const rest = [...acc, ...newLine];
       return rest;
     }, [] as PenplotterInstruction[]);

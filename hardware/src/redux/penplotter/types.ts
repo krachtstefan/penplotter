@@ -22,6 +22,8 @@ export interface PenProgress {
 export interface PenplotterInstruction {
   left: number;
   right: number;
+  leftThrottle: number;
+  rightThrottle: number;
   pen: PenPosition.UP | PenPosition.DOWN;
 }
 
