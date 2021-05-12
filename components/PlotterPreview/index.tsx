@@ -222,22 +222,23 @@ const Penplotter: React.FC = () => {
     ])
   );
 
-  const plotterInstructions: PenplotterInstruction[] = rotationDegSequence.reduce(
-    (acc, curr) => [
-      ...acc,
-      {
-        left: curr[0][0].toNumber(),
-        right: curr[0][1].toNumber(),
-        pen: PenPosition.UP,
-      },
-      {
-        left: curr[1][0].toNumber(),
-        right: curr[1][1].toNumber(),
-        pen: PenPosition.DOWN,
-      },
-    ],
-    [] as PenplotterInstruction[]
-  );
+  const plotterInstructions: PenplotterInstruction[] =
+    rotationDegSequence.reduce(
+      (acc, curr) => [
+        ...acc,
+        {
+          left: curr[0][0].toNumber(),
+          right: curr[0][1].toNumber(),
+          pen: PenPosition.UP,
+        },
+        {
+          left: curr[1][0].toNumber(),
+          right: curr[1][1].toNumber(),
+          pen: PenPosition.DOWN,
+        },
+      ],
+      [] as PenplotterInstruction[]
+    );
 
   const { penPositionX, penPositionY: _ } = useSpring({
     from: {
