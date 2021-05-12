@@ -1,8 +1,10 @@
+import { MeshProps, Vector3 } from "react-three-fiber";
 import React, { useEffect, useRef } from "react";
 
-import { MeshProps } from "react-three-fiber";
-
-const Cylinder = ({ diameter = 100, position = [0, 0, 0] }): React.FC => {
+const Cylinder: React.FC<{ diameter: number; position: Vector3 }> = ({
+  diameter = 100,
+  position = [0, 0, 0],
+}) => {
   const cylinderRef = useRef<MeshProps>();
   useEffect(() => {
     if (cylinderRef && cylinderRef.current && cylinderRef.current.rotateX) {
