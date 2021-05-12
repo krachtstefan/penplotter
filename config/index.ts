@@ -1,7 +1,10 @@
+const cylinderCircumference = 40;
+const cylinderDiameter = cylinderCircumference / (2 * Math.PI);
 const config = {
   cylinder: {
     distance: 747,
-    circumference: 40,
+    circumference: cylinderCircumference,
+    diameter: cylinderDiameter,
   },
   paper: {
     width: 210,
