@@ -19,7 +19,7 @@ const config = {
     },
     stepper: {
       stepsPerRotation: 1600,
-      pauseBetweenInstructions: 500,
+      pauseBetweenInstructions: 0,
     },
   },
   websocket: {
