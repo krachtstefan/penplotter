@@ -18,6 +18,7 @@ import { animated, useSpring } from "react-spring/three.cjs";
 
 import BigDecimal from "decimal.js";
 import { Canvas } from "react-three-fiber";
+import Cylinder from "./Cylinder";
 import Grid from "./Grid";
 import Material from "./Material";
 import { Point2D } from "../../lib/plotter-model/types";
@@ -266,6 +267,22 @@ const Penplotter: React.FC = () => {
         <group position={[0, 500, 0]}>
           <ambientLight intensity={1} />
           <pointLight position={[0, -boardHeight / 2, boardHeight]} />
+          <Cylinder
+            position={[
+              -cylinderDistance / 2,
+              -config.cylinder.diameter,
+              config.cylinder.diameter,
+            ]}
+            diameter={config.cylinder.diameter}
+          />
+          <Cylinder
+            position={[
+              cylinderDistance / 2,
+              -config.cylinder.diameter,
+              config.cylinder.diameter,
+            ]}
+            diameter={config.cylinder.diameter}
+          />
           <Material
             width={boardWidth}
             height={boardHeight}
