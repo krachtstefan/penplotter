@@ -295,10 +295,10 @@ const Penplotter: React.FC = () => {
             center={[0, -paperHeight / 2 - paperTopDistance, -1]}
             color={"white"}
           />
-
           {moved.map((el, i) => (
             <line
               key={i}
+              // @ts-ignore */
               geometry={new THREE.BufferGeometry().setFromPoints(
                 el.map(
                   (point) =>
@@ -313,7 +313,7 @@ const Penplotter: React.FC = () => {
               <lineBasicMaterial attach="material" color="#444c56" />
             </line>
           ))}
-          <animated.line
+          {/* <animated.line
             geometry={penPositionX.interpolate((penX) => {
               return new THREE.BufferGeometry().setFromPoints([
                 new THREE.Vector3(
@@ -332,7 +332,7 @@ const Penplotter: React.FC = () => {
             })}
           >
             <lineBasicMaterial attach="material" color="#444c56" />
-          </animated.line>
+          </animated.line> */}
 
           {gridEnabled ? <Grid /> : null}
         </group>
