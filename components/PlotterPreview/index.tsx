@@ -14,13 +14,13 @@ import {
   PenPosition,
   PenplotterInstruction,
 } from "../../contexts/Penplotter/types";
+import { Point2D, RotationSeq } from "../../lib/plotter-model/types";
 
 import BigDecimal from "decimal.js";
 import { Canvas } from "react-three-fiber";
 import Cylinder from "./Cylinder";
 import Grid from "./Grid";
 import Material from "./Material";
-import { Point2D } from "../../lib/plotter-model/types";
 import React from "react";
 import config from "../../config";
 import dynamic from "next/dynamic";

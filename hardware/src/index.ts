@@ -184,10 +184,7 @@ board.on("ready", () => {
                         .toNumber()
                     : 1,
                 }),
-              ]).then(() => {
-                console.log("🥳");
-                return Promise.resolve();
-              })
+              ]).then(() => Promise.resolve())
             );
           });
         }, Promise.resolve())
