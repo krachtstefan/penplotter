@@ -205,9 +205,7 @@ export const returnPointsArrFromElement = (
                */
               [
                 translateSVGPoints(
-                  `${
-                    element.properties.points
-                  } ${element.properties.points
+                  `${element.properties.points} ${element.properties.points
                     .toString()
                     .split(" ")
                     .slice(0, 2)
