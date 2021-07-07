@@ -117,7 +117,7 @@ board.on("ready", () => {
 
     let wakeLock: any;
     try {
-      wakeLock = new WakeLock("polotter plotting");
+      wakeLock = new WakeLock("penplotter plotting");
     } catch (e) {
       console.warn(
         "Couldn't acquire wake lock. Ensure your machine does not sleep during plotting"
