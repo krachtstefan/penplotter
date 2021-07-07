@@ -98,6 +98,7 @@ const arrayofNumberArrToPoint2D = (arr: [any, any][]) =>
 // current implementations:
 // M35,0.75 L34.09375,2.5625
 // M 382.49999 494.99999 L 384.55374 496.87223
+// M 0,0 Q 200,20 200,200
 export const translatePathString = (pathString: string): Point2D[][] =>
   pathString
     .split(/ (?=[a-z|A-Z])/) // split by whitespaces that are followed by a character
@@ -178,6 +179,25 @@ export const translatePathString = (pathString: string): Point2D[][] =>
           }
 
           result = [...previouseLines, [...currentLine, ...newHorLineSegment]];
+          break;
+
+        case "Q": // Q command draws quadratic bezier curve
+        case "q": // relative version of Q
+          if (args.length !== 4) {
+            console.warn(
+              `quadratic bezier curve had an unexpected amount of args (${args.length}), skipped`
+            );
+            break;
+          }
+          let curveCoordinates = arrayofNumberArrToPoint2D(
+            chunk(args, 2).map((x) => [x[0], x[1]])
+          );
+          if (command === "q") {
+            curveCoordinates = curveCoordinates.map(
+              (b) => convertPointsRelToAbs(currentLine.slice(-1)[0], [b])[0]
+            );
+          }
+          result = [...previouseLines, [...currentLine, ...curveCoordinates]];
           break;
         default:
           console.error(
