@@ -181,7 +181,7 @@ export const translatePathString = (pathString: string): Point2D[][] =>
           break;
         default:
           console.error(
-            `path command ${command} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
+            `path command ${command} with args ${args} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
           );
           result = acc;
           break;
