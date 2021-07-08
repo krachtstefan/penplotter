@@ -275,6 +275,11 @@ export const returnPointsArrFromElement = (
   return [];
 };
 
+export const getMidPoint = (a: Point2D, b: Point2D): Point2D => [
+  a[0].plus(b[0]).div(2),
+  a[1].plus(b[1]).div(2),
+];
+
 export const getPosition = (arrOfPointArrays: Point2D[][]): Point2D => {
   const allX = arrOfPointArrays.flat().map((p) => p[0].toNumber());
   const allY = arrOfPointArrays.flat().map((p) => p[1].toNumber());
