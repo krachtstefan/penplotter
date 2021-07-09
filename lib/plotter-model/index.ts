@@ -197,7 +197,23 @@ export const translatePathString = (pathString: string): Point2D[][] =>
               (b) => convertPointsRelToAbs(currentLine.slice(-1)[0], [b])[0]
             );
           }
-          result = [...previouseLines, [...currentLine, ...curveCoordinates]];
+          const sampleSize = 100;
+          const samples = [...new Array(sampleSize)]
+            .map((_, index, src) => {
+              return index / src.length;
+            })
+            .slice(1)
+            // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
+            .map((x) =>
+              quadraticBezier(
+                [currentLine[0], curveCoordinates[0], curveCoordinates[1]],
+                x
+              )
+            );
+          result = [
+            ...previouseLines,
+            [currentLine[0], ...samples, curveCoordinates[1]],
+          ];
           break;
         default:
           console.error(
