@@ -275,10 +275,38 @@ export const returnPointsArrFromElement = (
   return [];
 };
 
-export const getMidPoint = (a: Point2D, b: Point2D): Point2D => [
-  a[0].plus(b[0]).div(2),
-  a[1].plus(b[1]).div(2),
+/**
+ * returns a point from the line segment between start and finish
+ * at the given fraction. A fraction of 0.5 f.e returns the midpoint
+ */
+const getPointFromLineSegment = (
+  start: Point2D,
+  finish: Point2D,
+  fraction: number
+): Point2D => [
+  start[0].minus(finish[0]).times(-fraction).plus(start[0]),
+  start[1].minus(finish[1]).times(-fraction).plus(start[1]),
 ];
+
+/**
+ *
+ * The quadratic bezier curve has three points, a start, finish and a control point
+ * there a three interploations done at the same time, to get a point (C) on that curve
+ * 1: a point (A) on the line from the start to the control point
+ * 2: a point (B) on the line from the control point to the finish
+ * 3: a point (C) on the line from point A to B
+ *
+ * It's much simpler as it sounds: https://youtu.be/pnYccz1Ha34
+ */
+const quadraticBezier = (
+  [start, controlPoint, finish]: [Point2D, Point2D, Point2D],
+  fraction: number
+) =>
+  getPointFromLineSegment(
+    getPointFromLineSegment(start, controlPoint, fraction),
+    getPointFromLineSegment(controlPoint, finish, fraction),
+    fraction
+  );
 
 export const getPosition = (arrOfPointArrays: Point2D[][]): Point2D => {
   const allX = arrOfPointArrays.flat().map((p) => p[0].toNumber());
