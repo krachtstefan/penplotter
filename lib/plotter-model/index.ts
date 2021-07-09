@@ -219,6 +219,45 @@ export const translatePathString = (pathString: string): Point2D[][] =>
             [currentLine[0], ...quadInterpolations, quadraticCurveCoords[1]],
           ];
           break;
+        case "C": // C command draws cubic bezier curve
+        case "c": // relative version of C
+          if (args.length !== 6) {
+            console.warn(
+              `quadratic bezier curve had an unexpected amount of args (${args.length}), skipped`
+            );
+            break;
+          }
+          let cubicCurveCoords = arrayofNumberArrToPoint2D(
+            chunk(args, 2).map((x) => [x[0], x[1]])
+          );
+          if (command === "c") {
+            cubicCurveCoords = cubicCurveCoords.map(
+              (b) => convertPointsRelToAbs(currentLine.slice(-1)[0], [b])[0]
+            );
+          }
+          const cubicSampleSize = 100;
+          const cubicInterpolations = [...new Array(cubicSampleSize)]
+            .map((_, index, src) => {
+              return index / src.length;
+            })
+            .slice(1)
+            // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
+            .map((x) =>
+              cubicBezier(
+                [
+                  currentLine[0],
+                  cubicCurveCoords[0],
+                  cubicCurveCoords[1],
+                  cubicCurveCoords[2],
+                ],
+                x
+              )
+            );
+          result = [
+            ...previouseLines,
+            [currentLine[0], ...cubicInterpolations, cubicCurveCoords[2]],
+          ];
+          break;
         default:
           console.error(
             `path command ${command} with args ${args} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
@@ -325,6 +364,30 @@ const quadraticBezier = (
   getPointFromLineSegment(
     getPointFromLineSegment(start, controlPoint, fraction),
     getPointFromLineSegment(controlPoint, finish, fraction),
+    fraction
+  );
+
+/**
+ *
+ * The cubic bezier curve has four points, a start, finish and control point a and b
+ * it is basically an interpolation between two quadratic bezier curves one with start,
+ * control point a and control point b and one with control point a, control point b
+ * and the finish point
+ *
+ * Again, it's not that complicated: https://youtu.be/pnYccz1Ha34
+ */
+const cubicBezier = (
+  [start, controlPointA, controlPointB, finish]: [
+    Point2D,
+    Point2D,
+    Point2D,
+    Point2D
+  ],
+  fraction: number
+) =>
+  getPointFromLineSegment(
+    quadraticBezier([start, controlPointA, controlPointB], fraction),
+    quadraticBezier([controlPointA, controlPointB, finish], fraction),
     fraction
   );
 
