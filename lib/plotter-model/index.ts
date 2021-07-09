@@ -197,8 +197,8 @@ export const translatePathString = (pathString: string): Point2D[][] =>
               (b) => convertPointsRelToAbs(currentLine.slice(-1)[0], [b])[0]
             );
           }
-          const sampleSize = 100;
-          const samples = [...new Array(sampleSize)]
+          const quadSampleSize = 100;
+          const quadInterpolations = [...new Array(quadSampleSize)]
             .map((_, index, src) => {
               return index / src.length;
             })
@@ -216,7 +216,7 @@ export const translatePathString = (pathString: string): Point2D[][] =>
             );
           result = [
             ...previouseLines,
-            [currentLine[0], ...samples, quadraticCurveCoords[1]],
+            [currentLine[0], ...quadInterpolations, quadraticCurveCoords[1]],
           ];
           break;
         default:
