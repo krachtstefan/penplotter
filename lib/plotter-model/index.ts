@@ -189,11 +189,11 @@ export const translatePathString = (pathString: string): Point2D[][] =>
             );
             break;
           }
-          let curveCoordinates = arrayofNumberArrToPoint2D(
+          let quadraticCurveCoords = arrayofNumberArrToPoint2D(
             chunk(args, 2).map((x) => [x[0], x[1]])
           );
           if (command === "q") {
-            curveCoordinates = curveCoordinates.map(
+            quadraticCurveCoords = quadraticCurveCoords.map(
               (b) => convertPointsRelToAbs(currentLine.slice(-1)[0], [b])[0]
             );
           }
@@ -206,13 +206,17 @@ export const translatePathString = (pathString: string): Point2D[][] =>
             // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
             .map((x) =>
               quadraticBezier(
-                [currentLine[0], curveCoordinates[0], curveCoordinates[1]],
+                [
+                  currentLine[0],
+                  quadraticCurveCoords[0],
+                  quadraticCurveCoords[1],
+                ],
                 x
               )
             );
           result = [
             ...previouseLines,
-            [currentLine[0], ...samples, curveCoordinates[1]],
+            [currentLine[0], ...samples, quadraticCurveCoords[1]],
           ];
           break;
         default:
