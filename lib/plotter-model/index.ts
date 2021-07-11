@@ -99,9 +99,10 @@ const arrayofNumberArrToPoint2D = (arr: [any, any][]) =>
 // M35,0.75 L34.09375,2.5625
 // M 382.49999 494.99999 L 384.55374 496.87223
 // M 0,0 Q 200,20 200,200
+// M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02L4.4,0.71L5.5,0.79L6.6,-0.96L7.7
 export const translatePathString = (pathString: string): Point2D[][] =>
   pathString
-    .split(/ (?=[a-z|A-Z])/) // split by whitespaces that are followed by a character
+    .split(/(?=[a-z|A-Z])/) // split before character
     .reduce((acc, curr) => {
       const command = curr.slice(0, 1);
       // trim optional whitespace between command and split at whitespaces or commas
@@ -109,7 +110,6 @@ export const translatePathString = (pathString: string): Point2D[][] =>
       let result = [...acc];
       const currentLine = acc.slice(-1)[0];
       const previouseLines = acc.slice(0, -1);
-
       switch (`${command}`) {
         case "M": // create a new element
         case "m": // relative version of M
