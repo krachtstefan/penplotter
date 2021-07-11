@@ -105,8 +105,13 @@ export const translatePathString = (pathString: string): Point2D[][] =>
     .split(/(?=[a-z|A-Z])/) // split before character
     .reduce((acc, curr) => {
       const command = curr.slice(0, 1);
-      // trim optional whitespace between command and split at whitespaces or commas
-      const args = curr.slice(1).trim().split(/[,| ]/);
+      // trim optional whitespace between command and split at whitespaces or commas (or )
+      // current implementation: "l10-0.6" "l10,0.6" "l10 0.6" "l10,-0.6"
+      const args = curr
+        .slice(1)
+        .trim()
+        .split(/[,| ]|(?=[-])/);
+
       let result = [...acc];
       const currentLine = acc.slice(-1)[0];
       const previouseLines = acc.slice(0, -1);
