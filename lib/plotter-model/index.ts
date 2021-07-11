@@ -124,16 +124,16 @@ export const translatePathString = (pathString: string): Point2D[][] =>
           break;
         case "Z": // close path command
         case "z": // relative version of Z
-          const fistPoint = currentLine[0];
+          const firstPoint = currentLine[0];
           const lastPoint = currentLine.slice(-1)[0];
           if (
             currentLine.length > 2 &&
-            !fistPoint[0].eq(lastPoint[0]) &&
-            !fistPoint[1].eq(lastPoint[1])
+            !firstPoint[0].eq(lastPoint[0]) &&
+            !firstPoint[1].eq(lastPoint[1])
           ) {
             result = [
               ...previouseLines,
-              [...currentLine, createPoint2D(fistPoint)],
+              [...currentLine, createPoint2D(firstPoint)],
             ];
           } else {
             console.warn(
