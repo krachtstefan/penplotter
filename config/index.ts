@@ -9,12 +9,13 @@ const config = {
   paper: {
     width: 210,
     height: 297,
-    topDistance: 500 - 20,
+    topDistance: 500 - 30,
     presets: {
       "a4 portrait": { width: 210, height: 297 },
       "a4 landscape": { width: 297, height: 210 },
       "a3 portrait": { width: 420, height: 594 },
       "a3 landscape": { width: 594, height: 420 },
+      "color paper (240 x 340)": { width: 240, height: 340 },
     },
   },
   board: {
@@ -26,7 +27,7 @@ const config = {
     },
   },
   pen: {
-    topDistance: 300 - 20,
+    topDistance: 300 - 30,
   },
   websocket: {
     address: "ws://localhost:8080",
