@@ -451,17 +451,15 @@ export const mirrorY = (arrOfPointArrays: Point2D[][]): Point2D[][] =>
   arrOfPointArrays.map((pA) => pA.map(([x, y]) => [x, y.times(-1)]));
 
 export const move = (
-  arrOfPointArrays: Point2D[][],
+  arrOfPoints: Point2D[],
   {
-    top = new BigDecimal(0),
-    left = new BigDecimal(0),
-  }: { top: BigDecimal; left: BigDecimal }
-): Point2D[][] =>
-  arrOfPointArrays.map((pA) =>
-    pA.map(([x, y]) => [
-      new BigDecimal(x).add(left || 0),
-      new BigDecimal(y).add(top || 0),
-    ])
-  );
+    down = new BigDecimal(0),
+    right = new BigDecimal(0),
+  }: { down: BigDecimal; right: BigDecimal }
+): Point2D[] =>
+  arrOfPoints.map(([x, y]) => [
+    new BigDecimal(x).add(right || 0),
+    new BigDecimal(y).add(down || 0),
+  ]);
 
 export default PenPlotter;

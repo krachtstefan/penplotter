@@ -154,17 +154,19 @@ const Penplotter: React.FC = () => {
   const [top, left] = getPosition(scaled);
   const { width: scaledWidth, height: scaledHeight } = getDimensions(scaled);
 
-  const moved = move(scaled, {
-    top: top
-      .times(-1)
-      .minus(paperTopDistance)
-      .minus(new BigDecimal(paperHeight).minus(scaledHeight).div(2)),
+  const moved = scaled.map((x) =>
+    move(x, {
+      down: top
+        .times(-1)
+        .minus(paperTopDistance)
+        .minus(new BigDecimal(paperHeight).minus(scaledHeight).div(2)),
 
-    left: left
-      .times(-1)
-      .minus(new BigDecimal(paperWidth).div(2))
-      .plus(new BigDecimal(paperWidth).minus(scaledWidth).div(2)),
-  });
+      right: left
+        .times(-1)
+        .minus(new BigDecimal(paperWidth).div(2))
+        .plus(new BigDecimal(paperWidth).minus(scaledWidth).div(2)),
+    })
+  );
 
   const upperLeft: Point2D = [
     new BigDecimal(-cylinderDistance).div(2),

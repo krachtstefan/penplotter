@@ -5,7 +5,8 @@ const {
   splitPathString,
   processPathCommand,
   getLenghtByPoints,
-} = require("./index");
+  move,
+} = require("../index");
 
 import BD from "decimal.js";
 
@@ -182,7 +183,54 @@ describe("plotter model", () => {
 
   describe("mirrorY", () => {});
 
-  describe("move", () => {});
+  describe("move", () => {
+    test.concurrent("move down ", () => {
+      const res = move(
+        [
+          [new BD(1), new BD(2)],
+          [new BD(-3), new BD(0)],
+        ],
+        {
+          down: 10,
+        }
+      );
+      expect(mapMatrixToString(res)).toEqual([
+        ["1", "12"],
+        ["-3", "10"],
+      ]);
+    });
+    test.concurrent("move right", () => {
+      const res = move(
+        [
+          [new BD(1), new BD(2)],
+          [new BD(-3), new BD(0)],
+        ],
+        {
+          right: 10,
+        }
+      );
+      expect(mapMatrixToString(res)).toEqual([
+        ["11", "2"],
+        ["7", "0"],
+      ]);
+    });
+    test.concurrent("move down and right", () => {
+      const res = move(
+        [
+          [new BD(1), new BD(2)],
+          [new BD(-3), new BD(0)],
+        ],
+        {
+          down: 1,
+          right: -10,
+        }
+      );
+      expect(mapMatrixToString(res)).toEqual([
+        ["-9", "3"],
+        ["-13", "1"],
+      ]);
+    });
+  });
 });
 
 export {};
