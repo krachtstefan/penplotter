@@ -117,16 +117,19 @@ export const splitPathString = (pathString: string): string[] =>
  * trim optional whitespace between command and split at whitespaces or commas (or )
  * current implementation: "l10-0.6" "l10,0.6" "l10 0.6" "l10,-0.6"
  */
-const splitArgs = (commandString: string): string[] =>
+export const processPathCommand = (
+  commandString: string
+): [string, string[]] => [
+  commandString.slice(0, 1),
   commandString
     .slice(1)
     .trim()
-    .split(/[,| ]|(?=[-])/);
+    .split(/[,| ]|(?=[-])/),
+];
 
 export const translatePathString = (pathString: string): Point2D[][] =>
   splitPathString(pathString).reduce((acc, curr) => {
-    const command = curr.slice(0, 1);
-    const args = splitArgs(curr);
+    const [command, args] = processPathCommand(curr);
 
     let result = [...acc];
     const currentLine = acc.slice(-1)[0];

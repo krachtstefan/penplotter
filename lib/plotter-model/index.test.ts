@@ -3,6 +3,7 @@ const {
   mapMatrixToString,
   convertPointsRelToAbs,
   splitPathString,
+  processPathCommand,
 } = require("./index");
 
 import BD from "decimal.js";
@@ -104,7 +105,24 @@ describe("plotter model", () => {
     });
   });
 
-  describe("splitArgs", () => {});
+  describe("splitArgs", () => {
+    test("comma", () => {
+      const res = processPathCommand("l10,0.6");
+      expect(res).toEqual(["l", ["10", "0.6"]]);
+    });
+    test("whitespace", () => {
+      const res = processPathCommand("l10 0.6");
+      expect(res).toEqual(["l", ["10", "0.6"]]);
+    });
+    test("negative value with comma", () => {
+      const res = processPathCommand("l10,-0.6");
+      expect(res).toEqual(["l", ["10", "-0.6"]]);
+    });
+    test("negative value without comma", () => {
+      const res = processPathCommand("l10-0.6");
+      expect(res).toEqual(["l", ["10", "-0.6"]]);
+    });
+  });
 
   describe("getPointFromLineSegment", () => {});
 
