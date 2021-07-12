@@ -6,6 +6,8 @@ const {
   processPathCommand,
   getLenghtByPoints,
   move,
+  mirrorY,
+  mirrorX,
 } = require("../index");
 
 import BD from "decimal.js";
@@ -179,9 +181,31 @@ describe("plotter model", () => {
 
   describe("scale", () => {});
 
-  describe("mirrorX", () => {});
+  describe("mirrorX", () => {
+    test.concurrent("mirror ", () => {
+      const res = mirrorX([
+        [new BD(1), new BD(1)],
+        [new BD(1), new BD(1)],
+      ]);
+      expect(mapMatrixToString(res)).toEqual([
+        ["-1", "1"],
+        ["-1", "1"],
+      ]);
+    });
+  });
 
-  describe("mirrorY", () => {});
+  describe("mirrorY", () => {
+    test.concurrent("mirror ", () => {
+      const res = mirrorY([
+        [new BD(1), new BD(1)],
+        [new BD(1), new BD(1)],
+      ]);
+      expect(mapMatrixToString(res)).toEqual([
+        ["1", "-1"],
+        ["1", "-1"],
+      ]);
+    });
+  });
 
   describe("move", () => {
     test.concurrent("move down ", () => {

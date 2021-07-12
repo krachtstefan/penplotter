@@ -148,7 +148,7 @@ const Penplotter: React.FC = () => {
   );
 
   // add projection
-  const mirroredY = mirrorY(elementsToDraw);
+  const mirroredY = elementsToDraw.map((el) => mirrorY(el));
   const scaled = scale(mirroredY, scaling);
 
   const [top, left] = getPosition(scaled);
