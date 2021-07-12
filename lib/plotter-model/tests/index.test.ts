@@ -199,9 +199,13 @@ describe("plotter model", () => {
     });
   });
 
-  describe("quadraticBezier", () => {});
+  describe("quadraticBezier", () => {
+    it.todo("quadraticBezier");
+  });
 
-  describe("cubicBezier", () => {});
+  describe("cubicBezier", () => {
+    it.todo("cubicBezier");
+  });
 
   describe("getPosition", () => {
     test.concurrent("returns upper left position", () => {
