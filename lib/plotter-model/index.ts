@@ -421,9 +421,11 @@ export const getPosition = (arrOfPointArrays: Point2D[][]): Point2D => {
   return [new BigDecimal(Math.max(...allY)), new BigDecimal(Math.min(...allX))];
 };
 
-export const getDimensions = (arrOfPointArrays: Point2D[][]) => {
-  const allX = arrOfPointArrays.flat().map((p) => p[0].toNumber());
-  const allY = arrOfPointArrays.flat().map((p) => p[1].toNumber());
+export const getDimensions = (
+  arrOfPoints: Point2D[]
+): { width: BigDecimal; height: BigDecimal } => {
+  const allX = arrOfPoints.map((p) => p[0].toNumber());
+  const allY = arrOfPoints.map((p) => p[1].toNumber());
   return {
     width: new BigDecimal(Math.max(...allX)).minus(Math.min(...allX)),
     height: new BigDecimal(Math.max(...allY)).minus(Math.min(...allY)),
@@ -433,16 +435,11 @@ export const getDimensions = (arrOfPointArrays: Point2D[][]) => {
 export const mapMatrixToString = (arr: Point2D[][]): string[][] =>
   arr.map((x) => x.map((y) => y.toString()));
 
-export const scale = (
-  arrOfPointArrays: Point2D[][],
-  factor: number
-): Point2D[][] =>
-  arrOfPointArrays.map((pA) =>
-    pA.map(([x, y]) => [
-      new BigDecimal(x).times(factor || 0),
-      new BigDecimal(y).times(factor || 0),
-    ])
-  );
+export const scale = (arrOfPoints: Point2D[], factor: number): Point2D[] =>
+  arrOfPoints.map(([x, y]) => [
+    new BigDecimal(x).times(factor || 0),
+    new BigDecimal(y).times(factor || 0),
+  ]);
 
 export const mirrorX = (
   arrOfPoints: Point2D[],

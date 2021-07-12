@@ -8,6 +8,8 @@ const {
   move,
   mirrorY,
   mirrorX,
+  scale,
+  getDimensions,
 } = require("../index");
 
 import BD from "decimal.js";
@@ -177,9 +179,33 @@ describe("plotter model", () => {
 
   describe("getPosition", () => {});
 
-  describe("getDimensions", () => {});
+  describe("getDimensions", () => {
+    test.concurrent("calculates dimensions", () => {
+      const res = getDimensions([
+        [new BD(-10), new BD(1)],
+        [new BD(-9), new BD(1)],
+        [new BD(-5), new BD(1)],
+        [new BD(10), new BD(2)],
+      ]);
+      expect(res).toEqual({ width: new BD(20), height: new BD(1) });
+    });
+  });
 
-  describe("scale", () => {});
+  describe("scale", () => {
+    test.concurrent("scale by factor 2", () => {
+      const res = scale(
+        [
+          [new BD(-1), new BD(1)],
+          [new BD(1.5), new BD(1)],
+        ],
+        2
+      );
+      expect(mapMatrixToString(res)).toEqual([
+        ["-2", "2"],
+        ["3", "2"],
+      ]);
+    });
+  });
 
   describe("mirrorX", () => {
     test.concurrent("mirror ", () => {

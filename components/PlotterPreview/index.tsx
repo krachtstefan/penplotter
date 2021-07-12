@@ -36,7 +36,7 @@ const elementsToDraw = parsedSvg
   .map((pl) => returnPointsArrFromElement(pl))
   .flat();
 
-const { width, height } = getDimensions(elementsToDraw);
+const { width, height } = getDimensions(elementsToDraw.flat());
 
 const Penplotter: React.FC = () => {
   const { sendJsonMessage } = useWebSocket(config.websocket.address);
@@ -149,10 +149,12 @@ const Penplotter: React.FC = () => {
 
   // add projection
   const mirroredY = elementsToDraw.map((el) => mirrorY(el));
-  const scaled = scale(mirroredY, scaling);
+  const scaled = mirroredY.map((x) => scale(x, scaling));
 
   const [top, left] = getPosition(scaled);
-  const { width: scaledWidth, height: scaledHeight } = getDimensions(scaled);
+  const { width: scaledWidth, height: scaledHeight } = getDimensions(
+    scaled.flat()
+  );
 
   const moved = scaled.map((x) =>
     move(x, {
