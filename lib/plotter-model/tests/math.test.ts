@@ -1,9 +1,6 @@
 const {
-  translateSVGPoints,
   mapMatrixToString,
   convertPointsRelToAbs,
-  splitPathString,
-  processPathCommand,
   getLenghtByPoints,
   move,
   mirrorY,
@@ -12,11 +9,37 @@ const {
   getDimensions,
   getPosition,
   getPointFromLineSegment,
-} = require("../index");
+} = require("../math");
 
 import BD from "decimal.js";
 
-describe("plotter model", () => {
+describe("math model", () => {
+  describe("getPointFromLineSegment", () => {
+    const start = [new BD(-10), new BD(1)];
+    const finish = [new BD(9), new BD(0)];
+
+    test.concurrent("returns start at fraction 0", () => {
+      const res = getPointFromLineSegment(start, finish, 0);
+      expect(res).toEqual(start);
+    });
+    test.concurrent("returns finish at fraction 1", () => {
+      const res = getPointFromLineSegment(start, finish, 1);
+      expect(res).toEqual(finish);
+    });
+    test.concurrent("returns midpoint at fraction 0.5", () => {
+      const res = getPointFromLineSegment(start, finish, 0.5);
+      expect(res).toEqual([new BD(-0.5), new BD(0.5)]);
+    });
+    test.concurrent("can handle identical start and finish", () => {
+      const res = getPointFromLineSegment(
+        [new BD(0), new BD(0)],
+        [new BD(0), new BD(0)],
+        1
+      );
+      expect(res).toEqual([new BD(0), new BD(0)]);
+    });
+  });
+
   describe("getLenghtByPoints", () => {
     test.concurrent("horizontal line", () => {
       const res = getLenghtByPoints(
@@ -57,45 +80,6 @@ describe("plotter model", () => {
     });
   });
 
-  describe("translateSVGPoints", () => {
-    test.concurrent("comma as delimter", () => {
-      const res = mapMatrixToString(translateSVGPoints("20,20 40,25 60,40.5"));
-      expect(res).toEqual([
-        ["20", "20"],
-        ["40", "25"],
-        ["60", "40.5"],
-      ]);
-    });
-    test.concurrent("spaces as delimter", () => {
-      const res = mapMatrixToString(translateSVGPoints("20 20 40 25 60 40.5"));
-      expect(res).toEqual([
-        ["20", "20"],
-        ["40", "25"],
-        ["60", "40.5"],
-      ]);
-    });
-    test.concurrent("nl as delimiter", () => {
-      const res = mapMatrixToString(
-        translateSVGPoints("20,20\n40,25\n60\n40.5")
-      );
-      expect(res).toEqual([
-        ["20", "20"],
-        ["40", "25"],
-        ["60", "40.5"],
-      ]);
-    });
-    test.concurrent("mixed as delimiter", () => {
-      const res = mapMatrixToString(
-        translateSVGPoints("20 20 40,25\n60\n40.5")
-      );
-      expect(res).toEqual([
-        ["20", "20"],
-        ["40", "25"],
-        ["60", "40.5"],
-      ]);
-    });
-  });
-
   describe("convertPointsRelToAbs", () => {
     test.concurrent("translates relative points to absolute ", () => {
       const res = mapMatrixToString(
@@ -113,89 +97,6 @@ describe("plotter model", () => {
         ["7", "10"],
         ["11", "15"],
       ]);
-    });
-  });
-
-  describe("splitPathString", () => {
-    test.concurrent("translates relative points to absolute", () => {
-      const res = splitPathString("M35,0.75 L34.09375,2.5625");
-      expect(res).toEqual(["M35,0.75", "L34.09375,2.5625"]);
-    });
-
-    test.concurrent("whitespaces after each command and argument", () => {
-      const res = splitPathString(
-        "M 382.49999 494.99999 L 384.55374 496.87223"
-      );
-      expect(res).toEqual(["M 382.49999 494.99999", "L 384.55374 496.87223"]);
-    });
-
-    test.concurrent(
-      "whitespaces after and before each command, comma between arguments",
-      () => {
-        const res = splitPathString("M 0,0 Q 200.12,20 200,200");
-        expect(res).toEqual(["M 0,0", "Q 200.12,20 200,200"]);
-      }
-    );
-
-    test.concurrent("no whitespaces except after the first command", () => {
-      const res = splitPathString(
-        "M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02L4.4,0.71L5.5,0.79L6.6,-0.96L7.7"
-      );
-      expect(res).toEqual([
-        "M 0,0",
-        "L1.1,1.14",
-        "L2.2,-0.37",
-        "L3.3,-1.02",
-        "L4.4,0.71",
-        "L5.5,0.79",
-        "L6.6,-0.96",
-        "L7.7",
-      ]);
-    });
-  });
-
-  describe("splitArgs", () => {
-    test.concurrent("comma", () => {
-      const res = processPathCommand("l10,0.6");
-      expect(res).toEqual(["l", ["10", "0.6"]]);
-    });
-    test.concurrent("whitespace", () => {
-      const res = processPathCommand("l10 0.6");
-      expect(res).toEqual(["l", ["10", "0.6"]]);
-    });
-    test.concurrent("negative value with comma", () => {
-      const res = processPathCommand("l10,-0.6");
-      expect(res).toEqual(["l", ["10", "-0.6"]]);
-    });
-    test.concurrent("negative value without comma", () => {
-      const res = processPathCommand("l10-0.6");
-      expect(res).toEqual(["l", ["10", "-0.6"]]);
-    });
-  });
-
-  describe("getPointFromLineSegment", () => {
-    const start = [new BD(-10), new BD(1)];
-    const finish = [new BD(9), new BD(0)];
-
-    test.concurrent("returns start at fraction 0", () => {
-      const res = getPointFromLineSegment(start, finish, 0);
-      expect(res).toEqual(start);
-    });
-    test.concurrent("returns finish at fraction 1", () => {
-      const res = getPointFromLineSegment(start, finish, 1);
-      expect(res).toEqual(finish);
-    });
-    test.concurrent("returns midpoint at fraction 0.5", () => {
-      const res = getPointFromLineSegment(start, finish, 0.5);
-      expect(res).toEqual([new BD(-0.5), new BD(0.5)]);
-    });
-    test.concurrent("can handle identical start and finish", () => {
-      const res = getPointFromLineSegment(
-        [new BD(0), new BD(0)],
-        [new BD(0), new BD(0)],
-        1
-      );
-      expect(res).toEqual([new BD(0), new BD(0)]);
     });
   });
 

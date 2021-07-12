@@ -1,20 +1,22 @@
 import * as THREE from "three";
 
 import { Leva, button, folder, useControls } from "leva";
-import PenPlotter, {
-  getDimensions,
-  getLenghtByPoints,
-  getPosition,
-  mirrorY,
-  move,
-  returnPointsArrFromElement,
-  scale,
-} from "../../lib/plotter-model";
 import {
   PenPosition,
   PenplotterInstruction,
 } from "../../contexts/Penplotter/types";
 import { Point2D, RotationSeq } from "../../lib/plotter-model/types";
+import SvgParser, {
+  returnPointsArrFromElement,
+} from "../../lib/plotter-model/svg";
+import {
+  getDimensions,
+  getLenghtByPoints,
+  getPosition,
+  mirrorY,
+  move,
+  scale,
+} from "../../lib/plotter-model/math";
 
 import BigDecimal from "decimal.js";
 import { Canvas } from "react-three-fiber";
@@ -27,7 +29,7 @@ import dynamic from "next/dynamic";
 import useWebSocket from "react-use-websocket";
 
 const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/line.svg", "utf8")`;
-const parsedSvg = new PenPlotter(svgFile);
+const parsedSvg = new SvgParser(svgFile);
 
 const Controls = dynamic(() => import("./Controls"), { ssr: false });
 
