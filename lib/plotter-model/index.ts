@@ -102,18 +102,23 @@ const arrayofNumberArrToPoint2D = (arr: [any, any][]) =>
  * M 0,0 Q 200,20 200,200
  * M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02L4.4,0.71L5.5,0.79L6.6,-0.96L7.7
  */
-export const splitPathString = (pathString: string): string[] =>
+const splitPathString = (pathString: string): string[] =>
   pathString.split(/(?=[a-z|A-Z])/); // split before character
+
+/**
+ * trim optional whitespace between command and split at whitespaces or commas (or )
+ * current implementation: "l10-0.6" "l10,0.6" "l10 0.6" "l10,-0.6"
+ */
+const splitArgs = (commandString: string): string[] =>
+  commandString
+    .slice(1)
+    .trim()
+    .split(/[,| ]|(?=[-])/);
 
 export const translatePathString = (pathString: string): Point2D[][] =>
   splitPathString(pathString).reduce((acc, curr) => {
     const command = curr.slice(0, 1);
-    // trim optional whitespace between command and split at whitespaces or commas (or )
-    // current implementation: "l10-0.6" "l10,0.6" "l10 0.6" "l10,-0.6"
-    const args = curr
-      .slice(1)
-      .trim()
-      .split(/[,| ]|(?=[-])/);
+    const args = splitArgs(curr);
 
     let result = [...acc];
     const currentLine = acc.slice(-1)[0];
