@@ -12,7 +12,7 @@ describe("plotter model", () => {
   describe("getLenghtByPoints", () => {});
 
   describe("translateSVGPoints", () => {
-    test("comma as delimter", () => {
+    test.concurrent("comma as delimter", () => {
       const res = mapMatrixToString(translateSVGPoints("20,20 40,25 60,40.5"));
       expect(res).toEqual([
         ["20", "20"],
@@ -20,7 +20,7 @@ describe("plotter model", () => {
         ["60", "40.5"],
       ]);
     });
-    test("spaces as delimter", () => {
+    test.concurrent("spaces as delimter", () => {
       const res = mapMatrixToString(translateSVGPoints("20 20 40 25 60 40.5"));
       expect(res).toEqual([
         ["20", "20"],
@@ -28,7 +28,7 @@ describe("plotter model", () => {
         ["60", "40.5"],
       ]);
     });
-    test("nl as delimiter", () => {
+    test.concurrent("nl as delimiter", () => {
       const res = mapMatrixToString(
         translateSVGPoints("20,20\n40,25\n60\n40.5")
       );
@@ -38,7 +38,7 @@ describe("plotter model", () => {
         ["60", "40.5"],
       ]);
     });
-    test("mixed as delimiter", () => {
+    test.concurrent("mixed as delimiter", () => {
       const res = mapMatrixToString(
         translateSVGPoints("20 20 40,25\n60\n40.5")
       );
@@ -51,7 +51,7 @@ describe("plotter model", () => {
   });
 
   describe("convertPointsRelToAbs", () => {
-    test("translates relative points to absolute ", () => {
+    test.concurrent("translates relative points to absolute ", () => {
       const res = mapMatrixToString(
         convertPointsRelToAbs(
           [new BD(1), new BD(2)],
@@ -71,24 +71,27 @@ describe("plotter model", () => {
   });
 
   describe("splitPathString", () => {
-    test("translates relative points to absolute", () => {
+    test.concurrent("translates relative points to absolute", () => {
       const res = splitPathString("M35,0.75 L34.09375,2.5625");
       expect(res).toEqual(["M35,0.75", "L34.09375,2.5625"]);
     });
 
-    test("whitespaces after each command and argument", () => {
+    test.concurrent("whitespaces after each command and argument", () => {
       const res = splitPathString(
         "M 382.49999 494.99999 L 384.55374 496.87223"
       );
       expect(res).toEqual(["M 382.49999 494.99999", "L 384.55374 496.87223"]);
     });
 
-    test("whitespaces after and before each command, comma between arguments", () => {
-      const res = splitPathString("M 0,0 Q 200.12,20 200,200");
-      expect(res).toEqual(["M 0,0", "Q 200.12,20 200,200"]);
-    });
+    test.concurrent(
+      "whitespaces after and before each command, comma between arguments",
+      () => {
+        const res = splitPathString("M 0,0 Q 200.12,20 200,200");
+        expect(res).toEqual(["M 0,0", "Q 200.12,20 200,200"]);
+      }
+    );
 
-    test("no whitespaces except after the first command", () => {
+    test.concurrent("no whitespaces except after the first command", () => {
       const res = splitPathString(
         "M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02L4.4,0.71L5.5,0.79L6.6,-0.96L7.7"
       );
@@ -106,19 +109,19 @@ describe("plotter model", () => {
   });
 
   describe("splitArgs", () => {
-    test("comma", () => {
+    test.concurrent("comma", () => {
       const res = processPathCommand("l10,0.6");
       expect(res).toEqual(["l", ["10", "0.6"]]);
     });
-    test("whitespace", () => {
+    test.concurrent("whitespace", () => {
       const res = processPathCommand("l10 0.6");
       expect(res).toEqual(["l", ["10", "0.6"]]);
     });
-    test("negative value with comma", () => {
+    test.concurrent("negative value with comma", () => {
       const res = processPathCommand("l10,-0.6");
       expect(res).toEqual(["l", ["10", "-0.6"]]);
     });
-    test("negative value without comma", () => {
+    test.concurrent("negative value without comma", () => {
       const res = processPathCommand("l10-0.6");
       expect(res).toEqual(["l", ["10", "-0.6"]]);
     });
