@@ -444,11 +444,15 @@ export const scale = (
     ])
   );
 
-export const mirrorX = (arrOfPoints: Point2D[]): Point2D[] =>
-  arrOfPoints.map(([x, y]) => [x.times(-1), y]);
+export const mirrorX = (
+  arrOfPoints: Point2D[],
+  xAxis = new BigDecimal(0)
+): Point2D[] => arrOfPoints.map(([x, y]) => [xAxis.minus(x.minus(xAxis)), y]);
 
-export const mirrorY = (arrOfPoints: Point2D[]): Point2D[] =>
-  arrOfPoints.map(([x, y]) => [x, y.times(-1)]);
+export const mirrorY = (
+  arrOfPoints: Point2D[],
+  yAxis = new BigDecimal(0)
+): Point2D[] => arrOfPoints.map(([x, y]) => [x, yAxis.minus(y.minus(yAxis))]);
 
 export const move = (
   arrOfPoints: Point2D[],

@@ -192,10 +192,24 @@ describe("plotter model", () => {
         ["-1", "1"],
       ]);
     });
+
+    test.concurrent("mirror at x = 2", () => {
+      const res = mirrorX(
+        [
+          [new BD(1), new BD(1)],
+          [new BD(10), new BD(1)],
+        ],
+        new BD(2)
+      );
+      expect(mapMatrixToString(res)).toEqual([
+        ["3", "1"],
+        ["-6", "1"],
+      ]);
+    });
   });
 
   describe("mirrorY", () => {
-    test.concurrent("mirror ", () => {
+    test.concurrent("mirror", () => {
       const res = mirrorY([
         [new BD(1), new BD(1)],
         [new BD(1), new BD(1)],
@@ -203,6 +217,20 @@ describe("plotter model", () => {
       expect(mapMatrixToString(res)).toEqual([
         ["1", "-1"],
         ["1", "-1"],
+      ]);
+    });
+
+    test.concurrent("mirror at y = 2", () => {
+      const res = mirrorY(
+        [
+          [new BD(1), new BD(1)],
+          [new BD(1), new BD(10)],
+        ],
+        new BD(2)
+      );
+      expect(mapMatrixToString(res)).toEqual([
+        ["1", "3"],
+        ["1", "-6"],
       ]);
     });
   });
