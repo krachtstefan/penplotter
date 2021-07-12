@@ -11,6 +11,7 @@ const {
   scale,
   getDimensions,
   getPosition,
+  getPointFromLineSegment,
 } = require("../index");
 
 import BD from "decimal.js";
@@ -172,7 +173,31 @@ describe("plotter model", () => {
     });
   });
 
-  describe("getPointFromLineSegment", () => {});
+  describe("getPointFromLineSegment", () => {
+    const start = [new BD(-10), new BD(1)];
+    const finish = [new BD(9), new BD(0)];
+
+    test.concurrent("returns start at fraction 0", () => {
+      const res = getPointFromLineSegment(start, finish, 0);
+      expect(res).toEqual(start);
+    });
+    test.concurrent("returns finish at fraction 1", () => {
+      const res = getPointFromLineSegment(start, finish, 1);
+      expect(res).toEqual(finish);
+    });
+    test.concurrent("returns midpoint at fraction 0.5", () => {
+      const res = getPointFromLineSegment(start, finish, 0.5);
+      expect(res).toEqual([new BD(-0.5), new BD(0.5)]);
+    });
+    test.concurrent("can handle identical start and finish", () => {
+      const res = getPointFromLineSegment(
+        [new BD(0), new BD(0)],
+        [new BD(0), new BD(0)],
+        1
+      );
+      expect(res).toEqual([new BD(0), new BD(0)]);
+    });
+  });
 
   describe("quadraticBezier", () => {});
 

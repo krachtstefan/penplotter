@@ -362,7 +362,7 @@ export const returnPointsArrFromElement = (
  * returns a point from the line segment between start and finish
  * at the given fraction. A fraction of 0.5 f.e returns the midpoint
  */
-const getPointFromLineSegment = (
+export const getPointFromLineSegment = (
   start: Point2D,
   finish: Point2D,
   fraction: number
