@@ -416,6 +416,9 @@ export const getDimensions = (arrOfPointArrays: Point2D[][]) => {
   };
 };
 
+export const mapMatrixToString = (arr: Point2D[][]): string[][] =>
+  arr.map((x) => x.map((y) => y.toString()));
+
 export const scale = (
   arrOfPointArrays: Point2D[][],
   factor: number
