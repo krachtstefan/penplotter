@@ -10,7 +10,7 @@ describe("plotter model", () => {
   describe("getLenghtByPoints", () => {});
 
   describe("translateSVGPoints", () => {
-    test("spaces as delimter", () => {
+    test("comma as delimter", () => {
       const res = mapMatrixToString(translateSVGPoints("20,20 40,25 60,40.5"));
       expect(res).toEqual([
         ["20", "20"],
@@ -20,6 +20,26 @@ describe("plotter model", () => {
     });
     test("spaces as delimter", () => {
       const res = mapMatrixToString(translateSVGPoints("20 20 40 25 60 40.5"));
+      expect(res).toEqual([
+        ["20", "20"],
+        ["40", "25"],
+        ["60", "40.5"],
+      ]);
+    });
+    test("nl as delimiter", () => {
+      const res = mapMatrixToString(
+        translateSVGPoints("20,20\n40,25\n60\n40.5")
+      );
+      expect(res).toEqual([
+        ["20", "20"],
+        ["40", "25"],
+        ["60", "40.5"],
+      ]);
+    });
+    test("mixed as delimiter", () => {
+      const res = mapMatrixToString(
+        translateSVGPoints("20 20 40,25\n60\n40.5")
+      );
       expect(res).toEqual([
         ["20", "20"],
         ["40", "25"],
