@@ -26,7 +26,7 @@ import config from "../../config";
 import dynamic from "next/dynamic";
 import useWebSocket from "react-use-websocket";
 
-const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/path-cubic-bezier.svg", "utf8")`;
+const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/line.svg", "utf8")`;
 const parsedSvg = new PenPlotter(svgFile);
 
 const Controls = dynamic(() => import("./Controls"), { ssr: false });
@@ -150,16 +150,13 @@ const Penplotter: React.FC = () => {
   // add projection
   const mirroredY = elementsToDraw.map((el) => mirrorY(el));
   const scaled = mirroredY.map((x) => scale(x, scaling));
-
-  const [top, left] = getPosition(scaled);
   const { width: scaledWidth, height: scaledHeight } = getDimensions(
     scaled.flat()
   );
-
+  const left = getPosition(scaled.flat())[0];
   const moved = scaled.map((x) =>
     move(x, {
-      down: top
-        .times(-1)
+      down: new BigDecimal(0)
         .minus(paperTopDistance)
         .minus(new BigDecimal(paperHeight).minus(scaledHeight).div(2)),
 

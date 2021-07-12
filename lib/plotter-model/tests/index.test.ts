@@ -10,6 +10,7 @@ const {
   mirrorX,
   scale,
   getDimensions,
+  getPosition,
 } = require("../index");
 
 import BD from "decimal.js";
@@ -177,7 +178,17 @@ describe("plotter model", () => {
 
   describe("cubicBezier", () => {});
 
-  describe("getPosition", () => {});
+  describe("getPosition", () => {
+    test.concurrent("returns upper left position", () => {
+      const res = getPosition([
+        [new BD(-10), new BD(1)],
+        [new BD(-9), new BD(1)],
+        [new BD(-5), new BD(1)],
+        [new BD(10), new BD(2)],
+      ]);
+      expect(res).toEqual([new BD(-10), new BD(1)]);
+    });
+  });
 
   describe("getDimensions", () => {
     test.concurrent("calculates dimensions", () => {

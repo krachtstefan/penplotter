@@ -415,10 +415,10 @@ const cubicBezier = (
     fraction
   );
 
-export const getPosition = (arrOfPointArrays: Point2D[][]): Point2D => {
-  const allX = arrOfPointArrays.flat().map((p) => p[0].toNumber());
-  const allY = arrOfPointArrays.flat().map((p) => p[1].toNumber());
-  return [new BigDecimal(Math.max(...allY)), new BigDecimal(Math.min(...allX))];
+export const getPosition = (arrOfPoints: Point2D[]): Point2D => {
+  const allX = arrOfPoints.map((p) => p[0].toNumber());
+  const allY = arrOfPoints.map((p) => p[1].toNumber());
+  return [new BigDecimal(Math.min(...allX)), new BigDecimal(Math.min(...allY))];
 };
 
 export const getDimensions = (
