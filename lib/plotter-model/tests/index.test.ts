@@ -4,12 +4,51 @@ const {
   convertPointsRelToAbs,
   splitPathString,
   processPathCommand,
+  getLenghtByPoints,
 } = require("./index");
 
 import BD from "decimal.js";
 
 describe("plotter model", () => {
-  describe("getLenghtByPoints", () => {});
+  describe("getLenghtByPoints", () => {
+    test.concurrent("horizontal line", () => {
+      const res = getLenghtByPoints(
+        [new BD(12), new BD(0)],
+        [new BD(24), new BD(0)]
+      );
+      expect(res.toString()).toEqual("12");
+    });
+    test.concurrent("vertical line", () => {
+      const res = getLenghtByPoints(
+        [new BD(0), new BD(2)],
+        [new BD(0), new BD(12)]
+      );
+
+      expect(res.toString()).toEqual("10");
+    });
+    test.concurrent("diagonal line", () => {
+      const res = getLenghtByPoints(
+        [new BD(1), new BD(1)],
+        [new BD(2), new BD(2)]
+      );
+      expect(res.toString()).toEqual("1.4142135623730950488");
+    });
+    test.concurrent("negative valued points", () => {
+      const res = getLenghtByPoints(
+        [new BD(0), new BD(2)],
+        [new BD(0), new BD(-12)]
+      );
+
+      expect(res.toString()).toEqual("14");
+    });
+    test.concurrent("length of 0", () => {
+      const res = getLenghtByPoints(
+        [new BD(0), new BD(0)],
+        [new BD(0), new BD(0)]
+      );
+      expect(res.toString()).toEqual("0");
+    });
+  });
 
   describe("translateSVGPoints", () => {
     test.concurrent("comma as delimter", () => {
