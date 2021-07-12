@@ -1,4 +1,10 @@
-const { translateSVGPoints, mapMatrixToString } = require("./index");
+const {
+  translateSVGPoints,
+  mapMatrixToString,
+  convertPointsRelToAbs,
+} = require("./index");
+
+import BD from "decimal.js";
 
 describe("plotter model", () => {
   describe("getLenghtByPoints", () => {});
@@ -22,7 +28,25 @@ describe("plotter model", () => {
     });
   });
 
-  describe("convertPointsRelToAbs", () => {});
+  describe("convertPointsRelToAbs", () => {
+    test("translates relative points to absolute ", () => {
+      const res = mapMatrixToString(
+        convertPointsRelToAbs(
+          [new BD(1), new BD(2)],
+          [
+            [new BD(2), new BD(3)],
+            [new BD(4), new BD(5)],
+            [new BD(4), new BD(5)],
+          ]
+        )
+      );
+      expect(res).toEqual([
+        ["3", "5"],
+        ["7", "10"],
+        ["11", "15"],
+      ]);
+    });
+  });
 
   describe("splitPathString", () => {});
 
