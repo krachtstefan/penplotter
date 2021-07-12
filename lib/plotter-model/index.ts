@@ -72,7 +72,10 @@ export const translateSVGPoints = (pointString: string): Point2D[] => {
  * returns
  * [[3,5], [7,10]]
  */
-const convertPointsRelToAbs = (startPnt: Point2D, arrOfPoints: Point2D[]) =>
+export const convertPointsRelToAbs = (
+  startPnt: Point2D,
+  arrOfPoints: Point2D[]
+) =>
   arrOfPoints
     .reduce(
       (acc, curr) => {
