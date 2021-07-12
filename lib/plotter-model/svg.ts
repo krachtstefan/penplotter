@@ -79,8 +79,10 @@ export const splitPathString = (pathString: string): string[] =>
   pathString.split(/(?=(?<! )[a-z|A-Z])| (?=[a-z|A-Z])/);
 
 /**
- * trim optional whitespace between command and split at whitespaces or commas (or )
- * current implementation: "l10-0.6" "l10,0.6" "l10 0.6" "l10,-0.6"
+ * trim optional whitespace between commands and split at whitespaces, commas or at minus (when
+ * negative numbers are used, a separator is not required to optimize file size
+ *
+ * current implementation: "l10,0.6" "l10 0.6" "l10,-0.6" "l10-0.6"
  */
 export const processPathCommand = (
   commandString: string
