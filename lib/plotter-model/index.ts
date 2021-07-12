@@ -103,10 +103,15 @@ const arrayofNumberArrToPoint2D = (arr: [any, any][]) =>
  * M35,0.75 L34.09375,2.5625
  * M 382.49999 494.99999 L 384.55374 496.87223
  * M 0,0 Q 200,20 200,200
- * M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02L4.4,0.71L5.5,0.79L6.6,-0.96L7.7
+ * M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02
  */
-const splitPathString = (pathString: string): string[] =>
-  pathString.split(/(?=[a-z|A-Z])/); // split before character
+export const splitPathString = (pathString: string): string[] =>
+  /**
+   * split before character and trim
+   * "(?=(?<! )[a-z|A-Z])" set the cursor before all character with no whitespace before it
+   * " (?=[a-z|A-Z])" find all whitespaces with a character behind them
+   */
+  pathString.split(/(?=(?<! )[a-z|A-Z])| (?=[a-z|A-Z])/);
 
 /**
  * trim optional whitespace between command and split at whitespaces or commas (or )
