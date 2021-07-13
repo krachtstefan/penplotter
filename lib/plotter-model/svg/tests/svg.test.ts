@@ -1,10 +1,7 @@
-const {
-  translateSVGPoints,
-  splitPathString,
-  processPathCommand,
-} = require("../svg");
+const { translateSVGPoints } = require("../index");
+const { splitPathString, processPathCommand } = require("../path");
 
-const { mapMatrixToString } = require("../math");
+const { mapMatrixToString } = require("../../math");
 
 describe("svg model", () => {
   describe("translateSVGPoints", () => {

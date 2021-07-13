@@ -1,100 +1,13 @@
-import { ElementNode, Node, RootNode, parse } from "svg-parser";
-import { ElementType, NestedArray, Point2D, isElementNode } from "./types";
 import {
   arrayofNumberArrToPoint2D,
   convertPointsRelToAbs,
   createPoint2D,
   cubicBezier,
   quadraticBezier,
-} from "./math";
-import { chunk, flattenDeep } from "lodash";
+} from "../math";
 
-import BigDecimal from "decimal.js";
-
-class SvgParser {
-  elements: ElementNode[];
-  supportedTypes: ElementType[];
-  constructor(svg: string) {
-    const svgObj = parse(svg);
-    this.elements = this._getAllElements(svgObj);
-    this.supportedTypes = Object.values(ElementType);
-  }
-
-  returnElementsByTagName(tagnames: ElementType | ElementType[]) {
-    const tagnamesArr = typeof tagnames === "string" ? [tagnames] : tagnames;
-    return this.elements.filter((e) =>
-      tagnamesArr.some((x) => x === e.tagName)
-    );
-  }
-
-  returnSupportedElements() {
-    return this.returnElementsByTagName(this.supportedTypes);
-  }
-
-  _getAllElements = (obj: RootNode | Node): ElementNode[] => {
-    const getChildren = (
-      o: RootNode | Node | string
-    ): NestedArray<RootNode | Node> => {
-      if (typeof o === "string") {
-        return [];
-      }
-      return o.type !== "text" && o.children
-        ? [o, ...o.children.filter(isElementNode).map((x) => getChildren(x))]
-        : [o];
-    };
-
-    return flattenDeep(getChildren(obj))
-      .filter(isElementNode)
-      .map((x) => x);
-  };
-}
-
-// current implementations:
-// 20,20 40,25 60,40 80,120 120,140 200,180
-// 20 20 40 25 60 40 80 120 120 140 200 180
-export const translateSVGPoints = (pointString: string): Point2D[] => {
-  const allPoints = pointString.split(/,| |\n/);
-  if (allPoints.length % 2 !== 0) {
-    console.error("detected uneven pair of points", allPoints);
-  }
-  return chunk(allPoints, 2).map((x) => [
-    new BigDecimal(x[0]),
-    new BigDecimal(x[1]),
-  ]);
-};
-
-/**
- * current implementations:
- * M35,0.75 L34.09375,2.5625
- * M 382.49999 494.99999 L 384.55374 496.87223
- * M 0,0 Q 200,20 200,200
- * M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02
- */
-export const splitPathString = (pathString: string): string[] =>
-  /**
-   * split before character and trim
-   * "(?=(?<! )[a-z|A-Z])" set the cursor before all character with no whitespace before it
-   * " (?=[a-z|A-Z])" find all whitespaces with a character behind them
-   */
-  pathString.split(/(?=(?<! )[a-z|A-Z])| (?=[a-z|A-Z])/);
-
-/**
- * trim optional whitespace between commands and split at whitespaces, commas or at minus (when
- * negative numbers are used, a separator is not required to optimize file size
- *
- * current implementation: "l10,0.6" "l10 0.6" "l10,-0.6" "l10-0.6"
- */
-export const processPathCommand = (
-  commandString: string
-): [string, string[]] => [
-  commandString.slice(0, 1),
-  commandString
-    .slice(1)
-    .trim()
-    .split(/[,| ]|(?=[-])/)
-    // support commands without arguments
-    .filter((x) => x !== ""),
-];
+import { Point2D } from "../types";
+import { chunk } from "lodash";
 
 const mCommand = {
   command: [
@@ -289,13 +202,46 @@ const cCommand = {
   },
 };
 
-const commandMapping = [
+export const commandMapping = [
   mCommand,
   zCommand,
   lCommand,
   horVerLineCommands,
   qCommand,
   cCommand,
+];
+
+/**
+ * current implementations:
+ * M35,0.75 L34.09375,2.5625
+ * M 382.49999 494.99999 L 384.55374 496.87223
+ * M 0,0 Q 200,20 200,200
+ * M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02
+ */
+export const splitPathString = (pathString: string): string[] =>
+  /**
+   * split before character and trim
+   * "(?=(?<! )[a-z|A-Z])" set the cursor before all character with no whitespace before it
+   * " (?=[a-z|A-Z])" find all whitespaces with a character behind them
+   */
+  pathString.split(/(?=(?<! )[a-z|A-Z])| (?=[a-z|A-Z])/);
+
+/**
+ * trim optional whitespace between commands and split at whitespaces, commas or at minus (when
+ * negative numbers are used, a separator is not required to optimize file size
+ *
+ * current implementation: "l10,0.6" "l10 0.6" "l10,-0.6" "l10-0.6"
+ */
+export const processPathCommand = (
+  commandString: string
+): [string, string[]] => [
+  commandString.slice(0, 1),
+  commandString
+    .slice(1)
+    .trim()
+    .split(/[,| ]|(?=[-])/)
+    // support commands without arguments
+    .filter((x) => x !== ""),
 ];
 
 export const translatePathString = (pathString: string): Point2D[][] =>
@@ -317,71 +263,3 @@ export const translatePathString = (pathString: string): Point2D[][] =>
     }
     return acc;
   }, [] as Point2D[][]);
-
-export const returnPointsArrFromElement = (
-  element: ElementNode
-): Point2D[][] => {
-  if (element.properties) {
-    switch (element.tagName) {
-      case ElementType.polyline:
-      case ElementType.polygon:
-        if (element.properties && element.properties.points) {
-          return element.tagName === ElementType.polyline
-            ? [translateSVGPoints(`${element.properties.points}`)]
-            : /**
-               * polygon is like polyline, except the path is closed,
-               * we need to copy the first coordinates
-               */
-              [
-                translateSVGPoints(
-                  `${element.properties.points} ${element.properties.points
-                    .toString()
-                    .split(" ")
-                    .slice(0, 2)
-                    .join(" ")}`
-                ),
-              ];
-        }
-        console.error(`points are missing for ${element.tagName}`);
-        return [];
-      case ElementType.line:
-        const { x1, x2, y1, y2 } = element.properties;
-        if (
-          x1 !== undefined &&
-          x2 !== undefined &&
-          y1 !== undefined &&
-          y2 !== undefined
-        ) {
-          return [
-            [
-              [new BigDecimal(x1), new BigDecimal(y1)],
-              [new BigDecimal(x2), new BigDecimal(y2)],
-            ],
-          ];
-        }
-        console.error(`coordinates are missing for ${element.tagName}`);
-        return [];
-      case ElementType.rect:
-        const { x: xAttr, y: yAttr, width, height } = element.properties;
-        const x = new BigDecimal(xAttr ? xAttr : 0);
-        const y = new BigDecimal(yAttr ? yAttr : 0);
-        return [
-          [
-            [x, y],
-            [x.add(width), y],
-            [x.add(width), y.add(height)],
-            [x, y.add(height)],
-            [x, y],
-          ],
-        ];
-      case ElementType.path:
-        return translatePathString(`${element.properties.d}`);
-      default:
-        return [];
-    }
-  }
-  console.error(`properties are missing for ${element.tagName}`);
-  return [];
-};
-
-export default SvgParser;
