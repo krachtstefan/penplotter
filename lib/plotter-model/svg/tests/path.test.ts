@@ -75,15 +75,13 @@ describe("svg model (path)", () => {
   });
 
   describe("path command", () => {
-    it.todo("quadraticBezier");
+    it.todo("moveToCmd");
+    it.todo("closeCmd");
+    it.todo("lineToCmd");
+    it.todo("lineToHorVerCmd");
+    it.todo("quadraticBezierCmd");
+    it.todo("cubicBezierCmd");
   });
-  /**
-   * test every command, make sure older coordinates are adopted
-   * expand isValid with more arguments to make much deeper tests
-   *
-   *
-   *
-   */
 });
 
 export {};
