@@ -42,25 +42,6 @@ export const processPathCommand = (
     .filter((x) => x !== ""),
 ];
 
-export const translatePathString = (pathString: string): Point2D[][] =>
-  splitPathString(pathString).reduce((acc, curr) => {
-    const [command, args] = processPathCommand(curr);
-    const currentLine = acc.slice(-1)[0];
-    const cmd = commandMapping.find((x) => x.command.includes(command));
-    if (cmd) {
-      if (cmd.isValid(args) === true) {
-        return cmd.process(command, args, acc, currentLine);
-      } else {
-        console.error(`invalid command ${command} with arguments ${args}`);
-      }
-    } else {
-      console.error(
-        `path command ${command} with args ${args} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
-      );
-    }
-    return acc;
-  }, [] as Point2D[][]);
-
 const moveToCmd = {
   command: [
     "M", // create a new element
@@ -262,3 +243,22 @@ export const commandMapping = [
   quadraticBezierCmd,
   cubicBezierCmd,
 ];
+
+export const translatePathString = (pathString: string): Point2D[][] =>
+  splitPathString(pathString).reduce((acc, curr) => {
+    const [command, args] = processPathCommand(curr);
+    const currentLine = acc.slice(-1)[0];
+    const cmd = commandMapping.find((x) => x.command.includes(command));
+    if (cmd) {
+      if (cmd.isValid(args) === true) {
+        return cmd.process(command, args, acc, currentLine);
+      } else {
+        console.error(`invalid command ${command} with arguments ${args}`);
+      }
+    } else {
+      console.error(
+        `path command ${command} with args ${args} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
+      );
+    }
+    return acc;
+  }, [] as Point2D[][]);
