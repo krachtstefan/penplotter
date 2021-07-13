@@ -85,6 +85,22 @@ describe("svg model", () => {
   });
 
   describe("processPathCommand", () => {
+    test.concurrent("splits command from arguments", () => {
+      const res = processPathCommand("M35,0.75");
+      expect(res).toEqual(["M", ["35", "0.75"]]);
+    });
+    test.concurrent("trims whitespace", () => {
+      const res = processPathCommand("M35,0.75 ");
+      expect(res).toEqual(["M", ["35", "0.75"]]);
+    });
+
+    test.concurrent("supports commandss without arguments", () => {
+      const res = processPathCommand("Z");
+      expect(res).toEqual(["Z", []]);
+    });
+  });
+
+  describe("processPathCommand", () => {
     test.concurrent("comma", () => {
       const res = processPathCommand("l10,0.6");
       expect(res).toEqual(["l", ["10", "0.6"]]);
