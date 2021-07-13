@@ -28,7 +28,7 @@ import config from "../../config";
 import dynamic from "next/dynamic";
 import useWebSocket from "react-use-websocket";
 
-const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/line.svg", "utf8")`;
+const svgFile = preval`module.exports = require("fs").readFileSync("./assets/examples/everything.svg", "utf8")`;
 const parsedSvg = new SvgParser(svgFile);
 
 const Controls = dynamic(() => import("./Controls"), { ssr: false });
