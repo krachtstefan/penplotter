@@ -91,7 +91,9 @@ export const processPathCommand = (
   commandString
     .slice(1)
     .trim()
-    .split(/[,| ]|(?=[-])/),
+    .split(/[,| ]|(?=[-])/)
+    // support commands without arguments
+    .filter((x) => x !== ""),
 ];
 
 const commandMapping = [
