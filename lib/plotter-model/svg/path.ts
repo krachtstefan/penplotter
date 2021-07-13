@@ -9,7 +9,7 @@ import {
 import { Point2D } from "../types";
 import { chunk } from "lodash";
 
-const mCommand = {
+const moveToCmd = {
   command: [
     "M", // create a new element
     "m", // relative version of M
@@ -30,7 +30,7 @@ const mCommand = {
   ],
 };
 
-const zCommand = {
+const closeCmd = {
   command: [
     "Z", // close path command
     "z", // relative version of Z
@@ -57,7 +57,7 @@ const zCommand = {
   },
 };
 
-const lCommand = {
+const lineToCmd = {
   command: [
     "L", // L (line) command draws to a new coordinate
     "l", // relative version of L
@@ -82,7 +82,7 @@ const lCommand = {
   },
 };
 
-const horVerLineCommands = {
+const lineToHorVerCmd = {
   command: [
     "H", // H command draws a new horizontal line
     "h", // relative version of H
@@ -118,7 +118,7 @@ const horVerLineCommands = {
   },
 };
 
-const qCommand = {
+const quadraticBezierCmd = {
   command: [
     "Q", // Q command draws quadratic bezier curve
     "q", // relative version of Q
@@ -157,7 +157,7 @@ const qCommand = {
     ];
   },
 };
-const cCommand = {
+const cubicBezierCmd = {
   command: [
     "C", // C command draws cubic bezier curve
     "c", // relative version of C
@@ -203,12 +203,12 @@ const cCommand = {
 };
 
 export const commandMapping = [
-  mCommand,
-  zCommand,
-  lCommand,
-  horVerLineCommands,
-  qCommand,
-  cCommand,
+  moveToCmd,
+  closeCmd,
+  lineToCmd,
+  lineToHorVerCmd,
+  quadraticBezierCmd,
+  cubicBezierCmd,
 ];
 
 /**
