@@ -9,6 +9,59 @@ import {
 import { Point2D } from "../types";
 import { chunk } from "lodash";
 
+/**
+ * current implementations:
+ * M35,0.75 L34.09375,2.5625
+ * M 382.49999 494.99999 L 384.55374 496.87223
+ * M 0,0 Q 200,20 200,200
+ * M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02
+ */
+export const splitPathString = (pathString: string): string[] =>
+  /**
+   * split before character and trim
+   * "(?=(?<! )[a-z|A-Z])" set the cursor before all character with no whitespace before it
+   * " (?=[a-z|A-Z])" find all whitespaces with a character behind them
+   */
+  pathString.split(/(?=(?<! )[a-z|A-Z])| (?=[a-z|A-Z])/);
+
+/**
+ * trim optional whitespace between commands and split at whitespaces, commas or at minus (when
+ * negative numbers are used, a separator is not required to optimize file size
+ *
+ * current implementation: "l10,0.6" "l10 0.6" "l10,-0.6" "l10-0.6"
+ */
+export const processPathCommand = (
+  commandString: string
+): [string, string[]] => [
+  commandString.slice(0, 1),
+  commandString
+    .slice(1)
+    .trim()
+    .split(/[,| ]|(?=[-])/)
+    // support commands without arguments
+    .filter((x) => x !== ""),
+];
+
+export const translatePathString = (pathString: string): Point2D[][] =>
+  splitPathString(pathString).reduce((acc, curr) => {
+    const [command, args] = processPathCommand(curr);
+    const currentLine = acc.slice(-1)[0];
+    const previousLines = acc.slice(0, -1);
+    const cmd = commandMapping.find((x) => x.command.includes(command));
+    if (cmd) {
+      if (cmd.isValid(args) === true) {
+        return cmd.process(command, args, previousLines, currentLine);
+      } else {
+        console.log(`invalid command ${command} with arguments ${args}`);
+      }
+    } else {
+      console.error(
+        `path command ${command} with args ${args} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
+      );
+    }
+    return acc;
+  }, [] as Point2D[][]);
+
 const moveToCmd = {
   command: [
     "M", // create a new element
@@ -210,56 +263,3 @@ export const commandMapping = [
   quadraticBezierCmd,
   cubicBezierCmd,
 ];
-
-/**
- * current implementations:
- * M35,0.75 L34.09375,2.5625
- * M 382.49999 494.99999 L 384.55374 496.87223
- * M 0,0 Q 200,20 200,200
- * M 0,0L1.1,1.14L2.2,-0.37L3.3,-1.02
- */
-export const splitPathString = (pathString: string): string[] =>
-  /**
-   * split before character and trim
-   * "(?=(?<! )[a-z|A-Z])" set the cursor before all character with no whitespace before it
-   * " (?=[a-z|A-Z])" find all whitespaces with a character behind them
-   */
-  pathString.split(/(?=(?<! )[a-z|A-Z])| (?=[a-z|A-Z])/);
-
-/**
- * trim optional whitespace between commands and split at whitespaces, commas or at minus (when
- * negative numbers are used, a separator is not required to optimize file size
- *
- * current implementation: "l10,0.6" "l10 0.6" "l10,-0.6" "l10-0.6"
- */
-export const processPathCommand = (
-  commandString: string
-): [string, string[]] => [
-  commandString.slice(0, 1),
-  commandString
-    .slice(1)
-    .trim()
-    .split(/[,| ]|(?=[-])/)
-    // support commands without arguments
-    .filter((x) => x !== ""),
-];
-
-export const translatePathString = (pathString: string): Point2D[][] =>
-  splitPathString(pathString).reduce((acc, curr) => {
-    const [command, args] = processPathCommand(curr);
-    const currentLine = acc.slice(-1)[0];
-    const previousLines = acc.slice(0, -1);
-    const cmd = commandMapping.find((x) => x.command.includes(command));
-    if (cmd) {
-      if (cmd.isValid(args) === true) {
-        return cmd.process(command, args, previousLines, currentLine);
-      } else {
-        console.log(`invalid command ${command} with arguments ${args}`);
-      }
-    } else {
-      console.error(
-        `path command ${command} with args ${args} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
-      );
-    }
-    return acc;
-  }, [] as Point2D[][]);
