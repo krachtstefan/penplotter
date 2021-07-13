@@ -46,13 +46,12 @@ export const translatePathString = (pathString: string): Point2D[][] =>
   splitPathString(pathString).reduce((acc, curr) => {
     const [command, args] = processPathCommand(curr);
     const currentLine = acc.slice(-1)[0];
-    const previousLines = acc.slice(0, -1);
     const cmd = commandMapping.find((x) => x.command.includes(command));
     if (cmd) {
       if (cmd.isValid(args) === true) {
-        return cmd.process(command, args, previousLines, currentLine);
+        return cmd.process(command, args, acc, currentLine);
       } else {
-        console.log(`invalid command ${command} with arguments ${args}`);
+        console.error(`invalid command ${command} with arguments ${args}`);
       }
     } else {
       console.error(
