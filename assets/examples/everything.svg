@@ -29,4 +29,8 @@
   <polygon points="200,10 250,190 160,210" style="fill:lime;stroke:purple;stroke-width:1" />
   <polyline points="20,20 40,25 60,40 80,120 120,140 200,180" style="fill:none;stroke:black;stroke-width:3" />
   <rect width="300" height="100" style="fill:rgb(0,0,255);stroke-width:3;stroke:rgb(0,0,0)" />
+  <path d="M 10,90 C 30,90 25,10 50,10" stroke="red" fill="none"/>
+  <path d="M 10,90 c 30,90 25,10 50,10" stroke="red" fill="none"/>
+  <path d="M 0,0 Q 400,20 200,200" style="stroke:rgba(255,0,0);stroke-width:1" stroke-opacity="50%" fill="none"/>
+  <path d="M 50,50 q 400,20 200,200" style="stroke:rgba(255,0,0);stroke-width:1" stroke-opacity="50%" fill="none"/>
 </svg>
