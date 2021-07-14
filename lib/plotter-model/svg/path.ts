@@ -54,14 +54,21 @@ export const moveToCmd = {
     args,
     previousLines,
     currentLine,
-  }: processArgs): Point2D[][] => [
-    ...previousLines,
-    command === "M"
-      ? [createPoint2D([args[0], args[1]])]
-      : convertPointsRelToAbs(currentLine.slice(-1)[0], [
-          createPoint2D([args[0], args[1]]),
-        ]),
-  ],
+  }: processArgs): Point2D[][] => {
+    if (args && args.length === 2) {
+      return [
+        ...previousLines,
+        command === "M"
+          ? [createPoint2D([args[0], args[1]])]
+          : convertPointsRelToAbs(currentLine.slice(-1)[0], [
+              createPoint2D([args[0], args[1]]),
+            ]),
+      ];
+    } else {
+      console.warn(`invalid args (${args}) for command ${command}. `);
+      return [...previousLines, currentLine];
+    }
+  },
 };
 
 export const closeCmd = {
@@ -72,7 +79,6 @@ export const closeCmd = {
   isValid: (args: string[]) => args.length === 0,
   process: ({
     command,
-    args,
     previousLines,
     currentLine,
   }: processArgs): Point2D[][] => {
@@ -133,27 +139,32 @@ export const lineToHorVerCmd = {
     previousLines,
     currentLine,
   }: processArgs): Point2D[][] => {
-    const isRelative = ["h", "v"].includes(command);
-    // the x or y of this coordinate will be adopted
-    const refCoordinate: Point2D = isRelative
-      ? [new BigDecimal(0), new BigDecimal(0)]
-      : currentLine.slice(-1)[0];
+    if (args) {
+      const isRelative = ["h", "v"].includes(command);
+      // the x or y of this coordinate will be adopted
+      const refCoordinate: Point2D = isRelative
+        ? [new BigDecimal(0), new BigDecimal(0)]
+        : currentLine.slice(-1)[0];
 
-    const targetCoordinate =
-      command.toLowerCase() === "h"
-        ? [...args, refCoordinate[1]]
-        : [refCoordinate[0], ...args];
-    let newHorLineSegment = [
-      createPoint2D([targetCoordinate[0], targetCoordinate[1]]),
-    ];
-    if (isRelative) {
-      newHorLineSegment = convertPointsRelToAbs(
-        currentLine.slice(-1)[0],
-        newHorLineSegment
-      );
+      const targetCoordinate =
+        command.toLowerCase() === "h"
+          ? [...args, refCoordinate[1]]
+          : [refCoordinate[0], ...args];
+      let newHorLineSegment = [
+        createPoint2D([targetCoordinate[0], targetCoordinate[1]]),
+      ];
+      if (isRelative) {
+        newHorLineSegment = convertPointsRelToAbs(
+          currentLine.slice(-1)[0],
+          newHorLineSegment
+        );
+      }
+
+      return [...previousLines, [...currentLine, ...newHorLineSegment]];
+    } else {
+      console.warn(`invalid args (${args}) for command ${command}. `);
+      return [...previousLines, currentLine];
     }
-
-    return [...previousLines, [...currentLine, ...newHorLineSegment]];
   },
 };
 
