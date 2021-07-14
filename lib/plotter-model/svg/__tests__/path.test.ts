@@ -60,7 +60,7 @@ describe("svg model (path)", () => {
       expect(res).toEqual(["M", ["35", "0.75"]]);
     });
 
-    test.concurrent("supports commandss without arguments", () => {
+    test.concurrent("supports commands without arguments", () => {
       const res = processPathCommand("Z");
       expect(res).toEqual(["Z", []]);
     });
