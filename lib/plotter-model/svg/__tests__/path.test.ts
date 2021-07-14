@@ -129,9 +129,24 @@ describe("svg model (path)", () => {
     });
 
     describe("closeCmd", () => {
-      test.concurrent("absolute", () => {
+      test.concurrent("uppercase", () => {
         const res = closeCmd.process({
           command: "Z",
+          previousLines,
+          currentLine: currentLine2Pnts,
+        });
+        console.log("absolute", res);
+        expect(res.map((x) => mapMatrixToString(x))).toEqual([
+          [
+            ["5", "5"],
+            ["10", "10"],
+            ["5", "5"],
+          ],
+        ]);
+      });
+      test.concurrent("lowercase has identical behaviour", () => {
+        const res = closeCmd.process({
+          command: "z",
           previousLines,
           currentLine: currentLine2Pnts,
         });

@@ -66,7 +66,7 @@ export const moveToCmd = {
 export const closeCmd = {
   command: [
     "Z", // close path command
-    "z", // relative version of Z
+    "z", // both have the same behaviour
   ],
   isValid: (args: string[]) => args.length === 0,
   process: ({
