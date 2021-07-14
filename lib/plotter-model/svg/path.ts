@@ -1,3 +1,4 @@
+import { Point2D, processArgs } from "../types";
 import {
   arrayofNumberArrToPoint2D,
   convertPointsRelToAbs,
@@ -6,7 +7,6 @@ import {
   quadraticBezier,
 } from "../math";
 
-import { Point2D } from "../types";
 import { chunk } from "lodash";
 
 /**
@@ -48,12 +48,12 @@ export const moveToCmd = {
     "m", // relative version of M
   ],
   isValid: (args: string[]) => args.length === 2,
-  process: (
-    command: string,
-    args: string[],
-    previousLines: Point2D[][],
-    currentLine: Point2D[]
-  ): Point2D[][] => [
+  process: ({
+    command,
+    args,
+    previousLines,
+    currentLine,
+  }: processArgs): Point2D[][] => [
     ...previousLines,
     command === "M"
       ? [createPoint2D([args[0], args[1]])]
@@ -69,12 +69,12 @@ export const closeCmd = {
     "z", // relative version of Z
   ],
   isValid: (args: string[]) => args.length === 0,
-  process: (
-    command: string,
-    args: string[],
-    previousLines: Point2D[][],
-    currentLine: Point2D[]
-  ): Point2D[][] => {
+  process: ({
+    command,
+    args,
+    previousLines,
+    currentLine,
+  }: processArgs): Point2D[][] => {
     const firstPoint = currentLine[0];
     const lastPoint = currentLine.slice(-1)[0];
     if (
@@ -96,12 +96,12 @@ export const lineToCmd = {
     "l", // relative version of L
   ],
   isValid: (args: string[]) => args.length % 2 === 0,
-  process: (
-    command: string,
-    args: string[],
-    previousLines: Point2D[][],
-    currentLine: Point2D[]
-  ): Point2D[][] => {
+  process: ({
+    command,
+    args,
+    previousLines,
+    currentLine,
+  }: processArgs): Point2D[][] => {
     let newLineSegment = arrayofNumberArrToPoint2D(
       chunk(args, 2).map((x) => [x[0], x[1]])
     );
@@ -123,12 +123,12 @@ export const lineToHorVerCmd = {
     "v", // relative version of V
   ],
   isValid: (args: string[]) => args.length === 1,
-  process: (
-    command: string,
-    args: string[],
-    previousLines: Point2D[][],
-    currentLine: Point2D[]
-  ): Point2D[][] => {
+  process: ({
+    command,
+    args,
+    previousLines,
+    currentLine,
+  }: processArgs): Point2D[][] => {
     const isRelative = ["h", "v"].includes(command);
     // the x or y of this coordinate will be adopted
     const refCoordinate = isRelative ? [0, 0] : currentLine.slice(-1)[0];
@@ -157,12 +157,12 @@ export const quadraticBezierCmd = {
     "q", // relative version of Q
   ],
   isValid: (args: string[]) => args.length === 4,
-  process: (
-    command: string,
-    args: string[],
-    previousLines: Point2D[][],
-    currentLine: Point2D[]
-  ): Point2D[][] => {
+  process: ({
+    command,
+    args,
+    previousLines,
+    currentLine,
+  }: processArgs): Point2D[][] => {
     let quadraticCurveCoords = arrayofNumberArrToPoint2D(
       chunk(args, 2).map((x) => [x[0], x[1]])
     );
@@ -196,12 +196,12 @@ export const cubicBezierCmd = {
     "c", // relative version of C
   ],
   isValid: (args: string[]) => args.length === 6,
-  process: (
-    command: string,
-    args: string[],
-    previousLines: Point2D[][],
-    currentLine: Point2D[]
-  ): Point2D[][] => {
+  process: ({
+    command,
+    args,
+    previousLines,
+    currentLine,
+  }: processArgs): Point2D[][] => {
     let cubicCurveCoords = arrayofNumberArrToPoint2D(
       chunk(args, 2).map((x) => [x[0], x[1]])
     );
@@ -252,7 +252,7 @@ export const translatePathString = (pathString: string): Point2D[][] =>
     const cmd = commandMapping.find((x) => x.command.includes(command));
     if (cmd) {
       if (cmd.isValid(args) === true) {
-        return cmd.process(command, args, previousLines, currentLine);
+        return cmd.process({ command, args, previousLines, currentLine });
       } else {
         console.error(`invalid command ${command} with arguments ${args}`);
       }

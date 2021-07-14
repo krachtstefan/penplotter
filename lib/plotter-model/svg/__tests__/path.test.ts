@@ -1,4 +1,5 @@
 import {
+  closeCmd,
   moveToCmd,
   processPathCommand,
   splitPathString,
@@ -92,12 +93,12 @@ describe("svg model (path)", () => {
 
     describe("moveToCmd", () => {
       test.concurrent("absolute ", () => {
-        const res = moveToCmd.process(
-          "M",
-          ["50", "60"],
+        const res = moveToCmd.process({
+          command: "M",
+          args: ["50", "60"],
           previousLines,
-          currentLine
-        );
+          currentLine,
+        });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
             ["12", "34"],
@@ -107,12 +108,12 @@ describe("svg model (path)", () => {
         ]);
       });
       test.concurrent("relative ", () => {
-        const res = moveToCmd.process(
-          "m",
-          ["50", "60"],
+        const res = moveToCmd.process({
+          command: "m",
+          args: ["50", "60"],
           previousLines,
-          currentLine
-        );
+          currentLine,
+        });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
             ["12", "34"],
