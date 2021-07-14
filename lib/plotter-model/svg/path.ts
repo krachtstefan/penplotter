@@ -66,7 +66,7 @@ export const moveToCmd = {
       ];
     } else {
       console.warn(`invalid args (${args}) for command ${command}.`);
-      return [...previousLines, currentLine];
+      return [...previousLines.slice(0, -1), currentLine];
     }
   },
 };
@@ -95,7 +95,7 @@ export const closeCmd = {
       ];
     } else {
       console.warn(`Noting to close, skipped ${command} command.`, currentLine);
-      return [...previousLines, currentLine];
+      return [...previousLines.slice(0, -1), currentLine];
     }
   },
 };
@@ -133,7 +133,7 @@ export const lineToCmd = {
       ];
     } else {
       console.warn(`invalid args (${args}) for command ${command}.`);
-      return [...previousLines, currentLine];
+      return [...previousLines.slice(0, -1), currentLine];
     }
   },
 };
@@ -178,7 +178,7 @@ export const lineToHorVerCmd = {
       ];
     } else {
       console.warn(`invalid args (${args}) for command ${command}.`);
-      return [...previousLines, currentLine];
+      return [...previousLines.slice(0, -1), currentLine];
     }
   },
 };
