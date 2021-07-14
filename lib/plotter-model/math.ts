@@ -100,7 +100,7 @@ export const move = (
   {
     down = new BigDecimal(0),
     right = new BigDecimal(0),
-  }: { down: BigDecimal; right: BigDecimal }
+  }: { down?: BigDecimal; right?: BigDecimal }
 ): Point2D[] =>
   arrOfPoints.map(([x, y]) => [
     new BigDecimal(x).add(right || 0),
