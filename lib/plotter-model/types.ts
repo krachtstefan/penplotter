@@ -18,3 +18,10 @@ export enum ElementType {
 export const isElementNode = (
   node: string | RootNode | Node
 ): node is ElementNode => typeof node !== "string" && node.type === "element";
+
+export type processArgs = {
+  command: string;
+  args: string[];
+  previousLines: Point2D[][];
+  currentLine: Point2D[];
+};
