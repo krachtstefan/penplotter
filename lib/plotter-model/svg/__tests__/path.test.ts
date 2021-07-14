@@ -1,5 +1,6 @@
-const { splitPathString, processPathCommand, moveToCmd } = require("../path");
-const { mapMatrixToString } = require("../../math.ts");
+import { moveToCmd, processPathCommand, splitPathString } from "../path";
+
+import { mapMatrixToString } from "../../math";
 
 describe("svg model (path)", () => {
   describe("splitPathString", () => {
@@ -95,5 +96,3 @@ describe("svg model (path)", () => {
     it.todo("cubicBezierCmd");
   });
 });
-
-export {};

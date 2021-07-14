@@ -1,15 +1,15 @@
-const {
-  mapMatrixToString,
+import {
   convertPointsRelToAbs,
-  getLenghtByPoints,
-  move,
-  mirrorY,
-  mirrorX,
-  scale,
   getDimensions,
-  getPosition,
+  getLenghtByPoints,
   getPointFromLineSegment,
-} = require("../math");
+  getPosition,
+  mapMatrixToString,
+  mirrorX,
+  mirrorY,
+  move,
+  scale,
+} from "../math";
 
 import BD from "decimal.js";
 
@@ -251,5 +251,3 @@ describe("math model", () => {
     it.todo("cubicBezier");
   });
 });
-
-export {};

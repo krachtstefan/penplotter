@@ -1,6 +1,5 @@
-const { translateSVGPoints } = require("../index");
-
-const { mapMatrixToString } = require("../../math");
+import { mapMatrixToString } from "../../math";
+import { translateSVGPoints } from "../index";
 
 describe("svg model", () => {
   describe("translateSVGPoints", () => {
@@ -42,5 +41,3 @@ describe("svg model", () => {
     });
   });
 });
-
-export {};
