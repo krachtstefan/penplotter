@@ -42,7 +42,7 @@ export const processPathCommand = (
     .filter((x) => x !== ""),
 ];
 
-const moveToCmd = {
+export const moveToCmd = {
   command: [
     "M", // create a new element
     "m", // relative version of M
@@ -53,7 +53,7 @@ const moveToCmd = {
     args: string[],
     previousLines: Point2D[][],
     currentLine: Point2D[]
-  ) => [
+  ): Point2D[][] => [
     ...previousLines,
     command === "M"
       ? [createPoint2D([args[0], args[1]])]
@@ -63,7 +63,7 @@ const moveToCmd = {
   ],
 };
 
-const closeCmd = {
+export const closeCmd = {
   command: [
     "Z", // close path command
     "z", // relative version of Z
@@ -74,7 +74,7 @@ const closeCmd = {
     args: string[],
     previousLines: Point2D[][],
     currentLine: Point2D[]
-  ) => {
+  ): Point2D[][] => {
     const firstPoint = currentLine[0];
     const lastPoint = currentLine.slice(-1)[0];
     if (
@@ -90,7 +90,7 @@ const closeCmd = {
   },
 };
 
-const lineToCmd = {
+export const lineToCmd = {
   command: [
     "L", // L (line) command draws to a new coordinate
     "l", // relative version of L
@@ -101,7 +101,7 @@ const lineToCmd = {
     args: string[],
     previousLines: Point2D[][],
     currentLine: Point2D[]
-  ) => {
+  ): Point2D[][] => {
     let newLineSegment = arrayofNumberArrToPoint2D(
       chunk(args, 2).map((x) => [x[0], x[1]])
     );
@@ -115,7 +115,7 @@ const lineToCmd = {
   },
 };
 
-const lineToHorVerCmd = {
+export const lineToHorVerCmd = {
   command: [
     "H", // H command draws a new horizontal line
     "h", // relative version of H
@@ -128,7 +128,7 @@ const lineToHorVerCmd = {
     args: string[],
     previousLines: Point2D[][],
     currentLine: Point2D[]
-  ) => {
+  ): Point2D[][] => {
     const isRelative = ["h", "v"].includes(command);
     // the x or y of this coordinate will be adopted
     const refCoordinate = isRelative ? [0, 0] : currentLine.slice(-1)[0];
@@ -151,7 +151,7 @@ const lineToHorVerCmd = {
   },
 };
 
-const quadraticBezierCmd = {
+export const quadraticBezierCmd = {
   command: [
     "Q", // Q command draws quadratic bezier curve
     "q", // relative version of Q
@@ -162,7 +162,7 @@ const quadraticBezierCmd = {
     args: string[],
     previousLines: Point2D[][],
     currentLine: Point2D[]
-  ) => {
+  ): Point2D[][] => {
     let quadraticCurveCoords = arrayofNumberArrToPoint2D(
       chunk(args, 2).map((x) => [x[0], x[1]])
     );
@@ -190,7 +190,7 @@ const quadraticBezierCmd = {
     ];
   },
 };
-const cubicBezierCmd = {
+export const cubicBezierCmd = {
   command: [
     "C", // C command draws cubic bezier curve
     "c", // relative version of C
@@ -201,7 +201,7 @@ const cubicBezierCmd = {
     args: string[],
     previousLines: Point2D[][],
     currentLine: Point2D[]
-  ) => {
+  ): Point2D[][] => {
     let cubicCurveCoords = arrayofNumberArrToPoint2D(
       chunk(args, 2).map((x) => [x[0], x[1]])
     );
