@@ -1,6 +1,7 @@
 import {
   closeCmd,
   lineToCmd,
+  lineToHorVerCmd,
   moveToCmd,
   processPathCommand,
   splitPathString,
@@ -8,7 +9,6 @@ import {
 } from "../path";
 
 import BD from "decimal.js";
-import { Point2D } from "../../types";
 import { mapMatrixToString } from "../../math";
 
 describe("svg model (path)", () => {
@@ -84,26 +84,24 @@ describe("svg model (path)", () => {
   });
 
   describe("path command", () => {
-    const previousLines: Point2D[][] = [
-      [
-        [new BD("12"), new BD("34")],
-        [new BD("56"), new BD("78")],
-      ],
-    ];
-
     describe("moveToCmd", () => {
       test.concurrent("absolute ", () => {
         const res = moveToCmd.process({
           command: "M",
           args: ["50", "60"],
-          previousLines,
-          currentLine: [[new BD("5"), new BD("5")]],
+          lines: [
+            [
+              [new BD("5"), new BD("5")],
+              [new BD("10"), new BD("10")],
+            ],
+          ],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
-            ["12", "34"],
-            ["56", "78"],
+            ["5", "5"],
+            ["10", "10"],
           ],
+
           [["50", "60"]],
         ]);
       });
@@ -111,15 +109,19 @@ describe("svg model (path)", () => {
         const res = moveToCmd.process({
           command: "m",
           args: ["50", "60"],
-          previousLines,
-          currentLine: [[new BD("5"), new BD("5")]],
+          lines: [
+            [
+              [new BD("5"), new BD("5")],
+              [new BD("10"), new BD("10")],
+            ],
+          ],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
-            ["12", "34"],
-            ["56", "78"],
+            ["5", "5"],
+            ["10", "10"],
           ],
-          [["55", "65"]],
+          [["60", "70"]],
         ]);
       });
     });
@@ -128,10 +130,11 @@ describe("svg model (path)", () => {
       test.concurrent("uppercase", () => {
         const res = closeCmd.process({
           command: "Z",
-          previousLines,
-          currentLine: [
-            [new BD("5"), new BD("5")],
-            [new BD("10"), new BD("10")],
+          lines: [
+            [
+              [new BD("5"), new BD("5")],
+              [new BD("10"), new BD("10")],
+            ],
           ],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
@@ -145,10 +148,11 @@ describe("svg model (path)", () => {
       test.concurrent("lowercase has identical behaviour", () => {
         const res = closeCmd.process({
           command: "z",
-          previousLines,
-          currentLine: [
-            [new BD("5"), new BD("5")],
-            [new BD("10"), new BD("10")],
+          lines: [
+            [
+              [new BD("5"), new BD("5")],
+              [new BD("10"), new BD("10")],
+            ],
           ],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
@@ -162,15 +166,20 @@ describe("svg model (path)", () => {
       test.concurrent("skippes when nothing to close", () => {
         const res = closeCmd.process({
           command: "Z",
-          previousLines,
-          currentLine: [[new BD("5"), new BD("5")]],
+          lines: [
+            [
+              [new BD("5"), new BD("5")],
+              [new BD("10"), new BD("10")],
+              [new BD("5"), new BD("5")],
+            ],
+          ],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
-            ["12", "34"],
-            ["56", "78"],
+            ["5", "5"],
+            ["10", "10"],
+            ["5", "5"],
           ],
-          [["5", "5"]],
         ]);
       });
     });
@@ -180,12 +189,17 @@ describe("svg model (path)", () => {
           const res = lineToCmd.process({
             command: "L",
             args: ["50", "60"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
           expect(res.map((x) => mapMatrixToString(x))).toEqual([
             [
               ["5", "5"],
+              ["10", "10"],
               ["50", "60"],
             ],
           ]);
@@ -194,12 +208,17 @@ describe("svg model (path)", () => {
           const res = lineToCmd.process({
             command: "L",
             args: ["50", "60", "150", "160"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
           expect(res.map((x) => mapMatrixToString(x))).toEqual([
             [
               ["5", "5"],
+              ["10", "10"],
               ["50", "60"],
               ["150", "160"],
             ],
@@ -209,21 +228,35 @@ describe("svg model (path)", () => {
           const res = lineToCmd.process({
             command: "L",
             args: ["50"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
-          expect(res.map((x) => mapMatrixToString(x))).toEqual([[["5", "5"]]]);
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["10", "10"],
+            ],
+          ]);
         });
         test.concurrent("three argument (invalid)", () => {
           const res = lineToCmd.process({
             command: "L",
             args: ["50", "60", "150"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
           expect(res.map((x) => mapMatrixToString(x))).toEqual([
             [
               ["5", "5"],
+              ["10", "10"],
               ["50", "60"],
             ],
           ]);
@@ -235,13 +268,18 @@ describe("svg model (path)", () => {
           const res = lineToCmd.process({
             command: "l",
             args: ["50", "60"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
           expect(res.map((x) => mapMatrixToString(x))).toEqual([
             [
               ["5", "5"],
-              ["55", "65"],
+              ["10", "10"],
+              ["60", "70"],
             ],
           ]);
         });
@@ -249,14 +287,19 @@ describe("svg model (path)", () => {
           const res = lineToCmd.process({
             command: "l",
             args: ["50", "60", "150", "160"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
           expect(res.map((x) => mapMatrixToString(x))).toEqual([
             [
               ["5", "5"],
-              ["55", "65"],
-              ["205", "225"],
+              ["10", "10"],
+              ["60", "70"],
+              ["210", "230"],
             ],
           ]);
         });
@@ -264,22 +307,36 @@ describe("svg model (path)", () => {
           const res = lineToCmd.process({
             command: "l",
             args: ["50"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
-          expect(res.map((x) => mapMatrixToString(x))).toEqual([[["5", "5"]]]);
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["10", "10"],
+            ],
+          ]);
         });
         test.concurrent("three argument (invalid)", () => {
           const res = lineToCmd.process({
             command: "l",
             args: ["50", "60", "150"],
-            previousLines,
-            currentLine: [[new BD("5"), new BD("5")]],
+            lines: [
+              [
+                [new BD("5"), new BD("5")],
+                [new BD("10"), new BD("10")],
+              ],
+            ],
           });
           expect(res.map((x) => mapMatrixToString(x))).toEqual([
             [
               ["5", "5"],
-              ["55", "65"],
+              ["10", "10"],
+              ["60", "70"],
             ],
           ]);
         });
