@@ -111,7 +111,7 @@ export const lineToCmd = {
         newLineSegment
       );
     }
-    return [...previousLines, [...currentLine, ...newLineSegment]];
+    return [...previousLines.slice(0, -1), [...currentLine, ...newLineSegment]];
   },
 };
 
@@ -247,11 +247,12 @@ export const commandMapping = [
 export const translatePathString = (pathString: string): Point2D[][] =>
   splitPathString(pathString).reduce((acc, curr) => {
     const [command, args] = processPathCommand(curr);
+    const previousLines = acc;
     const currentLine = acc.slice(-1)[0];
     const cmd = commandMapping.find((x) => x.command.includes(command));
     if (cmd) {
       if (cmd.isValid(args) === true) {
-        return cmd.process(command, args, acc, currentLine);
+        return cmd.process(command, args, previousLines, currentLine);
       } else {
         console.error(`invalid command ${command} with arguments ${args}`);
       }
