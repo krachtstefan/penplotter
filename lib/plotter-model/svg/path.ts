@@ -78,14 +78,17 @@ export const closeCmd = {
     const firstPoint = currentLine[0];
     const lastPoint = currentLine.slice(-1)[0];
     if (
-      currentLine.length > 2 &&
+      currentLine.length >= 2 &&
       !firstPoint[0].eq(lastPoint[0]) &&
       !firstPoint[1].eq(lastPoint[1])
     ) {
-      return [...previousLines, [...currentLine, createPoint2D(firstPoint)]];
+      return [
+        ...previousLines.slice(0, -1),
+        [...currentLine, createPoint2D(firstPoint)],
+      ];
     } else {
-      console.warn(`Path was already closed, skipped ${command} command.`);
-      return previousLines;
+      console.warn(`Noting to close, skipped ${command} command.`, currentLine);
+      return [...previousLines, currentLine];
     }
   },
 };

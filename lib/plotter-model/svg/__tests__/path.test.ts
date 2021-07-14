@@ -89,7 +89,11 @@ describe("svg model (path)", () => {
         [new BD("56"), new BD("78")],
       ],
     ];
-    const currentLine: Point2D[] = [[new BD("5"), new BD("5")]];
+    const currentLine1Pnt: Point2D[] = [[new BD("5"), new BD("5")]];
+    const currentLine2Pnts: Point2D[] = [
+      [new BD("5"), new BD("5")],
+      [new BD("10"), new BD("10")],
+    ];
 
     describe("moveToCmd", () => {
       test.concurrent("absolute ", () => {
@@ -97,7 +101,7 @@ describe("svg model (path)", () => {
           command: "M",
           args: ["50", "60"],
           previousLines,
-          currentLine,
+          currentLine: currentLine1Pnt,
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
@@ -112,7 +116,7 @@ describe("svg model (path)", () => {
           command: "m",
           args: ["50", "60"],
           previousLines,
-          currentLine,
+          currentLine: currentLine1Pnt,
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
@@ -123,18 +127,58 @@ describe("svg model (path)", () => {
         ]);
       });
     });
-    it.todo("closeCmd");
-    it.todo("lineToCmd");
-    it.todo("lineToHorVerCmd");
-    it.todo("quadraticBezierCmd");
-    it.todo("cubicBezierCmd");
+
+    describe("closeCmd", () => {
+      test.concurrent("absolute", () => {
+        const res = closeCmd.process({
+          command: "Z",
+          previousLines,
+          currentLine: currentLine2Pnts,
+        });
+        console.log("absolute", res);
+        expect(res.map((x) => mapMatrixToString(x))).toEqual([
+          [
+            ["5", "5"],
+            ["10", "10"],
+            ["5", "5"],
+          ],
+        ]);
+      });
+      test.concurrent("skippes when nothing to close", () => {
+        const res = closeCmd.process({
+          command: "Z",
+          previousLines,
+          currentLine: currentLine1Pnt,
+        });
+        expect(res.map((x) => mapMatrixToString(x))).toEqual([
+          [
+            ["12", "34"],
+            ["56", "78"],
+          ],
+          [["5", "5"]],
+        ]);
+      });
+    });
+    describe("lineToCmd", () => {
+      it.todo("lineToCmd");
+    });
+    describe("lineToHorVerCmd", () => {
+      it.todo("lineToHorVerCmd");
+    });
+    describe("quadraticBezierCmd", () => {
+      it.todo("quadraticBezierCmd");
+    });
+    describe("cubicBezierCmd", () => {
+      it.todo("cubicBezierCmd");
+    });
   });
 
   describe("translatePathString", () => {
     test.concurrent("multiple move to and line commands", () => {
       const res = translatePathString(
-        "M 100 100 L 300 100 l 200 300 M 10 10 L 20 30"
+        "M 100 100 L 300 100 l 200 300 M 10 10 L 20 30 L 100 100 Z"
       );
+
       expect(res.map((matrix) => mapMatrixToString(matrix))).toEqual([
         [
           ["100", "100"],
@@ -144,8 +188,16 @@ describe("svg model (path)", () => {
         [
           ["10", "10"],
           ["20", "30"],
+          ["100", "100"],
+          ["10", "10"],
         ],
       ]);
     });
   });
 });
+
+/**
+ * test every command, make sure older coordinates are adopted
+ * expand isValid with more arguments to make much deeper tests
+ * make relative commands support input from older elements
+ */
