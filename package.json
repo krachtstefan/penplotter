@@ -6,7 +6,7 @@
     "dev": "next dev -p 5000",
     "build": "next build",
     "start": "next start",
-    "test": "jest",
+    "test": "jest --watch",
     "penplotter": "node hardware/index.ts"
   },
   "dependencies": {
