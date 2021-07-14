@@ -145,8 +145,8 @@ export const lineToHorVerCmd = {
 
       const targetCoordinate =
         command.toLowerCase() === "h"
-          ? [...args, refCoordinate[1]]
-          : [refCoordinate[0], ...args];
+          ? [...args.slice(-1), refCoordinate[1]]
+          : [refCoordinate[0], ...args.slice(-1)];
       let newHorLineSegment = [
         createPoint2D([targetCoordinate[0], targetCoordinate[1]]),
       ];
