@@ -65,7 +65,7 @@ export const moveToCmd = {
             ]),
       ];
     } else {
-      console.warn(`invalid args (${args}) for command ${command}. `);
+      console.warn(`invalid args (${args}) for command ${command}.`);
       return [...previousLines, currentLine];
     }
   },
@@ -162,7 +162,7 @@ export const lineToHorVerCmd = {
 
       return [...previousLines, [...currentLine, ...newHorLineSegment]];
     } else {
-      console.warn(`invalid args (${args}) for command ${command}. `);
+      console.warn(`invalid args (${args}) for command ${command}.`);
       return [...previousLines, currentLine];
     }
   },
