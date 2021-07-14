@@ -73,7 +73,7 @@ export const closeCmd: pathCommandImplementation = {
   process: ({ command, args, lines }) => {
     if (args) {
       console.warn(
-        `command ${command} was called with arguments ${args}. No arguments needed`
+        `command ${command} was called with arguments ${args}. No arguments needed.`
       );
     }
     const firstPoint = lines.slice(-1)[0][0];
@@ -102,7 +102,9 @@ export const lineToCmd: pathCommandImplementation = {
   process: ({ command, args, lines }) => {
     if (args) {
       if (args.length % 2 === 0) {
-        console.warn(`invalid args (${args}) for command ${command}.`);
+        console.warn(
+          `invalid args (${args}) for command ${command}. Last one will be ignored`
+        );
       }
       let newLineSegment = arrayofNumberArrToPoint2D(
         chunk(args, 2)
