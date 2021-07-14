@@ -134,9 +134,14 @@ export const lineToHorVerCmd = {
     "V", // V command draws a new vertical line
     "v", // relative version of V
   ],
-  isValid: (args: string[]) => args.length === 1,
+  isValid: (args: string[]) => true,
   process: ({ command, args, lines }: processArgs): Point2D[][] => {
     if (args) {
+      if (args.length > 1) {
+        console.warn(
+          `more than one argument for command ${command}. Only using the last`
+        );
+      }
       const isRelative = ["h", "v"].includes(command);
       // the x or y of this coordinate will be adopted
       const refCoordinate: Point2D = isRelative
