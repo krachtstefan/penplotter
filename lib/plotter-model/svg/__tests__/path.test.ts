@@ -48,6 +48,11 @@ describe("svg model (path)", () => {
         "L7.7",
       ]);
     });
+
+    test.concurrent("gets z command at the end", () => {
+      const res = splitPathString("M 10,10 L 90,90 z");
+      expect(res).toEqual(["M 10,10", "L 90,90", "z"]);
+    });
   });
 
   describe("processPathCommand", () => {
