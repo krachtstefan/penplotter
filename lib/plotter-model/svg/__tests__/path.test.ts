@@ -175,7 +175,60 @@ describe("svg model (path)", () => {
       });
     });
     describe("lineToCmd", () => {
-      it.todo("lineToCmd");
+      describe("absolute", () => {
+        test.concurrent("two argument", () => {
+          const res = lineToCmd.process({
+            command: "L",
+            args: ["50", "60"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["50", "60"],
+            ],
+          ]);
+        });
+        test.concurrent("four arguments", () => {
+          const res = lineToCmd.process({
+            command: "L",
+            args: ["50", "60", "150", "160"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["50", "60"],
+              ["150", "160"],
+            ],
+          ]);
+        });
+        test.concurrent("one argument (ivalid)", () => {
+          const res = lineToCmd.process({
+            command: "L",
+            args: ["50"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([[["5", "5"]]]);
+        });
+        test.concurrent("three argument (ivalid)", () => {
+          const res = lineToCmd.process({
+            command: "L",
+            args: ["50", "60", "150"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["50", "60"],
+            ],
+          ]);
+        });
+      });
     });
     describe("lineToHorVerCmd", () => {
       it.todo("lineToHorVerCmd");
