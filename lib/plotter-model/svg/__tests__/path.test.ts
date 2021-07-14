@@ -229,6 +229,61 @@ describe("svg model (path)", () => {
           ]);
         });
       });
+
+      describe("relative", () => {
+        test.concurrent("two argument", () => {
+          const res = lineToCmd.process({
+            command: "l",
+            args: ["50", "60"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["55", "65"],
+            ],
+          ]);
+        });
+        test.concurrent("four arguments", () => {
+          const res = lineToCmd.process({
+            command: "l",
+            args: ["50", "60", "150", "160"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["55", "65"],
+              ["205", "225"],
+            ],
+          ]);
+        });
+        test.concurrent("one argument (invalid)", () => {
+          const res = lineToCmd.process({
+            command: "l",
+            args: ["50"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([[["5", "5"]]]);
+        });
+        test.concurrent("three argument (invalid)", () => {
+          const res = lineToCmd.process({
+            command: "l",
+            args: ["50", "60", "150"],
+            previousLines,
+            currentLine: [[new BD("5"), new BD("5")]],
+          });
+          expect(res.map((x) => mapMatrixToString(x))).toEqual([
+            [
+              ["5", "5"],
+              ["55", "65"],
+            ],
+          ]);
+        });
+      });
     });
     describe("lineToHorVerCmd", () => {
       it.todo("lineToHorVerCmd");
