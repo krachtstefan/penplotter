@@ -24,3 +24,8 @@ export type processArgs = {
   args?: string[];
   lines: Point2D[][];
 };
+
+export type pathCommandImplementation = {
+  command: string[];
+  process: ({ command, args, lines }: processArgs) => Point2D[][];
+};

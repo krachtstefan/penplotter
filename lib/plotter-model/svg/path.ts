@@ -1,4 +1,4 @@
-import { Point2D, processArgs } from "../types";
+import { Point2D, pathCommandImplementation, processArgs } from "../types";
 import {
   arrayofNumberArrToPoint2D,
   convertPointsRelToAbs,
@@ -43,12 +43,12 @@ export const processPathCommand = (
     .filter((x) => x !== ""),
 ];
 
-export const moveToCmd = {
+export const moveToCmd: pathCommandImplementation = {
   command: [
     "M", // create a new element
     "m", // relative version of M
   ],
-  process: ({ command, args, lines }: processArgs): Point2D[][] => {
+  process: ({ command, args, lines }) => {
     if (args && args.length === 2) {
       return [
         ...lines,
@@ -65,12 +65,12 @@ export const moveToCmd = {
   },
 };
 
-export const closeCmd = {
+export const closeCmd: pathCommandImplementation = {
   command: [
     "Z", // close path command
     "z", // both have the same behaviour
   ],
-  process: ({ command, args, lines }: processArgs): Point2D[][] => {
+  process: ({ command, args, lines }) => {
     if (args) {
       console.warn(
         `command ${command} was called with arguments ${args}. No arguments needed`
@@ -94,12 +94,12 @@ export const closeCmd = {
   },
 };
 
-export const lineToCmd = {
+export const lineToCmd: pathCommandImplementation = {
   command: [
     "L", // L (line) command draws to a new coordinate
     "l", // relative version of L
   ],
-  process: ({ command, args, lines }: processArgs): Point2D[][] => {
+  process: ({ command, args, lines }) => {
     if (args) {
       if (args.length % 2 === 0) {
         console.warn(`invalid args (${args}) for command ${command}.`);
@@ -126,14 +126,14 @@ export const lineToCmd = {
   },
 };
 
-export const lineToHorVerCmd = {
+export const lineToHorVerCmd: pathCommandImplementation = {
   command: [
     "H", // H command draws a new horizontal line
     "h", // relative version of H
     "V", // V command draws a new vertical line
     "v", // relative version of V
   ],
-  process: ({ command, args, lines }: processArgs): Point2D[][] => {
+  process: ({ command, args, lines }) => {
     if (args) {
       if (args.length > 1) {
         console.warn(
@@ -170,12 +170,12 @@ export const lineToHorVerCmd = {
   },
 };
 
-export const quadraticBezierCmd = {
+export const quadraticBezierCmd: pathCommandImplementation = {
   command: [
     "Q", // Q command draws quadratic bezier curve
     "q", // relative version of Q
   ],
-  process: ({ command, args, lines }: processArgs): Point2D[][] => {
+  process: ({ command, args, lines }) => {
     if (args && args.length === 4) {
       let quadraticCurveCoords = arrayofNumberArrToPoint2D(
         chunk(args, 2).map((x) => [x[0], x[1]])
@@ -212,12 +212,12 @@ export const quadraticBezierCmd = {
     }
   },
 };
-export const cubicBezierCmd = {
+export const cubicBezierCmd: pathCommandImplementation = {
   command: [
     "C", // C command draws cubic bezier curve
     "c", // relative version of C
   ],
-  process: ({ command, args, lines }: processArgs): Point2D[][] => {
+  process: ({ command, args, lines }) => {
     if (args && args.length === 6) {
       let cubicCurveCoords = arrayofNumberArrToPoint2D(
         chunk(args, 2).map((x) => [x[0], x[1]])
