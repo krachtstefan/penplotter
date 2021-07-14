@@ -112,16 +112,29 @@ export const lineToCmd = {
     previousLines,
     currentLine,
   }: processArgs): Point2D[][] => {
-    let newLineSegment = arrayofNumberArrToPoint2D(
-      chunk(args, 2).map((x) => [x[0], x[1]])
-    );
-    if (command === "l") {
-      newLineSegment = convertPointsRelToAbs(
-        currentLine.slice(-1)[0],
-        newLineSegment
+    if (args) {
+      if (args.length % 2 === 0) {
+        console.warn(`invalid args (${args}) for command ${command}.`);
+      }
+      let newLineSegment = arrayofNumberArrToPoint2D(
+        chunk(args, 2)
+          .filter((pair) => pair.length === 2)
+          .map((x) => [x[0], x[1]])
       );
+      if (command === "l") {
+        newLineSegment = convertPointsRelToAbs(
+          currentLine.slice(-1)[0],
+          newLineSegment
+        );
+      }
+      return [
+        ...previousLines.slice(0, -1),
+        [...currentLine, ...newLineSegment],
+      ];
+    } else {
+      console.warn(`invalid args (${args}) for command ${command}.`);
+      return [...previousLines, currentLine];
     }
-    return [...previousLines.slice(0, -1), [...currentLine, ...newLineSegment]];
   },
 };
 
