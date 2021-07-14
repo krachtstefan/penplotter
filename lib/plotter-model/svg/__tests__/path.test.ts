@@ -55,9 +55,7 @@ describe("svg model (path)", () => {
       const res = processPathCommand("Z");
       expect(res).toEqual(["Z", []]);
     });
-  });
 
-  describe("processPathCommand", () => {
     test.concurrent("comma", () => {
       const res = processPathCommand("l10,0.6");
       expect(res).toEqual(["l", ["10", "0.6"]]);
