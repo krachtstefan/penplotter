@@ -12,6 +12,7 @@ import {
 } from "../math";
 
 import BD from "decimal.js";
+import { Point2D } from "../types";
 
 describe("math model", () => {
   describe("convertPointsRelToAbs", () => {
@@ -26,6 +27,7 @@ describe("math model", () => {
           ]
         )
       );
+
       expect(res).toEqual([
         ["3", "5"],
         ["7", "10"],
@@ -75,8 +77,8 @@ describe("math model", () => {
   });
 
   describe("getPointFromLineSegment", () => {
-    const start = [new BD(-10), new BD(1)];
-    const finish = [new BD(9), new BD(0)];
+    const start: Point2D = [new BD(-10), new BD(1)];
+    const finish: Point2D = [new BD(9), new BD(0)];
 
     test.concurrent("returns start at fraction 0", () => {
       const res = getPointFromLineSegment(start, finish, 0);
@@ -202,7 +204,7 @@ describe("math model", () => {
           [new BD(-3), new BD(0)],
         ],
         {
-          down: 10,
+          down: new BD(10),
         }
       );
       expect(mapMatrixToString(res)).toEqual([
@@ -217,7 +219,7 @@ describe("math model", () => {
           [new BD(-3), new BD(0)],
         ],
         {
-          right: 10,
+          right: new BD(10),
         }
       );
       expect(mapMatrixToString(res)).toEqual([
@@ -232,8 +234,8 @@ describe("math model", () => {
           [new BD(-3), new BD(0)],
         ],
         {
-          down: 1,
-          right: -10,
+          down: new BD(1),
+          right: new BD(-10),
         }
       );
       expect(mapMatrixToString(res)).toEqual([
