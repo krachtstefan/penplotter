@@ -1,5 +1,6 @@
 import {
   closeCmd,
+  lineToCmd,
   moveToCmd,
   processPathCommand,
   splitPathString,
@@ -89,11 +90,6 @@ describe("svg model (path)", () => {
         [new BD("56"), new BD("78")],
       ],
     ];
-    const currentLine1Pnt: Point2D[] = [[new BD("5"), new BD("5")]];
-    const currentLine2Pnts: Point2D[] = [
-      [new BD("5"), new BD("5")],
-      [new BD("10"), new BD("10")],
-    ];
 
     describe("moveToCmd", () => {
       test.concurrent("absolute ", () => {
@@ -101,7 +97,7 @@ describe("svg model (path)", () => {
           command: "M",
           args: ["50", "60"],
           previousLines,
-          currentLine: currentLine1Pnt,
+          currentLine: [[new BD("5"), new BD("5")]],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
@@ -116,7 +112,7 @@ describe("svg model (path)", () => {
           command: "m",
           args: ["50", "60"],
           previousLines,
-          currentLine: currentLine1Pnt,
+          currentLine: [[new BD("5"), new BD("5")]],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
@@ -133,7 +129,10 @@ describe("svg model (path)", () => {
         const res = closeCmd.process({
           command: "Z",
           previousLines,
-          currentLine: currentLine2Pnts,
+          currentLine: [
+            [new BD("5"), new BD("5")],
+            [new BD("10"), new BD("10")],
+          ],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
@@ -147,7 +146,10 @@ describe("svg model (path)", () => {
         const res = closeCmd.process({
           command: "z",
           previousLines,
-          currentLine: currentLine2Pnts,
+          currentLine: [
+            [new BD("5"), new BD("5")],
+            [new BD("10"), new BD("10")],
+          ],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
@@ -161,7 +163,7 @@ describe("svg model (path)", () => {
         const res = closeCmd.process({
           command: "Z",
           previousLines,
-          currentLine: currentLine1Pnt,
+          currentLine: [[new BD("5"), new BD("5")]],
         });
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
