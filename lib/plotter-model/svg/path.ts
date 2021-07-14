@@ -7,6 +7,7 @@ import {
   quadraticBezier,
 } from "../math";
 
+import BigDecimal from "decimal.js";
 import { chunk } from "lodash";
 
 /**
@@ -134,7 +135,9 @@ export const lineToHorVerCmd = {
   }: processArgs): Point2D[][] => {
     const isRelative = ["h", "v"].includes(command);
     // the x or y of this coordinate will be adopted
-    const refCoordinate = isRelative ? [0, 0] : currentLine.slice(-1)[0];
+    const refCoordinate: Point2D = isRelative
+      ? [new BigDecimal(0), new BigDecimal(0)]
+      : currentLine.slice(-1)[0];
 
     const targetCoordinate =
       command.toLowerCase() === "h"
