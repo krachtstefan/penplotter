@@ -321,9 +321,3 @@ describe("svg model (path)", () => {
     );
   });
 });
-
-/**
- * test every command, make sure older coordinates are adopted
- * expand isValid with more arguments to make much deeper tests
- * make relative commands support input from older elements
- */
