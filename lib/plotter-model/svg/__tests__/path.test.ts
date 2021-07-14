@@ -205,7 +205,7 @@ describe("svg model (path)", () => {
             ],
           ]);
         });
-        test.concurrent("one argument (ivalid)", () => {
+        test.concurrent("one argument (invalid)", () => {
           const res = lineToCmd.process({
             command: "L",
             args: ["50"],
@@ -214,7 +214,7 @@ describe("svg model (path)", () => {
           });
           expect(res.map((x) => mapMatrixToString(x))).toEqual([[["5", "5"]]]);
         });
-        test.concurrent("three argument (ivalid)", () => {
+        test.concurrent("three argument (invalid)", () => {
           const res = lineToCmd.process({
             command: "L",
             args: ["50", "60", "150"],
