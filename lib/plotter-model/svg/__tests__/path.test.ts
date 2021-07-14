@@ -176,7 +176,7 @@ describe("svg model (path)", () => {
     });
     describe("lineToCmd", () => {
       describe("absolute", () => {
-        test.concurrent("two argument", () => {
+        test.concurrent("two arguments", () => {
           const res = lineToCmd.process({
             command: "L",
             args: ["50", "60"],
@@ -231,7 +231,7 @@ describe("svg model (path)", () => {
       });
 
       describe("relative", () => {
-        test.concurrent("two argument", () => {
+        test.concurrent("two arguments", () => {
           const res = lineToCmd.process({
             command: "l",
             args: ["50", "60"],
