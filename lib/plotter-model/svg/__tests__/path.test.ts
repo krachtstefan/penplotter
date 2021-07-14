@@ -319,8 +319,10 @@ describe("svg model (path)", () => {
         ]);
       }
     );
-    test.concurrent("multiple line commands", () => {
-      const res = translatePathString("M 10,10 L 90,90 V 10 H 50 v10 h10 Z");
+    test.concurrent("multiple line commands and a redundant close", () => {
+      const res = translatePathString(
+        "M 10,10 L 90,90 V 10 H 50 v10 h10 v-10 h-50 z"
+      );
       expect(res.map((matrix) => mapMatrixToString(matrix))).toEqual([
         [
           ["10", "10"],
@@ -329,6 +331,7 @@ describe("svg model (path)", () => {
           ["50", "10"],
           ["50", "20"],
           ["60", "20"],
+          ["60", "10"],
           ["10", "10"],
         ],
       ]);
