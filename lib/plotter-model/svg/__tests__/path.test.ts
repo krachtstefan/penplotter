@@ -1,4 +1,5 @@
-const { splitPathString, processPathCommand } = require("../path");
+const { splitPathString, processPathCommand, moveToCmd } = require("../path");
+const { mapMatrixToString } = require("../../math.ts");
 
 describe("svg model (path)", () => {
   describe("splitPathString", () => {
@@ -80,7 +81,13 @@ describe("svg model (path)", () => {
      * expand isValid with more arguments to make much deeper tests
      * make relative commands support input from older elements
      */
-    it.todo("moveToCmd");
+
+    describe("moveToCmd", () => {
+      test.concurrent("absolute ", () => {
+        const res = moveToCmd.process("M", [10, 10], [], []);
+        expect(res.map((x) => mapMatrixToString(x))).toEqual([[["10", "10"]]]);
+      });
+    });
     it.todo("closeCmd");
     it.todo("lineToCmd");
     it.todo("lineToHorVerCmd");
