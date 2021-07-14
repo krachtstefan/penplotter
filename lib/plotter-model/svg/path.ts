@@ -172,8 +172,10 @@ export const lineToHorVerCmd = {
           newHorLineSegment
         );
       }
-
-      return [...previousLines, [...currentLine, ...newHorLineSegment]];
+      return [
+        ...previousLines.slice(0, -1),
+        [...currentLine, ...newHorLineSegment],
+      ];
     } else {
       console.warn(`invalid args (${args}) for command ${command}.`);
       return [...previousLines, currentLine];
