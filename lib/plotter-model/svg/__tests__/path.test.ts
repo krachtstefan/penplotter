@@ -1,5 +1,12 @@
-import { moveToCmd, processPathCommand, splitPathString } from "../path";
+import {
+  moveToCmd,
+  processPathCommand,
+  splitPathString,
+  translatePathString,
+} from "../path";
 
+import BD from "decimal.js";
+import { Point2D } from "../../types";
 import { mapMatrixToString } from "../../math";
 
 describe("svg model (path)", () => {
@@ -75,16 +82,44 @@ describe("svg model (path)", () => {
   });
 
   describe("path command", () => {
-    /**
-     * test every command, make sure older coordinates are adopted
-     * expand isValid with more arguments to make much deeper tests
-     * make relative commands support input from older elements
-     */
+    const previousLines: Point2D[][] = [
+      [
+        [new BD("12"), new BD("34")],
+        [new BD("56"), new BD("78")],
+      ],
+    ];
+    const currentLine: Point2D[] = [[new BD("5"), new BD("5")]];
 
     describe("moveToCmd", () => {
       test.concurrent("absolute ", () => {
-        const res = moveToCmd.process("M", [10, 10], [], []);
-        expect(res.map((x) => mapMatrixToString(x))).toEqual([[["10", "10"]]]);
+        const res = moveToCmd.process(
+          "M",
+          ["50", "60"],
+          previousLines,
+          currentLine
+        );
+        expect(res.map((x) => mapMatrixToString(x))).toEqual([
+          [
+            ["12", "34"],
+            ["56", "78"],
+          ],
+          [["50", "60"]],
+        ]);
+      });
+      test.concurrent("relative ", () => {
+        const res = moveToCmd.process(
+          "m",
+          ["50", "60"],
+          previousLines,
+          currentLine
+        );
+        expect(res.map((x) => mapMatrixToString(x))).toEqual([
+          [
+            ["12", "34"],
+            ["56", "78"],
+          ],
+          [["55", "65"]],
+        ]);
       });
     });
     it.todo("closeCmd");
@@ -92,5 +127,24 @@ describe("svg model (path)", () => {
     it.todo("lineToHorVerCmd");
     it.todo("quadraticBezierCmd");
     it.todo("cubicBezierCmd");
+  });
+
+  describe("translatePathString", () => {
+    test.concurrent("multiple move to and line commands", () => {
+      const res = translatePathString(
+        "M 100 100 L 300 100 l 200 300 M 10 10 L 20 30"
+      );
+      expect(res.map((matrix) => mapMatrixToString(matrix))).toEqual([
+        [
+          ["100", "100"],
+          ["300", "100"],
+          ["500", "400"],
+        ],
+        [
+          ["10", "10"],
+          ["20", "30"],
+        ],
+      ]);
+    });
   });
 });
