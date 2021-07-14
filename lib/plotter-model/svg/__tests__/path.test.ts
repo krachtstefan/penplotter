@@ -135,7 +135,6 @@ describe("svg model (path)", () => {
           previousLines,
           currentLine: currentLine2Pnts,
         });
-        console.log("absolute", res);
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
             ["5", "5"],
@@ -150,7 +149,6 @@ describe("svg model (path)", () => {
           previousLines,
           currentLine: currentLine2Pnts,
         });
-        console.log("absolute", res);
         expect(res.map((x) => mapMatrixToString(x))).toEqual([
           [
             ["5", "5"],
