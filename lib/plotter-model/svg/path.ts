@@ -48,7 +48,6 @@ export const moveToCmd = {
     "M", // create a new element
     "m", // relative version of M
   ],
-  isValid: (args: string[]) => args.length === 2,
   process: ({ command, args, lines }: processArgs): Point2D[][] => {
     if (args && args.length === 2) {
       return [
@@ -71,8 +70,12 @@ export const closeCmd = {
     "Z", // close path command
     "z", // both have the same behaviour
   ],
-  isValid: (args: string[]) => args.length === 0,
-  process: ({ command, lines }: processArgs): Point2D[][] => {
+  process: ({ command, args, lines }: processArgs): Point2D[][] => {
+    if (args) {
+      console.warn(
+        `command ${command} was called with arguments ${args}. No arguments needed`
+      );
+    }
     const firstPoint = lines.slice(-1)[0][0];
     const lastPoint = lines.slice(-1)[0].slice(-1)[0];
     if (
@@ -85,10 +88,7 @@ export const closeCmd = {
         [...lines.slice(-1)[0], createPoint2D(firstPoint)],
       ];
     } else {
-      console.warn(
-        `Noting to close, skipped ${command} command.`,
-        lines.slice(-1)[0]
-      );
+      console.warn(`Noting to close, skipped ${command} command.`);
       return lines;
     }
   },
@@ -99,7 +99,6 @@ export const lineToCmd = {
     "L", // L (line) command draws to a new coordinate
     "l", // relative version of L
   ],
-  isValid: (args: string[]) => args.length % 2 === 0,
   process: ({ command, args, lines }: processArgs): Point2D[][] => {
     if (args) {
       if (args.length % 2 === 0) {
@@ -134,7 +133,6 @@ export const lineToHorVerCmd = {
     "V", // V command draws a new vertical line
     "v", // relative version of V
   ],
-  isValid: (args: string[]) => true,
   process: ({ command, args, lines }: processArgs): Point2D[][] => {
     if (args) {
       if (args.length > 1) {
@@ -177,37 +175,41 @@ export const quadraticBezierCmd = {
     "Q", // Q command draws quadratic bezier curve
     "q", // relative version of Q
   ],
-  isValid: (args: string[]) => args.length === 4,
   process: ({ command, args, lines }: processArgs): Point2D[][] => {
-    let quadraticCurveCoords = arrayofNumberArrToPoint2D(
-      chunk(args, 2).map((x) => [x[0], x[1]])
-    );
-    if (command === "q") {
-      quadraticCurveCoords = quadraticCurveCoords.map(
-        (b) => convertPointsRelToAbs(lines.slice(-1)[0].slice(-1)[0], [b])[0]
+    if (args && args.length === 4) {
+      let quadraticCurveCoords = arrayofNumberArrToPoint2D(
+        chunk(args, 2).map((x) => [x[0], x[1]])
       );
+      if (command === "q") {
+        quadraticCurveCoords = quadraticCurveCoords.map(
+          (b) => convertPointsRelToAbs(lines.slice(-1)[0].slice(-1)[0], [b])[0]
+        );
+      }
+      const quadSampleSize = 100;
+      const quadInterpolations = [...new Array(quadSampleSize)]
+        .map((_, index, src) => {
+          return index / src.length;
+        })
+        .slice(1)
+        // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
+        .map((x) =>
+          quadraticBezier(
+            [
+              lines.slice(-1)[0][0],
+              quadraticCurveCoords[0],
+              quadraticCurveCoords[1],
+            ],
+            x
+          )
+        );
+      return [
+        ...lines,
+        [lines.slice(-1)[0][0], ...quadInterpolations, quadraticCurveCoords[1]],
+      ];
+    } else {
+      console.warn(`invalid args (${args}) for command ${command}. skipped.`);
+      return lines;
     }
-    const quadSampleSize = 100;
-    const quadInterpolations = [...new Array(quadSampleSize)]
-      .map((_, index, src) => {
-        return index / src.length;
-      })
-      .slice(1)
-      // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
-      .map((x) =>
-        quadraticBezier(
-          [
-            lines.slice(-1)[0][0],
-            quadraticCurveCoords[0],
-            quadraticCurveCoords[1],
-          ],
-          x
-        )
-      );
-    return [
-      ...lines,
-      [lines.slice(-1)[0][0], ...quadInterpolations, quadraticCurveCoords[1]],
-    ];
   },
 };
 export const cubicBezierCmd = {
@@ -215,38 +217,42 @@ export const cubicBezierCmd = {
     "C", // C command draws cubic bezier curve
     "c", // relative version of C
   ],
-  isValid: (args: string[]) => args.length === 6,
   process: ({ command, args, lines }: processArgs): Point2D[][] => {
-    let cubicCurveCoords = arrayofNumberArrToPoint2D(
-      chunk(args, 2).map((x) => [x[0], x[1]])
-    );
-    if (command === "c") {
-      cubicCurveCoords = cubicCurveCoords.map(
-        (b) => convertPointsRelToAbs(lines.slice(-1)[0].slice(-1)[0], [b])[0]
+    if (args && args.length === 6) {
+      let cubicCurveCoords = arrayofNumberArrToPoint2D(
+        chunk(args, 2).map((x) => [x[0], x[1]])
       );
+      if (command === "c") {
+        cubicCurveCoords = cubicCurveCoords.map(
+          (b) => convertPointsRelToAbs(lines.slice(-1)[0].slice(-1)[0], [b])[0]
+        );
+      }
+      const cubicSampleSize = 100;
+      const cubicInterpolations = [...new Array(cubicSampleSize)]
+        .map((_, index, src) => {
+          return index / src.length;
+        })
+        .slice(1)
+        // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
+        .map((x) =>
+          cubicBezier(
+            [
+              lines.slice(-1)[0][0],
+              cubicCurveCoords[0],
+              cubicCurveCoords[1],
+              cubicCurveCoords[2],
+            ],
+            x
+          )
+        );
+      return [
+        ...lines,
+        [lines.slice(-1)[0][0], ...cubicInterpolations, cubicCurveCoords[2]],
+      ];
+    } else {
+      console.warn(`invalid args (${args}) for command ${command}. skipped.`);
+      return lines;
     }
-    const cubicSampleSize = 100;
-    const cubicInterpolations = [...new Array(cubicSampleSize)]
-      .map((_, index, src) => {
-        return index / src.length;
-      })
-      .slice(1)
-      // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
-      .map((x) =>
-        cubicBezier(
-          [
-            lines.slice(-1)[0][0],
-            cubicCurveCoords[0],
-            cubicCurveCoords[1],
-            cubicCurveCoords[2],
-          ],
-          x
-        )
-      );
-    return [
-      ...lines,
-      [lines.slice(-1)[0][0], ...cubicInterpolations, cubicCurveCoords[2]],
-    ];
   },
 };
 
@@ -264,12 +270,7 @@ export const translatePathString = (pathString: string): Point2D[][] =>
     const [command, args] = processPathCommand(curr);
     const cmd = commandMapping.find((x) => x.command.includes(command));
     if (cmd) {
-      // TODO: remove this
-      if (cmd.isValid(args) === true) {
-        return cmd.process({ command, args, lines: acc });
-      } else {
-        console.error(`invalid command ${command} with arguments ${args}`);
-      }
+      return cmd.process({ command, args, lines: acc });
     } else {
       console.error(
         `path command ${command} with args ${args} not supported yet (https://developer.mozilla.org/en-US/docs/Web/SVG/Attribute/d#path_commands)`
