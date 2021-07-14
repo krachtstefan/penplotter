@@ -319,5 +319,19 @@ describe("svg model (path)", () => {
         ]);
       }
     );
+    test.concurrent("multiple line commands", () => {
+      const res = translatePathString("M 10,10 L 90,90 V 10 H 50 v10 h10 Z");
+      expect(res.map((matrix) => mapMatrixToString(matrix))).toEqual([
+        [
+          ["10", "10"],
+          ["90", "90"],
+          ["90", "10"],
+          ["50", "10"],
+          ["50", "20"],
+          ["60", "20"],
+          ["10", "10"],
+        ],
+      ]);
+    });
   });
 });
