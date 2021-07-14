@@ -343,7 +343,170 @@ describe("svg model (path)", () => {
       });
     });
     describe("lineToHorVerCmd", () => {
-      it.todo("lineToHorVerCmd");
+      describe("horizontal", () => {
+        describe("absolute", () => {
+          test.concurrent("one arguments", () => {
+            const res = lineToHorVerCmd.process({
+              command: "H",
+              args: ["12"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["12", "10"],
+              ],
+            ]);
+          });
+          test.concurrent("two arguments uses the last", () => {
+            const res = lineToHorVerCmd.process({
+              command: "H",
+              args: ["10", "15"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["15", "10"],
+              ],
+            ]);
+          });
+        });
+        describe("relative", () => {
+          test.concurrent("one arguments", () => {
+            const res = lineToHorVerCmd.process({
+              command: "h",
+              args: ["12"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["22", "10"],
+              ],
+            ]);
+          });
+          test.concurrent("two arguments uses the last", () => {
+            const res = lineToHorVerCmd.process({
+              command: "h",
+              args: ["10", "15"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["25", "10"],
+              ],
+            ]);
+          });
+        });
+      });
+      describe("vertical", () => {
+        describe("absolute", () => {
+          test.concurrent("one arguments", () => {
+            const res = lineToHorVerCmd.process({
+              command: "V",
+              args: ["12"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["10", "12"],
+              ],
+            ]);
+          });
+          test.concurrent("two arguments uses the last", () => {
+            const res = lineToHorVerCmd.process({
+              command: "V",
+              args: ["10", "15"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["10", "15"],
+              ],
+            ]);
+          });
+        });
+        describe("relative", () => {
+          test.concurrent("one arguments", () => {
+            const res = lineToHorVerCmd.process({
+              command: "v",
+              args: ["12"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["10", "22"],
+              ],
+            ]);
+          });
+          test.concurrent("two arguments uses the last", () => {
+            const res = lineToHorVerCmd.process({
+              command: "v",
+              args: ["10", "15"],
+              lines: [
+                [
+                  [new BD("5"), new BD("5")],
+                  [new BD("10"), new BD("10")],
+                ],
+              ],
+            });
+            expect(res.map((x) => mapMatrixToString(x))).toEqual([
+              [
+                ["5", "5"],
+                ["10", "10"],
+                ["10", "25"],
+              ],
+            ]);
+          });
+        });
+      });
     });
     describe("quadraticBezierCmd", () => {
       it.todo("quadraticBezierCmd");
