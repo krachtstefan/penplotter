@@ -1,4 +1,4 @@
-import { Point2D, pathCommandImplementation, processArgs } from "../types";
+import { Point2D, pathCommandImplementation } from "../types";
 import {
   arrayofNumberArrToPoint2D,
   convertPointsRelToAbs,
@@ -71,7 +71,7 @@ export const closeCmd: pathCommandImplementation = {
     "z", // both have the same behaviour
   ],
   process: ({ command, args, lines }) => {
-    if (args) {
+    if (args && args.length > 0) {
       console.warn(
         `command ${command} was called with arguments ${args}. No arguments needed.`
       );
@@ -100,7 +100,7 @@ export const lineToCmd: pathCommandImplementation = {
     "l", // relative version of L
   ],
   process: ({ command, args, lines }) => {
-    if (args) {
+    if (args && args.length > 0) {
       if (args.length % 2 !== 0) {
         console.warn(
           `invalid args (${args}) for command ${command}. Last one will be ignored.`
@@ -136,10 +136,10 @@ export const lineToHorVerCmd: pathCommandImplementation = {
     "v", // relative version of V
   ],
   process: ({ command, args, lines }) => {
-    if (args) {
+    if (args && args.length > 0) {
       if (args.length > 1) {
         console.warn(
-          `more than one argument for command ${command}. Only using the last`
+          `more than one argument for command ${command}. Only using the last one.`
         );
       }
       const isRelative = ["h", "v"].includes(command);
