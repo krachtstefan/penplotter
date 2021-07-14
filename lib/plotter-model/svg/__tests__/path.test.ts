@@ -189,25 +189,28 @@ describe("svg model (path)", () => {
   });
 
   describe("translatePathString", () => {
-    test.concurrent("multiple move to and line commands", () => {
-      const res = translatePathString(
-        "M 100 100 L 300 100 l 200 300 M 10 10 L 20 30 L 100 100 Z"
-      );
+    test.concurrent(
+      "multiple move to and line commands with close command",
+      () => {
+        const res = translatePathString(
+          "M 100 100 L 300 100 l 200 300 M 10 10 L 20 30 L 100 100 Z"
+        );
 
-      expect(res.map((matrix) => mapMatrixToString(matrix))).toEqual([
-        [
-          ["100", "100"],
-          ["300", "100"],
-          ["500", "400"],
-        ],
-        [
-          ["10", "10"],
-          ["20", "30"],
-          ["100", "100"],
-          ["10", "10"],
-        ],
-      ]);
-    });
+        expect(res.map((matrix) => mapMatrixToString(matrix))).toEqual([
+          [
+            ["100", "100"],
+            ["300", "100"],
+            ["500", "400"],
+          ],
+          [
+            ["10", "10"],
+            ["20", "30"],
+            ["100", "100"],
+            ["10", "10"],
+          ],
+        ]);
+      }
+    );
   });
 });
 
