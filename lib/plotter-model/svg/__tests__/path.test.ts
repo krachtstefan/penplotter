@@ -4,6 +4,7 @@ import {
   lineToHorVerCmd,
   moveToCmd,
   processPathCommand,
+  quadraticBezierCmd,
   splitPathString,
   translatePathString,
 } from "../path";
@@ -517,7 +518,44 @@ describe("svg model (path)", () => {
     });
 
     describe("quadraticBezierCmd", () => {
-      it.todo("quadraticBezierCmd");
+      test.concurrent("absolute", () => {
+        const res = quadraticBezierCmd.process({
+          command: "Q",
+          args: ["400", "20", "200", "200"],
+          lines: [
+            [
+              [new BD("5"), new BD("5")],
+              [new BD("10"), new BD("10")],
+            ],
+          ],
+        });
+
+        expect(res[0].length).toEqual(102); // first point, start of the bezier and 100 bezier samples
+        expect(mapMatrixToString(res[0].slice(0, 2))).toEqual([
+          ["5", "5"],
+          ["10", "10"],
+        ]); // bezier start
+        expect(mapMatrixToString(res[0].slice(-1))).toEqual([["200", "200"]]); // bezier end
+      });
+      test.concurrent("relative", () => {
+        const res = quadraticBezierCmd.process({
+          command: "q",
+          args: ["400", "20", "200", "200"],
+          lines: [
+            [
+              [new BD("5"), new BD("5")],
+              [new BD("10"), new BD("10")],
+            ],
+          ],
+        });
+
+        expect(res[0].length).toEqual(102); // first point, start of the bezier and 100 bezier samples
+        expect(mapMatrixToString(res[0].slice(0, 2))).toEqual([
+          ["5", "5"],
+          ["10", "10"],
+        ]); // bezier start
+        expect(mapMatrixToString(res[0].slice(-1))).toEqual([["210", "210"]]); // bezier end
+      });
     });
 
     describe("cubicBezierCmd", () => {
