@@ -565,5 +565,16 @@ describe("svg model (path)", () => {
         ],
       ]);
     });
+    test.concurrent("basic quadratic bezier", () => {
+      const res = translatePathString("M 0,0 Q 400,20 200,200");
+      expect(res[0].length).toEqual(101); // start point and 100 bezier samples
+      expect(mapMatrixToString(res[0].slice(-1))[0]).toEqual(["200", "200"]); // the last point is the finish point
+    });
+
+    test.concurrent("basic quadratic bezier", () => {
+      const res = translatePathString("M 10,90 C 30,90 25,10 50,10");
+      expect(res[0].length).toEqual(101); // start point and 100 bezier samples
+      expect(mapMatrixToString(res[0].slice(-1))[0]).toEqual(["50", "10"]); // the last point is the finish point
+    });
   });
 });

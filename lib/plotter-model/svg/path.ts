@@ -205,7 +205,7 @@ export const quadraticBezierCmd: pathCommandImplementation = {
           )
         );
       return [
-        ...lines,
+        ...lines.slice(0, -1),
         [lines.slice(-1)[0][0], ...quadInterpolations, quadraticCurveCoords[1]],
       ];
     } else {
@@ -248,7 +248,7 @@ export const cubicBezierCmd: pathCommandImplementation = {
           )
         );
       return [
-        ...lines,
+        ...lines.slice(0, -1),
         [lines.slice(-1)[0][0], ...cubicInterpolations, cubicCurveCoords[2]],
       ];
     } else {
