@@ -21,7 +21,7 @@ export const isElementNode = (
 
 export type processArgs = {
   command: string;
-  args: string[];
+  args?: string[];
   lines: Point2D[][];
 };
 
