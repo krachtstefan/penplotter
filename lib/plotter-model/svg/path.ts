@@ -206,7 +206,7 @@ export const quadraticBezierCmd: pathCommandImplementation = {
         );
       return [
         ...lines.slice(0, -1),
-        [lines.slice(-1)[0][0], ...quadInterpolations, quadraticCurveCoords[1]],
+        [...lines.slice(-1)[0], ...quadInterpolations, quadraticCurveCoords[1]],
       ];
     } else {
       console.warn(`invalid args (${args}) for command ${command}. skipped.`);
@@ -249,7 +249,7 @@ export const cubicBezierCmd: pathCommandImplementation = {
         );
       return [
         ...lines.slice(0, -1),
-        [lines.slice(-1)[0][0], ...cubicInterpolations, cubicCurveCoords[2]],
+        [...lines.slice(-1)[0], ...cubicInterpolations, cubicCurveCoords[2]],
       ];
     } else {
       console.warn(`invalid args (${args}) for command ${command}. skipped.`);

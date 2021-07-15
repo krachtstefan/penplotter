@@ -566,14 +566,19 @@ describe("svg model (path)", () => {
       ]);
     });
     test.concurrent("basic quadratic bezier", () => {
-      const res = translatePathString("M 0,0 Q 400,20 200,200");
-      expect(res[0].length).toEqual(101); // start point and 100 bezier samples
-      expect(mapMatrixToString(res[0].slice(-1))[0]).toEqual(["200", "200"]); // the last point is the finish point
+      const res = translatePathString("M 0,0 L 20,20 M 10,10 Q 400,20 200,200");
+      expect(res.length).toEqual(2); // two lines
+      expect(res[1].length).toEqual(101); // second line has start point and 100 bezier samples
+      expect(mapMatrixToString(res[1])[0]).toEqual(["10", "10"]); // start point
+      expect(mapMatrixToString(res[1].slice(-1))[0]).toEqual(["200", "200"]); // the last point is the finish point
     });
 
-    test.concurrent("basic quadratic bezier", () => {
-      const res = translatePathString("M 10,90 C 30,90 25,10 50,10");
-      expect(res[0].length).toEqual(101); // start point and 100 bezier samples
+    test.concurrent("one line with basic cubic bezier", () => {
+      const res = translatePathString("M 10,90 L 20,20 C 30,90 25,10 50,10");
+      expect(res.length).toEqual(1); // one line
+      expect(res[0].length).toEqual(102); // start point, second point and 100 bezier samples
+      expect(mapMatrixToString(res[0])[0]).toEqual(["10", "90"]); // start point
+      expect(mapMatrixToString(res[0])[1]).toEqual(["20", "20"]); // second point
       expect(mapMatrixToString(res[0].slice(-1))[0]).toEqual(["50", "10"]); // the last point is the finish point
     });
   });
