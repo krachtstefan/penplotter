@@ -188,6 +188,7 @@ describe("svg model (path)", () => {
         ]);
       });
     });
+
     describe("lineToCmd", () => {
       describe("absolute", () => {
         test.concurrent("two arguments", () => {
@@ -347,6 +348,7 @@ describe("svg model (path)", () => {
         });
       });
     });
+
     describe("lineToHorVerCmd", () => {
       describe("horizontal", () => {
         describe("absolute", () => {
@@ -513,9 +515,11 @@ describe("svg model (path)", () => {
         });
       });
     });
+
     describe("quadraticBezierCmd", () => {
       it.todo("quadraticBezierCmd");
     });
+
     describe("cubicBezierCmd", () => {
       it.todo("cubicBezierCmd");
     });
