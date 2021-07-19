@@ -107,6 +107,32 @@ export const move = (
     new BigDecimal(y).add(down || 0),
   ]);
 
+// https://www.geogebra.org/graphing/h7sktqg2
+export const rotate = (
+  point: Point2D, // p
+  degree: BigDecimal,
+  origin: Point2D = [new BigDecimal(0), new BigDecimal(0)] // o
+): Point2D => {
+  // α = radian version of degree = (degree * -2 * pi) / 360
+  const angle = degree.times(Math.PI).times(-2).div(360);
+
+  // x = cos(α) * (px-ox) - sin(α) * (py-oy) + ox
+  const x = angle
+    .cos()
+    .times(point[0].minus(origin[0]))
+    .minus(angle.sin().times(point[1].minus(origin[1])))
+    .plus(origin[0]);
+
+  // y = sind(α) * (px-ox) + cos(α) * (py-oy) + oy
+  const y = angle
+    .sin()
+    .times(point[0].minus(origin[0]))
+    .plus(angle.cos().times(point[1].minus(origin[1])))
+    .plus(origin[1]);
+
+  return [x, y];
+};
+
 /**
  *
  * The quadratic bezier curve has three points, a start, finish and a control point

@@ -8,6 +8,7 @@ import {
   mirrorX,
   mirrorY,
   move,
+  rotate,
   scale,
 } from "../math";
 
@@ -241,6 +242,36 @@ describe("math model", () => {
       expect(mapMatrixToString(res)).toEqual([
         ["-9", "3"],
         ["-13", "1"],
+      ]);
+    });
+  });
+
+  describe("rotate", () => {
+    test.concurrent("rotate 180 degrees with default origin", () => {
+      const res = rotate([new BD(5), new BD(10)], new BD(180));
+      expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+        "-5.00",
+        "-10.00",
+      ]);
+    });
+    test.concurrent("rotate 90 degrees with custom origin", () => {
+      const res = rotate([new BD(-5), new BD(-10)], new BD(90), [
+        new BD(2),
+        new BD(-3),
+      ]);
+      expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+        "-5.00",
+        "4.00",
+      ]);
+    });
+    test.concurrent("rotate 360 degrees with custom origin", () => {
+      const res = rotate([new BD(-123.456), new BD(123.456)], new BD(360), [
+        new BD(2),
+        new BD(-3),
+      ]);
+      expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+        "-123.46",
+        "123.46",
       ]);
     });
   });
