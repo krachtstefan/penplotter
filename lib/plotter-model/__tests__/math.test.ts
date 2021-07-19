@@ -279,7 +279,7 @@ describe("math model", () => {
   describe("quadraticBezier", () => {
     it.todo("quadraticBezier");
     it.todo("change fraction to BigDecimal");
-    it.todo("also for getPointFromLineSegment");
+    it.todo("also for getPointFromLineSegment, (use 1-100 or 0-1)");
   });
 
   describe("cubicBezier", () => {

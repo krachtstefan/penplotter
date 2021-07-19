@@ -146,7 +146,7 @@ export const rotate = (
 export const quadraticBezier = (
   [start, controlPoint, finish]: [Point2D, Point2D, Point2D],
   fraction: number
-) =>
+): Point2D =>
   getPointFromLineSegment(
     getPointFromLineSegment(start, controlPoint, fraction),
     getPointFromLineSegment(controlPoint, finish, fraction),
