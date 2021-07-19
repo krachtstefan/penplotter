@@ -133,6 +133,36 @@ export const rotate = (
   return [x, y];
 };
 
+// https://www.geogebra.org/graphing/axnnmxsp
+export const ellipse = (
+  [center, xRadius, yRadius]: [Point2D, BigDecimal, BigDecimal], // [c, xr, yr]
+  fraction: BigDecimal,
+  upper: Boolean = true
+): Point2D => {
+  // get x value
+  const left = move([center], { right: xRadius.times(-1) });
+  const right = move([center], { right: xRadius });
+  const x = getPointFromLineSegment(
+    left[0],
+    right[0],
+    fraction.div(100).toNumber()
+  );
+  const scale = xRadius.div(yRadius);
+
+  // function for upper and ellipse, plus is upper, minus is under
+  // f(x) = +-scale * sqrt(xr^(2)-(x-cx))^(2))+cy
+  const circle = xRadius
+    .toPower(2)
+    .minus(new BigDecimal(x[0].minus(center[0]).toPower(2)).toPower(2));
+
+  const y = scale
+    .times(circle.squareRoot())
+    .plus(center[1])
+    .times(upper ? 1 : -1);
+
+  return [x[0], y];
+};
+
 /**
  *
  * The quadratic bezier curve has three points, a start, finish and a control point

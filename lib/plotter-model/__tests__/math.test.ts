@@ -1,5 +1,6 @@
 import {
   convertPointsRelToAbs,
+  ellipse,
   getDimensions,
   getLenghtByPoints,
   getPointFromLineSegment,
@@ -272,6 +273,19 @@ describe("math model", () => {
       expect(res.map((x) => x.toFixed(2).toString())).toEqual([
         "-123.46",
         "123.46",
+      ]);
+    });
+  });
+
+  describe("ellipse", () => {
+    test.concurrent("upper circle with radius of 10 at fraction 50", () => {
+      const res = ellipse(
+        [[new BD(0), new BD(0)], new BD(10), new BD(10)],
+        new BD(50)
+      );
+      expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+        "0.00",
+        "10.00",
       ]);
     });
   });
