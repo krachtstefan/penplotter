@@ -156,12 +156,14 @@ const Penplotter: React.FC = () => {
     scaled.flat()
   );
   const left = getPosition(scaled.flat())[0];
+  const top = getPosition(scaled.flat())[1];
   const moved = scaled.map((x) =>
     move(x, {
-      down: new BigDecimal(0)
+      down: top
+        .times(-1)
         .minus(paperTopDistance)
-        .minus(new BigDecimal(paperHeight).minus(scaledHeight).div(2)),
-
+        .minus(scaledHeight.div(2))
+        .minus(new BigDecimal(paperHeight).div(2)),
       right: left
         .times(-1)
         .minus(new BigDecimal(paperWidth).div(2))
