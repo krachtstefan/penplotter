@@ -326,7 +326,7 @@ describe("math model", () => {
       }
     );
     test.concurrent(
-      "lower ellipse, radius of 10/20, at -12|-34, fraction 70",
+      "lower ellipse, radius of 10/20, at -12,-34, fraction 70",
       () => {
         const res = ellipse(
           [[new BD(-12), new BD(-34)], new BD(10), new BD(20)],
@@ -339,7 +339,64 @@ describe("math model", () => {
         ]);
       }
     );
-    // TEST NEGATIVE
+    describe("fraction", () => {
+      test.concurrent(
+        "upper ellipse, radius of 20/20, at -12,34 fraction 0",
+        () => {
+          const res = ellipse(
+            [[new BD(-12), new BD(34)], new BD(20), new BD(20)],
+            new BD(0),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "-32.00",
+            "34.00",
+          ]);
+        }
+      );
+      test.concurrent(
+        "upper ellipse, radius of 20/20, at -12,34 fraction 100",
+        () => {
+          const res = ellipse(
+            [[new BD(-12), new BD(34)], new BD(20), new BD(20)],
+            new BD(100),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "8.00",
+            "34.00",
+          ]);
+        }
+      );
+      test.concurrent(
+        "upper ellipse, radius of 20/20, at -12,34 fraction 101",
+        () => {
+          const res = ellipse(
+            [[new BD(-12), new BD(34)], new BD(20), new BD(20)],
+            new BD(101),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "8.40",
+            "NaN",
+          ]);
+        }
+      );
+      test.concurrent(
+        "upper ellipse, radius of 20/20, at -12,34 fraction -0.001",
+        () => {
+          const res = ellipse(
+            [[new BD(-12), new BD(34)], new BD(20), new BD(20)],
+            new BD(-0.001),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "-32.00",
+            "NaN",
+          ]);
+        }
+      );
+    });
   });
 
   describe("quadraticBezier", () => {

@@ -139,6 +139,10 @@ export const ellipse = (
   fraction: BigDecimal,
   upper: Boolean = true
 ): Point2D => {
+  if (fraction.lessThan(0) || fraction.greaterThan(100)) {
+    console.warn(`${fraction.toString()} is out of bounds`);
+  }
+
   // get x value
   const left = move([center], { right: xRadius.times(-1) });
   const right = move([center], { right: xRadius });
