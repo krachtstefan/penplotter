@@ -149,7 +149,7 @@ export const ellipse = (
   );
   const scale = xRadius.div(yRadius);
 
-  // function for upper and ellipse, plus is upper, minus is under
+  // function for upper and lower ellipse, plus is upper, minus is lower
   // f(x) = +-scale * sqrt(xr^(2)-(x-cx))^(2))+cy
   const circle = xRadius
     .toPower(2)

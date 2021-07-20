@@ -288,6 +288,17 @@ describe("math model", () => {
         "10.00",
       ]);
     });
+    test.concurrent("lower circle with radius of 10 at fraction 50", () => {
+      const res = ellipse(
+        [[new BD(0), new BD(0)], new BD(10), new BD(10)],
+        new BD(50),
+        false
+      );
+      expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+        "0.00",
+        "-10.00",
+      ]);
+    });
   });
 
   describe("quadraticBezier", () => {
