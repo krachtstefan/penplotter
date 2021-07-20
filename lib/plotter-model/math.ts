@@ -147,7 +147,7 @@ export const ellipse = (
     right[0],
     fraction.div(100).toNumber()
   );
-  const scale = xRadius.div(yRadius);
+  const scale = yRadius.div(xRadius);
 
   // function for upper and lower ellipse, plus is upper, minus is lower
   // f(x) = +-scale * sqrt(xr^(2)-(x-cx))^(2))+cy
