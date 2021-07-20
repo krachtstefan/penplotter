@@ -3,6 +3,7 @@ import { ElementType, NestedArray, Point2D, isElementNode } from "../types";
 import { chunk, flattenDeep } from "lodash";
 
 import BigDecimal from "decimal.js";
+import { ellipse } from "../math";
 import { translatePathString } from "./path";
 
 class SvgParser {
@@ -115,6 +116,23 @@ export const returnPointsArrFromElement = (
         ];
       case ElementType.path:
         return translatePathString(`${element.properties.d}`);
+      case ElementType.circle:
+        const { cx, cy, r } = element.properties;
+        if (cx && cy && r) {
+          const sampleSize = 101;
+          const center: Point2D = [new BigDecimal(cx), new BigDecimal(cy)];
+          const radius = new BigDecimal(r);
+          return [
+            [...new Array(sampleSize)].map((x, i) =>
+              ellipse([center, radius, radius], new BigDecimal(i), false)
+            ),
+            [...new Array(sampleSize)].map((x, i) =>
+              ellipse([center, radius, radius], new BigDecimal(i))
+            ),
+          ];
+        }
+        console.error(`${ElementType.circle} has missing properties`);
+        return [];
       default:
         return [];
     }
