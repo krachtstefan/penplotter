@@ -117,22 +117,29 @@ export const returnPointsArrFromElement = (
       case ElementType.path:
         return translatePathString(`${element.properties.d}`);
       case ElementType.circle:
-        const { cx, cy, r } = element.properties;
-        if (cx && cy && r) {
+      case ElementType.ellipse:
+        let { cx, cy, r, rx, ry } = element.properties;
+        if (r) {
+          rx = r;
+          ry = r;
+        }
+        if (cx && cy && rx && ry) {
           const sampleSize = 101;
           const center: Point2D = [new BigDecimal(cx), new BigDecimal(cy)];
-          const radius = new BigDecimal(r);
+          const radiusX = new BigDecimal(rx);
+          const radiusY = new BigDecimal(ry);
           return [
             [...new Array(sampleSize)].map((x, i) =>
-              ellipse([center, radius, radius], new BigDecimal(i), false)
+              ellipse([center, radiusX, radiusY], new BigDecimal(i), false)
             ),
             [...new Array(sampleSize)].map((x, i) =>
-              ellipse([center, radius, radius], new BigDecimal(i))
+              ellipse([center, radiusX, radiusY], new BigDecimal(i))
             ),
           ];
         }
         console.error(`${ElementType.circle} has missing properties`);
         return [];
+
       default:
         return [];
     }
