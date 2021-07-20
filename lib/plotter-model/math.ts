@@ -144,19 +144,22 @@ export const ellipse = (
   }
 
   // get x value
-  const left = move([center], { right: xRadius.times(-1) });
-  const right = move([center], { right: xRadius });
+  const left = move([center], { right: xRadius.abs().times(-1) });
+  const right = move([center], { right: xRadius.abs() });
   const x = getPointFromLineSegment(
     left[0],
     right[0],
     fraction.div(100).toNumber()
   );
-  const scale = yRadius.div(xRadius);
+  const scale = yRadius.div(xRadius.abs());
 
   // function for upper and lower ellipse, plus is upper, minus is lower
   // f(x) = +-scale * sqrt(xr^(2)-(x-cx))^(2))+cy
 
-  const circle = xRadius.toPower(2).minus(x[0].minus(center[0]).toPower(2));
+  const circle = xRadius
+    .abs()
+    .toPower(2)
+    .minus(x[0].minus(center[0]).toPower(2));
   const y = scale
     .times(circle.squareRoot())
     .times(upper ? 1 : -1)
