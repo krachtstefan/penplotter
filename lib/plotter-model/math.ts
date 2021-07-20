@@ -142,6 +142,9 @@ export const ellipse = (
   if (fraction.lessThan(0) || fraction.greaterThan(100)) {
     console.warn(`${fraction.toString()} is out of bounds`);
   }
+  if (yRadius.equals(0)) {
+    console.warn("yRadius is zero");
+  }
 
   // get x value
   const left = move([center], { right: xRadius.abs().times(-1) });

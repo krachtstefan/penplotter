@@ -350,6 +350,51 @@ describe("math model", () => {
       );
     });
 
+    describe("radius edge cases", () => {
+      test.concurrent(
+        "lower ellipse, radius of 0/0, at 0,0, fraction 50 (NaN)",
+        () => {
+          const res = ellipse(
+            [[new BD(0), new BD(0)], new BD(0), new BD(0)],
+            new BD(50),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "0.00",
+            "NaN",
+          ]);
+        }
+      );
+      test.concurrent(
+        "lower ellipse, radius of 1/0, at 0,0, fraction 50",
+        () => {
+          const res = ellipse(
+            [[new BD(0), new BD(0)], new BD(1), new BD(0)],
+            new BD(50),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "0.00",
+            "0.00",
+          ]);
+        }
+      );
+      test.concurrent(
+        "lower ellipse, radius of 0/1, at 0,0, fraction 50 (NaN)",
+        () => {
+          const res = ellipse(
+            [[new BD(0), new BD(0)], new BD(0), new BD(1)],
+            new BD(50),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "0.00",
+            "NaN",
+          ]);
+        }
+      );
+    });
+
     describe("fraction", () => {
       test.concurrent(
         "upper ellipse, radius of 20/20, at -12,34 fraction 0",
@@ -380,7 +425,7 @@ describe("math model", () => {
         }
       );
       test.concurrent(
-        "upper ellipse, radius of 20/20, at -12,34 fraction 101",
+        "upper ellipse, radius of 20/20, at -12,34 fraction 101 (NaN)",
         () => {
           const res = ellipse(
             [[new BD(-12), new BD(34)], new BD(20), new BD(20)],
@@ -394,7 +439,7 @@ describe("math model", () => {
         }
       );
       test.concurrent(
-        "upper ellipse, radius of 20/20, at -12,34 fraction -0.001",
+        "upper ellipse, radius of 20/20, at -12,34 fraction -0.001 (NaN)",
         () => {
           const res = ellipse(
             [[new BD(-12), new BD(34)], new BD(20), new BD(20)],
