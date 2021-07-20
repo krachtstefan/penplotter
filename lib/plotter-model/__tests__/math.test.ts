@@ -278,25 +278,68 @@ describe("math model", () => {
   });
 
   describe("ellipse", () => {
-    test.concurrent("upper circle with radius of 10 at fraction 70", () => {
+    test.concurrent("upper circle, radius of 10, at 0,0, fraction 70", () => {
       const res = ellipse(
         [[new BD(0), new BD(0)], new BD(10), new BD(10)],
-        new BD(70),
-        true
+        new BD(70)
       );
       expect(res.map((x) => x.toFixed(2).toString())).toEqual(["4.00", "9.17"]);
     });
-    test.concurrent("lower circle with radius of 10 at fraction 50", () => {
+
+    test.concurrent("lower circle, radius of 10, at 12,34, fraction 50", () => {
       const res = ellipse(
-        [[new BD(0), new BD(0)], new BD(10), new BD(10)],
+        [[new BD(12), new BD(34)], new BD(10), new BD(10)],
         new BD(50),
         false
       );
       expect(res.map((x) => x.toFixed(2).toString())).toEqual([
-        "0.00",
-        "-10.00",
+        "12.00",
+        "24.00",
       ]);
     });
+
+    test.concurrent(
+      "upper ellipse, radius of 20/10, at 0,0, fraction 70",
+      () => {
+        const res = ellipse(
+          [[new BD(0), new BD(0)], new BD(20), new BD(10)],
+          new BD(70)
+        );
+        expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+          "8.00",
+          "9.17",
+        ]);
+      }
+    );
+    test.concurrent(
+      "lower ellipse, radius of 10/20, at 12,34, fraction 70",
+      () => {
+        const res = ellipse(
+          [[new BD(12), new BD(34)], new BD(10), new BD(20)],
+          new BD(70),
+          false
+        );
+        expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+          "16.00",
+          "15.67",
+        ]);
+      }
+    );
+    test.concurrent(
+      "lower ellipse, radius of 10/20, at -12|-34, fraction 70",
+      () => {
+        const res = ellipse(
+          [[new BD(-12), new BD(-34)], new BD(10), new BD(20)],
+          new BD(70),
+          false
+        );
+        expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+          "-8.00",
+          "-52.33",
+        ]);
+      }
+    );
+    // TEST NEGATIVE
   });
 
   describe("quadraticBezier", () => {

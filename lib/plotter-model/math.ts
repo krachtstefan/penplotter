@@ -155,8 +155,8 @@ export const ellipse = (
   const circle = xRadius.toPower(2).minus(x[0].minus(center[0]).toPower(2));
   const y = scale
     .times(circle.squareRoot())
-    .plus(center[1])
-    .times(upper ? 1 : -1);
+    .times(upper ? 1 : -1)
+    .plus(center[1]);
 
   return [x[0], y];
 };
