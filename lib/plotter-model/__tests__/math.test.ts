@@ -278,15 +278,13 @@ describe("math model", () => {
   });
 
   describe("ellipse", () => {
-    test.concurrent("upper circle with radius of 10 at fraction 50", () => {
+    test.concurrent("upper circle with radius of 10 at fraction 70", () => {
       const res = ellipse(
         [[new BD(0), new BD(0)], new BD(10), new BD(10)],
-        new BD(50)
+        new BD(70),
+        true
       );
-      expect(res.map((x) => x.toFixed(2).toString())).toEqual([
-        "0.00",
-        "10.00",
-      ]);
+      expect(res.map((x) => x.toFixed(2).toString())).toEqual(["4.00", "9.17"]);
     });
     test.concurrent("lower circle with radius of 10 at fraction 50", () => {
       const res = ellipse(

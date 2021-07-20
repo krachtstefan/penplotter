@@ -151,10 +151,8 @@ export const ellipse = (
 
   // function for upper and lower ellipse, plus is upper, minus is lower
   // f(x) = +-scale * sqrt(xr^(2)-(x-cx))^(2))+cy
-  const circle = xRadius
-    .toPower(2)
-    .minus(new BigDecimal(x[0].minus(center[0]).toPower(2)).toPower(2));
 
+  const circle = xRadius.toPower(2).minus(x[0].minus(center[0]).toPower(2));
   const y = scale
     .times(circle.squareRoot())
     .plus(center[1])
