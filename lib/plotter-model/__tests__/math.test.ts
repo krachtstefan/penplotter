@@ -278,67 +278,78 @@ describe("math model", () => {
   });
 
   describe("ellipse", () => {
-    test.concurrent("upper circle, radius of 10, at 0,0, fraction 70", () => {
-      const res = ellipse(
-        [[new BD(0), new BD(0)], new BD(10), new BD(10)],
-        new BD(70)
-      );
-      expect(res.map((x) => x.toFixed(2).toString())).toEqual(["4.00", "9.17"]);
-    });
-
-    test.concurrent("lower circle, radius of 10, at 12,34, fraction 50", () => {
-      const res = ellipse(
-        [[new BD(12), new BD(34)], new BD(10), new BD(10)],
-        new BD(50),
-        false
-      );
-      expect(res.map((x) => x.toFixed(2).toString())).toEqual([
-        "12.00",
-        "24.00",
-      ]);
-    });
-
-    test.concurrent(
-      "upper ellipse, radius of 20/10, at 0,0, fraction 70",
-      () => {
+    describe("circle", () => {
+      test.concurrent("upper circle, radius of 10, at 0,0, fraction 70", () => {
         const res = ellipse(
-          [[new BD(0), new BD(0)], new BD(20), new BD(10)],
+          [[new BD(0), new BD(0)], new BD(10), new BD(10)],
           new BD(70)
         );
         expect(res.map((x) => x.toFixed(2).toString())).toEqual([
-          "8.00",
+          "4.00",
           "9.17",
         ]);
-      }
-    );
-    test.concurrent(
-      "lower ellipse, radius of 10/20, at 12,34, fraction 70",
-      () => {
-        const res = ellipse(
-          [[new BD(12), new BD(34)], new BD(10), new BD(20)],
-          new BD(70),
-          false
-        );
-        expect(res.map((x) => x.toFixed(2).toString())).toEqual([
-          "16.00",
-          "15.67",
-        ]);
-      }
-    );
-    test.concurrent(
-      "lower ellipse, radius of 10/20, at -12,-34, fraction 70",
-      () => {
-        const res = ellipse(
-          [[new BD(-12), new BD(-34)], new BD(10), new BD(20)],
-          new BD(70),
-          false
-        );
-        expect(res.map((x) => x.toFixed(2).toString())).toEqual([
-          "-8.00",
-          "-52.33",
-        ]);
-      }
-    );
+      });
+
+      test.concurrent(
+        "lower circle, radius of 10, at 12,34, fraction 50",
+        () => {
+          const res = ellipse(
+            [[new BD(12), new BD(34)], new BD(10), new BD(10)],
+            new BD(50),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "12.00",
+            "24.00",
+          ]);
+        }
+      );
+    });
+
+    describe("ellipse", () => {
+      test.concurrent(
+        "upper ellipse, radius of 20/10, at 0,0, fraction 70",
+        () => {
+          const res = ellipse(
+            [[new BD(0), new BD(0)], new BD(20), new BD(10)],
+            new BD(70)
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "8.00",
+            "9.17",
+          ]);
+        }
+      );
+      test.concurrent(
+        "lower ellipse, radius of 10/20, at 12,34, fraction 70",
+        () => {
+          const res = ellipse(
+            [[new BD(12), new BD(34)], new BD(10), new BD(20)],
+            new BD(70),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "16.00",
+            "15.67",
+          ]);
+        }
+      );
+      test.concurrent(
+        "lower ellipse, radius of 10/20, at -12,-34, fraction 70",
+        () => {
+          const res = ellipse(
+            [[new BD(-12), new BD(-34)], new BD(10), new BD(20)],
+            new BD(70),
+            false
+          );
+          expect(res.map((x) => x.toFixed(2).toString())).toEqual([
+            "-8.00",
+            "-52.33",
+          ]);
+        }
+      );
+    });
+
     describe("fraction", () => {
       test.concurrent(
         "upper ellipse, radius of 20/20, at -12,34 fraction 0",
