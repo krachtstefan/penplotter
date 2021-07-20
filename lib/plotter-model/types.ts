@@ -13,6 +13,8 @@ export enum ElementType {
   line = "line",
   rect = "rect",
   path = "path",
+  circle = "circle",
+  ellipse = "ellipse",
 }
 
 export const isElementNode = (
