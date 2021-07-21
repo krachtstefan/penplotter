@@ -1,4 +1,5 @@
 import {
+  arcCommand,
   closeCmd,
   cubicBezierCmd,
   lineToCmd,
@@ -602,6 +603,72 @@ describe("svg model (path)", () => {
     });
   });
 
+  describe("arcCommand", () => {
+    describe("basic circle", () => {
+      const res = arcCommand.process({
+        command: "c",
+        args: ["1", "1", "0", "0", "0", "250", "0"],
+        lines: [
+          [
+            [new BD("-5"), new BD("-5")],
+            [new BD("0"), new BD("0")],
+          ],
+        ],
+      });
+      const resSweep = arcCommand.process({
+        command: "c",
+        args: ["1", "1", "0", "1", "0", "250", "0"],
+        lines: [
+          [
+            [new BD("-5"), new BD("-5")],
+            [new BD("0"), new BD("0")],
+          ],
+        ],
+      });
+      const reslargeArc = arcCommand.process({
+        command: "c",
+        args: ["1", "1", "0", "0", "1", "250", "0"],
+        lines: [
+          [
+            [new BD("-5"), new BD("-5")],
+            [new BD("0"), new BD("0")],
+          ],
+        ],
+      });
+
+      test.concurrent("basic circle lower", () => {
+        expect(res[0].length).toEqual(102); // first point, and 101 circle samples
+        expect(mapMatrixToString(res[0].slice(0, 2))).toEqual([
+          ["-5", "-5"],
+          ["0", "0"],
+        ]); // first point and circle start
+
+        expect(mapMatrixToString(res[0].slice(-51, -50))).toEqual([
+          ["125", "125"],
+        ]); // highes circle point
+        expect(mapMatrixToString(res[0].slice(-1))).toEqual([["250", "0"]]); // circle end
+      });
+
+      test.concurrent("basic circle, same result with sweepFlag flag", () => {
+        expect(res).toEqual(resSweep);
+      });
+      test.concurrent("basic circle upper", () => {
+        expect(reslargeArc[0].length).toEqual(102); // first point, and 101 circle samples
+        expect(mapMatrixToString(reslargeArc[0].slice(0, 2))).toEqual([
+          ["-5", "-5"],
+          ["0", "0"],
+        ]); // first point and circle start
+
+        expect(mapMatrixToString(reslargeArc[0].slice(-51, -50))).toEqual([
+          ["125", "-125"],
+        ]); // highes circle point
+        expect(mapMatrixToString(reslargeArc[0].slice(-1))).toEqual([
+          ["250", "0"],
+        ]); // circle end
+      });
+    });
+  });
+
   describe("translatePathString", () => {
     test.concurrent(
       "multiple move to and line commands with close command",
@@ -664,8 +731,14 @@ describe("svg model (path)", () => {
         "M 10 20 L 100 200 A 1 1 0 0 0 250 200 L400 0"
       );
       expect(res.length).toEqual(1); // one line
+      expect(res[0].length).toEqual(103); // 101 samples and 2 points
       expect(mapMatrixToString(res[0])[0]).toEqual(["10", "20"]); // first point
       expect(mapMatrixToString(res[0])[1]).toEqual(["100", "200"]); // start point of circle
+      expect(mapMatrixToString(res[0])[2]).not.toEqual(["100", "200"]); // first sample
+      expect(mapMatrixToString(res[0]).slice(-3)[0]).not.toEqual([
+        "250",
+        "200",
+      ]); // last sample
       expect(mapMatrixToString(res[0]).slice(-2)[0]).toEqual(["250", "200"]); // end point of circle
       expect(mapMatrixToString(res[0]).slice(-1)[0]).toEqual(["400", "0"]); // end point of line
     });
