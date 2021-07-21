@@ -4,6 +4,9 @@ import {
   convertPointsRelToAbs,
   createPoint2D,
   cubicBezier,
+  ellipse,
+  getLenghtByPoints,
+  getPointFromLineSegment,
   quadraticBezier,
 } from "../math";
 
@@ -214,6 +217,7 @@ export const quadraticBezierCmd: pathCommandImplementation = {
     }
   },
 };
+
 export const cubicBezierCmd: pathCommandImplementation = {
   command: [
     "C", // C command draws cubic bezier curve
@@ -258,6 +262,60 @@ export const cubicBezierCmd: pathCommandImplementation = {
   },
 };
 
+export const arcCommand: pathCommandImplementation = {
+  command: [
+    "A", // A command draws an arc
+    "a", // relative version of a
+  ],
+  process: ({ command, args, lines }) => {
+    // this is how it works https://www.youtube.com/watch?v=cBw0bKNaoHw
+    if (args && args.length === 7) {
+      const [
+        radiusXStr,
+        radiusYStr,
+        _xAxisRotationStr,
+        largeArcFlag,
+        sweepFlag,
+        endXStr,
+        endYStr,
+      ] = args;
+      if ([largeArcFlag, sweepFlag].every((x) => ["1", "0"].includes(x))) {
+        const startPoint = lines.slice(-1)[0].slice(-1)[0];
+        const endPoint: Point2D = [
+          new BigDecimal(endXStr),
+          new BigDecimal(endYStr),
+        ];
+        const radiusX = new BigDecimal(radiusXStr);
+        const radiusY = new BigDecimal(radiusYStr);
+        const center = getPointFromLineSegment(startPoint, endPoint, 0.5);
+        const radius = getLenghtByPoints(startPoint, endPoint).div(2);
+
+        const sampleSize = 101;
+
+        const arcSamples = [...new Array(sampleSize)].map((_, i) =>
+          ellipse(
+            [center, radius, radius],
+            new BigDecimal(i),
+            sweepFlag === "0"
+          )
+        );
+
+        return [
+          ...lines.slice(0, -1),
+          [...lines.slice(-1)[0].slice(0, -1), ...arcSamples],
+        ];
+      }
+      console.log(
+        `invalid largeArcFlag (${largeArcFlag}) or sweepFlag (${sweepFlag}). Must be 1 or 0`
+      );
+      return lines;
+    } else {
+      console.warn(`invalid args (${args}) for command ${command}.`);
+      return lines;
+    }
+  },
+};
+
 export const commandMapping = [
   moveToCmd,
   closeCmd,
@@ -265,6 +323,7 @@ export const commandMapping = [
   lineToHorVerCmd,
   quadraticBezierCmd,
   cubicBezierCmd,
+  arcCommand,
 ];
 
 export const translatePathString = (pathString: string): Point2D[][] =>
