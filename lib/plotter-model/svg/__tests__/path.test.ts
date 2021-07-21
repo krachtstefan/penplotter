@@ -605,7 +605,7 @@ describe("svg model (path)", () => {
 
   describe("arcCommand", () => {
     it.todo("swapping start and endpoint, swappes sweep flag too");
-    describe("basic circle", () => {
+    describe("circle", () => {
       const res = arcCommand.process({
         command: "c",
         args: ["1", "1", "0", "0", "0", "250", "0"],
@@ -639,7 +639,7 @@ describe("svg model (path)", () => {
         ],
       });
 
-      test.concurrent("basic circle lower", () => {
+      test.concurrent("lower", () => {
         expect(res[0].length).toEqual(102); // first point, and 101 circle samples
         expect(mapMatrixToString(res[0].slice(0, 2))).toEqual([
           ["-5", "-5"],
@@ -652,11 +652,11 @@ describe("svg model (path)", () => {
         expect(mapMatrixToString(res[0].slice(-1))).toEqual([["250", "0"]]); // circle end
       });
 
-      test.concurrent("basic circle, same result with large arc flag", () => {
+      test.concurrent("same result with large arc flag", () => {
         expect(res).toEqual(resLargeArc);
       });
 
-      test.concurrent("basic circle upper", () => {
+      test.concurrent("upper", () => {
         expect(resSweep[0].length).toEqual(102); // first point, and 101 circle samples
         expect(mapMatrixToString(resSweep[0].slice(0, 2))).toEqual([
           ["-5", "-5"],
@@ -706,7 +706,7 @@ describe("svg model (path)", () => {
             ],
           ],
         });
-        test.concurrent("basic", () => {
+        test.concurrent("lower", () => {
           expect(res2to1[0].length).toEqual(102); // first point, and 101 circle samples
           expect(mapMatrixToString(res2to1[0].slice(0, 2))).toEqual([
             ["-5", "-5"],
