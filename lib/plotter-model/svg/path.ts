@@ -288,13 +288,21 @@ export const arcCommand: pathCommandImplementation = {
         const radiusX = new BigDecimal(radiusXStr);
         const radiusY = new BigDecimal(radiusYStr);
         const center = getPointFromLineSegment(startPoint, endPoint, 0.5);
-        const radius = getLenghtByPoints(startPoint, endPoint).div(2);
+        const minRadius = getLenghtByPoints(startPoint, endPoint).div(2);
+
+        // when radiusX and radiusY are smaller than the min radius, they are relative values (like 1:2 f.e.)
+        const relativeRadius = radiusX.lte(minRadius) && radiusY.lte(minRadius);
+        const radiusRatio = radiusX.div(radiusY);
+        const usedRadiusX = relativeRadius ? minRadius : new BigDecimal(0);
+        const usedRadiusY = relativeRadius
+          ? minRadius.times(radiusRatio)
+          : new BigDecimal(0);
 
         const sampleSize = 101;
 
         const arcSamples = [...new Array(sampleSize)].map((_, i) =>
           ellipse(
-            [center, radius, radius],
+            [center, usedRadiusX, usedRadiusY],
             new BigDecimal(i),
             sweepFlag === "0"
           )
