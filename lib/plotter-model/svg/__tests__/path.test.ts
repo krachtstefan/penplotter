@@ -658,5 +658,16 @@ describe("svg model (path)", () => {
       expect(mapMatrixToString(res[0])[1]).toEqual(["20", "20"]); // second point
       expect(mapMatrixToString(res[0].slice(-1))[0]).toEqual(["50", "10"]); // the last point is the finish point
     });
+
+    test.concurrent("very simple arc inside a line segment", () => {
+      const res = translatePathString(
+        "M 10 20 L 100 200 A 1 1 0 0 0 250 200 L400 0"
+      );
+      expect(res.length).toEqual(1); // one line
+      expect(mapMatrixToString(res[0])[0]).toEqual(["10", "20"]); // first point
+      expect(mapMatrixToString(res[0])[1]).toEqual(["100", "200"]); // start point of circle
+      expect(mapMatrixToString(res[0]).slice(-2)[0]).toEqual(["250", "200"]); // end point of circle
+      expect(mapMatrixToString(res[0]).slice(-1)[0]).toEqual(["400", "0"]); // end point of line
+    });
   });
 });
