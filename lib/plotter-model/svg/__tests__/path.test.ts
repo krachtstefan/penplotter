@@ -604,6 +604,7 @@ describe("svg model (path)", () => {
   });
 
   describe("arcCommand", () => {
+    it.todo("swapping start and endpoint, swappes sweep flag too");
     describe("basic circle", () => {
       const res = arcCommand.process({
         command: "c",
