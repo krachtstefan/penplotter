@@ -66,7 +66,6 @@ describe("math model", () => {
         [new BD(0), new BD(2)],
         [new BD(0), new BD(-12)]
       );
-
       expect(res.toString()).toEqual("14");
     });
     test.concurrent("length of 0", () => {
