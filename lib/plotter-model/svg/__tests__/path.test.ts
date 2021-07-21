@@ -615,6 +615,7 @@ describe("svg model (path)", () => {
           ],
         ],
       });
+
       const resSweep = arcCommand.process({
         command: "c",
         args: ["1", "1", "0", "1", "0", "250", "0"],
@@ -625,6 +626,7 @@ describe("svg model (path)", () => {
           ],
         ],
       });
+
       const reslargeArc = arcCommand.process({
         command: "c",
         args: ["1", "1", "0", "0", "1", "250", "0"],
@@ -652,6 +654,7 @@ describe("svg model (path)", () => {
       test.concurrent("basic circle, same result with sweepFlag flag", () => {
         expect(res).toEqual(resSweep);
       });
+
       test.concurrent("basic circle upper", () => {
         expect(reslargeArc[0].length).toEqual(102); // first point, and 101 circle samples
         expect(mapMatrixToString(reslargeArc[0].slice(0, 2))).toEqual([
@@ -665,6 +668,142 @@ describe("svg model (path)", () => {
         expect(mapMatrixToString(reslargeArc[0].slice(-1))).toEqual([
           ["250", "0"],
         ]); // circle end
+      });
+    });
+
+    describe("ellipse", () => {
+      describe("2:1", () => {
+        const res2to1 = arcCommand.process({
+          command: "c",
+          args: ["2", "1", "0", "0", "0", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        const res2to1Sweep = arcCommand.process({
+          command: "c",
+          args: ["2", "1", "0", "1", "0", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        const res2to1LargeArc = arcCommand.process({
+          command: "c",
+          args: ["2", "1", "0", "0", "1", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+        test.concurrent("basic", () => {
+          expect(res2to1[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(res2to1[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["0", "0"],
+          ]); // first point and circle start
+
+          expect(mapMatrixToString(res2to1[0].slice(-51, -50))).toEqual([
+            ["125", "250"],
+          ]); // highes circle point
+          expect(mapMatrixToString(res2to1[0].slice(-1))).toEqual([
+            ["250", "0"],
+          ]); // circle end
+        });
+
+        test.concurrent("same result with sweepFlag flag", () => {
+          expect(res2to1).toEqual(res2to1Sweep);
+        });
+
+        test.concurrent("upper", () => {
+          expect(res2to1LargeArc[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(res2to1LargeArc[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["0", "0"],
+          ]); // first point and circle start
+          expect(mapMatrixToString(res2to1LargeArc[0].slice(-51, -50))).toEqual(
+            [["125", "-250"]]
+          ); // highes circle point
+          expect(mapMatrixToString(res2to1LargeArc[0].slice(-1))).toEqual([
+            ["250", "0"],
+          ]); // circle end
+        });
+      });
+
+      describe("1:2", () => {
+        const res1to2 = arcCommand.process({
+          command: "c",
+          args: ["1", "2", "0", "0", "0", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        const res1to2Sweep = arcCommand.process({
+          command: "c",
+          args: ["1", "2", "0", "1", "0", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        const res1to2LargeArc = arcCommand.process({
+          command: "c",
+          args: ["1", "2", "0", "0", "1", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+        test.concurrent("basic", () => {
+          expect(res1to2[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(res1to2[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["0", "0"],
+          ]); // first point and circle start
+
+          expect(mapMatrixToString(res1to2[0].slice(-51, -50))).toEqual([
+            ["125", "62.5"],
+          ]); // highes circle point
+          expect(mapMatrixToString(res1to2[0].slice(-1))).toEqual([
+            ["250", "0"],
+          ]); // circle end
+        });
+
+        test.concurrent("same result with sweepFlag flag", () => {
+          expect(res1to2).toEqual(res1to2Sweep);
+        });
+
+        test.concurrent("upper", () => {
+          expect(res1to2LargeArc[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(res1to2LargeArc[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["0", "0"],
+          ]); // first point and circle start
+          expect(mapMatrixToString(res1to2LargeArc[0].slice(-51, -50))).toEqual(
+            [["125", "-62.5"]]
+          ); // highes circle point
+          expect(mapMatrixToString(res1to2LargeArc[0].slice(-1))).toEqual([
+            ["250", "0"],
+          ]); // circle end
+        });
       });
     });
   });
