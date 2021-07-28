@@ -7,6 +7,7 @@ import {
   ellipse,
   getLenghtByPoints,
   getPointFromLineSegment,
+  move,
   quadraticBezier,
 } from "../math";
 
@@ -290,23 +291,50 @@ export const arcCommand: pathCommandImplementation = {
         const center = getPointFromLineSegment(startPoint, endPoint, 0.5);
         const minRadius = getLenghtByPoints(startPoint, endPoint).div(2);
 
+        const radiusXOverflow = radiusX.minus(minRadius);
+        const radiusYOverflow = radiusY.minus(minRadius);
         // when radiusX and radiusY are smaller than the min radius, they are relative values (like 1:2 f.e.)
-        const relativeRadius = radiusX.lte(minRadius) && radiusY.lte(minRadius);
+        const relativeRadius = radiusXOverflow.lte(0) && radiusYOverflow.lte(0);
         const radiusRatio = radiusX.div(radiusY);
-        const usedRadiusX = relativeRadius ? minRadius : new BigDecimal(0);
+        const usedRadiusX = relativeRadius ? minRadius : radiusX;
         const usedRadiusY = relativeRadius
           ? minRadius.times(radiusRatio)
-          : new BigDecimal(0);
+          : radiusY;
+
+        // when absolute radius, circle will not fit into start and endpoint, a scale of 0.5
+        // means that the distance from start to finish is 0.5 times of the circles radius
+        let scale = relativeRadius ? new BigDecimal(1) : minRadius.div(radiusX);
+        let downshift = new BigDecimal(0);
 
         const sampleSize = 101;
 
-        const arcSamples = [...new Array(sampleSize)].map((_, i) =>
-          ellipse(
-            [center, usedRadiusX, usedRadiusY],
-            new BigDecimal(i),
-            sweepFlag === "0"
-          )
-        );
+        // get the first y coordinate
+        downshift = relativeRadius
+          ? new BigDecimal(0)
+          : ellipse(
+              [center, usedRadiusX, usedRadiusY],
+              minRadius.times(scale),
+              sweepFlag === "0"
+            )[1].times(-1);
+
+        const arcSamples = [...new Array(sampleSize)].map((_, i) => {
+          const sample = relativeRadius
+            ? new BigDecimal(i)
+            : new BigDecimal(i).times(scale).plus(minRadius.times(scale));
+
+          return move(
+            [
+              ellipse(
+                [center, usedRadiusX, usedRadiusY],
+                sample,
+                sweepFlag === "0"
+              ),
+            ],
+            {
+              down: downshift,
+            }
+          )[0];
+        });
 
         return [
           ...lines.slice(0, -1),
