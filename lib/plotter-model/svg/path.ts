@@ -309,18 +309,26 @@ export const arcCommand: pathCommandImplementation = {
         const sampleSize = 101;
 
         // get the first y coordinate
+        const start = relativeRadius
+          ? new BigDecimal(0)
+          : new BigDecimal(50).minus(scale.times(100).div(2));
+        const end = relativeRadius
+          ? new BigDecimal(100)
+          : new BigDecimal(50).plus(scale.times(100).div(2));
+        const range = end.minus(start);
+
         downshift = relativeRadius
           ? new BigDecimal(0)
           : ellipse(
               [center, usedRadiusX, usedRadiusY],
-              minRadius.times(scale),
+              start,
               sweepFlag === "0"
             )[1].times(-1);
 
         const arcSamples = [...new Array(sampleSize)].map((_, i) => {
           const sample = relativeRadius
             ? new BigDecimal(i)
-            : new BigDecimal(i).times(scale).plus(minRadius.times(scale));
+            : start.plus(range.times(i).div(100));
 
           return move(
             [
