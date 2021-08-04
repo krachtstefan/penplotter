@@ -77,7 +77,11 @@ export const getDimensions = (
 };
 
 export const mapMatrixToString = (arr: Point2D[]): [string, string][] =>
-  arr.map((point) => [point[0].toString(), point[1].toString()]);
+  arr.map((point) => [
+    // toNearest will turn 8.58864376269049866 to 8.58
+    point[0].toNearest(0.005).toString(),
+    point[1].toNearest(0.005).toString(),
+  ]);
 
 export const scale = (arrOfPoints: Point2D[], factor: number): Point2D[] =>
   arrOfPoints.map(([x, y]) => [
