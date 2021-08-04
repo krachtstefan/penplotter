@@ -982,7 +982,6 @@ describe("svg model (path)", () => {
               ],
             ],
           });
-
           const res2to1LargeArc = arcCommand.process({
             command: "c",
             args: ["150", "50", "0", "1", "0", "250", "0"],
@@ -993,7 +992,6 @@ describe("svg model (path)", () => {
               ],
             ],
           });
-
           const res2to1Sweep = arcCommand.process({
             command: "c",
             args: ["150", "50", "0", "0", "1", "250", "0"],
@@ -1004,7 +1002,6 @@ describe("svg model (path)", () => {
               ],
             ],
           });
-
           const res2to1LargeArcSweep = arcCommand.process({
             command: "c",
             args: ["150", "50", "0", "1", "1", "250", "0"],
@@ -1015,40 +1012,32 @@ describe("svg model (path)", () => {
               ],
             ],
           });
-
           test.concurrent("lower", () => {
             expect(res2to1[0].length).toEqual(102); // first point, and 101 circle samples
             expect(mapMatrixToString(res2to1[0].slice(0, 2))).toEqual([
               ["-5", "-5"],
               ["0", "0"],
             ]); // first point and circle start
-
             expect(mapMatrixToString(res2to1[0].slice(-51, -50))).toEqual([
               ["125", "22.36"],
             ]); // highes circle point
-
             expect(mapMatrixToString(res2to1[0].slice(-1))).toEqual([
               ["250", "0"],
             ]); // circle end
           });
-
           test.concurrent("large arc flag", () => {
             expect(res2to1LargeArc[0].length).toEqual(304); // first point, and 3 times 101 circle samples (3 circle segments)
-
             expect(mapMatrixToString(res2to1LargeArc[0].slice(0, 2))).toEqual([
               ["-5", "-5"],
               ["0", "0"],
             ]); // first point and circle start
-
             expect(
               mapMatrixToString(res2to1LargeArc[0].slice(-152, -151))
             ).toEqual([["125", "77.64"]]); // highes circle point
-
             expect(mapMatrixToString(res2to1LargeArc[0].slice(-1))).toEqual([
               ["250", "0"],
             ]); // circle end
           });
-
           test.concurrent("upper", () => {
             expect(res2to1Sweep[0].length).toEqual(102); // first point, and 101 circle samples
             expect(mapMatrixToString(res2to1Sweep[0].slice(0, 2))).toEqual([
@@ -1062,21 +1051,17 @@ describe("svg model (path)", () => {
               ["250", "0"],
             ]); // circle end
           });
-
           test.concurrent("upper with large arc flag", () => {
             expect(res2to1LargeArcSweep[0].length).toEqual(304); // first point, and 3 times 101 circle samples (3 circle segments)
-
             expect(
               mapMatrixToString(res2to1LargeArcSweep[0].slice(0, 2))
             ).toEqual([
               ["-5", "-5"],
               ["0", "0"],
             ]); // first point and circle start
-
             expect(
               mapMatrixToString(res2to1LargeArcSweep[0].slice(-152, -151))
             ).toEqual([["125", "-77.64"]]); // highes circle point
-
             expect(
               mapMatrixToString(res2to1LargeArcSweep[0].slice(-1))
             ).toEqual([["250", "0"]]); // circle end
