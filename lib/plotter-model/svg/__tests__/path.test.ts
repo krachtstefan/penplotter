@@ -674,6 +674,88 @@ describe("svg model (path)", () => {
           ]); // circle end
         });
       });
+
+      describe("cropped (big radius)", () => {
+        const res = arcCommand.process({
+          command: "c",
+          args: ["150", "150", "0", "0", "0", "600", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("500"), new BD("0")],
+            ],
+          ],
+        });
+
+        const resLargeArc = arcCommand.process({
+          command: "c",
+          args: ["150", "150", "0", "1", "0", "600", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("500"), new BD("0")],
+            ],
+          ],
+        });
+
+        const resSweep = arcCommand.process({
+          command: "c",
+          args: ["150", "150", "0", "0", "1", "600", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("500"), new BD("0")],
+            ],
+          ],
+        });
+
+        test.concurrent("lower", () => {
+          expect(res[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(res[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["500", "0"],
+          ]); // first point and circle start
+
+          expect(mapMatrixToString(res[0].slice(-51, -50))).toEqual([
+            ["550", "8.58"],
+          ]); // highes circle point
+
+          expect(mapMatrixToString(res[0].slice(-1))).toEqual([["600", "0"]]); // circle end
+        });
+
+        test.concurrent("large arc flag", () => {
+          expect(resLargeArc[0].length).toEqual(304); // first point, and 3 times 101 circle samples (3 circle segments)
+
+          expect(mapMatrixToString(resLargeArc[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["500", "0"],
+          ]); // first point and circle start
+
+          expect(mapMatrixToString(resLargeArc[0].slice(-152, -151))).toEqual([
+            ["550", "291.42"],
+          ]); // highes circle point
+
+          expect(mapMatrixToString(resLargeArc[0].slice(-1))).toEqual([
+            ["600", "0"],
+          ]); // circle end
+        });
+
+        test.concurrent("upper", () => {
+          expect(resSweep[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(resSweep[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["500", "0"],
+          ]); // first point and circle start
+
+          expect(mapMatrixToString(resSweep[0].slice(-51, -50))).toEqual([
+            ["550", "-8.58"],
+          ]); // highes circle point
+
+          expect(mapMatrixToString(resSweep[0].slice(-1))).toEqual([
+            ["600", "0"],
+          ]); // circle end
+        });
+      });
     });
 
     describe("ellipse", () => {
