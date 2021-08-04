@@ -7,6 +7,7 @@ import {
   ellipse,
   getLenghtByPoints,
   getPointFromLineSegment,
+  mirrorY,
   move,
   quadraticBezier,
 } from "../math";
@@ -281,6 +282,8 @@ export const arcCommand: pathCommandImplementation = {
         endYStr,
       ] = args;
       if ([largeArcFlag, sweepFlag].every((x) => ["1", "0"].includes(x))) {
+        const useLargeArc = largeArcFlag === "1";
+
         const startPoint = lines.slice(-1)[0].slice(-1)[0];
         const endPoint: Point2D = [
           new BigDecimal(endXStr),
@@ -301,12 +304,14 @@ export const arcCommand: pathCommandImplementation = {
           ? minRadius.times(radiusRatio)
           : radiusY;
 
+        // absolute radius and large arc, this requires 3 circle samples
+        const absoluteRadLargeArc =
+          useLargeArc === true && relativeRadius === false;
+
         // when absolute radius, circle will not fit into start and endpoint, a scale of 0.5
         // means that the distance from start to finish is 0.5 times of the circles radius
         let scale = relativeRadius ? new BigDecimal(1) : minRadius.div(radiusX);
         let downshift = new BigDecimal(0);
-
-        const sampleSize = 101;
 
         // get the first y coordinate
         const start = relativeRadius
@@ -317,36 +322,66 @@ export const arcCommand: pathCommandImplementation = {
           : new BigDecimal(50).plus(scale.times(100).div(2));
         const range = end.minus(start);
 
-        downshift = relativeRadius
-          ? new BigDecimal(0)
-          : ellipse(
-              [center, usedRadiusX, usedRadiusY],
-              start,
-              sweepFlag === "0"
-            )[1].times(-1);
-
-        const arcSamples = [...new Array(sampleSize)].map((_, i) => {
-          const sample = relativeRadius
-            ? new BigDecimal(i)
-            : start.plus(range.times(i).div(100));
-
-          return move(
-            [
-              ellipse(
+        // mainSegment is the circle from start to finish with the shortest line, used
+        // all the time excedt when absolute radius is used and the large arc flag is set
+        let arcSamples: Point2D[] = [];
+        if (absoluteRadLargeArc === false) {
+          arcSamples = [
+            ...[...new Array(101)].map((_, i) => {
+              const sample = relativeRadius
+                ? new BigDecimal(i)
+                : start.plus(range.times(i).div(100));
+              return ellipse(
                 [center, usedRadiusX, usedRadiusY],
                 sample,
                 sweepFlag === "0"
-              ),
-            ],
-            {
-              down: downshift,
-            }
-          )[0];
+              );
+            }),
+          ];
+          downshift = relativeRadius
+            ? new BigDecimal(0)
+            : arcSamples[0][1].times(-1);
+        } else {
+          arcSamples = mirrorY([
+            ...[...new Array(101)].map((_, i) => {
+              const sample = new BigDecimal(100)
+                .minus(end)
+                .times(i)
+                .div(100)
+                .plus(end);
+              return ellipse(
+                [center, usedRadiusX, usedRadiusY],
+                sample,
+                sweepFlag === "0"
+              );
+            }),
+            ...[...new Array(101)].map((_, i) => {
+              const sample = new BigDecimal(100 - i);
+              return ellipse(
+                [center, usedRadiusX, usedRadiusY],
+                sample,
+                sweepFlag !== "0"
+              );
+            }),
+            ...[...new Array(101)].map((_, i) => {
+              const sample = start.times(i).div(100);
+              return ellipse(
+                [center, usedRadiusX, usedRadiusY],
+                sample,
+                sweepFlag === "0"
+              );
+            }),
+          ]);
+          downshift = arcSamples[0][1].times(-1);
+        }
+
+        const arcSamplesMoved = move(arcSamples, {
+          down: downshift,
         });
 
         return [
           ...lines.slice(0, -1),
-          [...lines.slice(-1)[0].slice(0, -1), ...arcSamples],
+          [...lines.slice(-1)[0].slice(0, -1), ...arcSamplesMoved],
         ];
       }
       console.log(
