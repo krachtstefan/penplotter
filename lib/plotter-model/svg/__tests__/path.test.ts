@@ -608,7 +608,7 @@ describe("svg model (path)", () => {
     it.todo("diagonal, circle and ellipse");
     it.todo("rotated, circle and ellipse");
     describe("circle", () => {
-      describe("no croping", () => {
+      describe("small radius", () => {
         const res = arcCommand.process({
           command: "c",
           args: ["1", "1", "0", "0", "0", "250", "0"],
@@ -690,7 +690,7 @@ describe("svg model (path)", () => {
         });
       });
 
-      describe("cropped (big radius)", () => {
+      describe("big radius (cropped)", () => {
         const res = arcCommand.process({
           command: "c",
           args: ["150", "150", "0", "0", "0", "600", "0"],
@@ -802,7 +802,7 @@ describe("svg model (path)", () => {
     });
 
     describe("ellipse", () => {
-      describe("no cropping", () => {
+      describe("small radius", () => {
         describe("2:1", () => {
           const res2to1 = arcCommand.process({
             command: "c",
@@ -970,8 +970,8 @@ describe("svg model (path)", () => {
         });
       });
 
-      describe("no cropping", () => {
-        describe("2:1", () => {
+      describe("big radius", () => {
+        describe("2:1 (cropped)", () => {
           const res2to1 = arcCommand.process({
             command: "c",
             args: ["150", "50", "0", "0", "0", "250", "0"],
@@ -1068,7 +1068,7 @@ describe("svg model (path)", () => {
           });
         });
 
-        describe("1:2", () => {
+        describe("1:2 (not cropped)", () => {
           const res1to2 = arcCommand.process({
             command: "c",
             args: ["50", "150", "0", "0", "0", "250", "0"],
