@@ -903,7 +903,7 @@ describe("svg model (path)", () => {
             ],
           });
 
-          test.concurrent("basic", () => {
+          test.concurrent("lower", () => {
             expect(res1to2[0].length).toEqual(102); // first point, and 101 circle samples
             expect(mapMatrixToString(res1to2[0].slice(0, 2))).toEqual([
               ["-5", "-5"],
