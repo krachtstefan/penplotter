@@ -724,6 +724,17 @@ describe("svg model (path)", () => {
           ],
         });
 
+        const resLargeArcSweep = arcCommand.process({
+          command: "c",
+          args: ["150", "150", "0", "1", "1", "600", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("500"), new BD("0")],
+            ],
+          ],
+        });
+
         test.concurrent("lower", () => {
           expect(res[0].length).toEqual(102); // first point, and 101 circle samples
           expect(mapMatrixToString(res[0].slice(0, 2))).toEqual([
@@ -767,6 +778,23 @@ describe("svg model (path)", () => {
           ]); // highes circle point
 
           expect(mapMatrixToString(resSweep[0].slice(-1))).toEqual([
+            ["600", "0"],
+          ]); // circle end
+        });
+
+        test.concurrent("upper with large arc flag", () => {
+          expect(resLargeArcSweep[0].length).toEqual(304); // first point, and 3 times 101 circle samples (3 circle segments)
+
+          expect(mapMatrixToString(resLargeArcSweep[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["500", "0"],
+          ]); // first point and circle start
+
+          expect(
+            mapMatrixToString(resLargeArcSweep[0].slice(-152, -151))
+          ).toEqual([["550", "-291.42"]]); // highes circle point
+
+          expect(mapMatrixToString(resLargeArcSweep[0].slice(-1))).toEqual([
             ["600", "0"],
           ]); // circle end
         });
