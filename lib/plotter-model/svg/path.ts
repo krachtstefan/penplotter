@@ -296,28 +296,38 @@ export const arcCommand: pathCommandImplementation = {
 
         const radiusXOverflow = radiusX.minus(minRadius);
         const radiusYOverflow = radiusY.minus(minRadius);
-        // when radiusX and radiusY are smaller than the min radius, they are relative values (like 1:2 f.e.)
-        const relativeRadius = radiusXOverflow.lte(0) && radiusYOverflow.lte(0);
+        // when radiusX is smaller than the min radius, they are relative values (like 1:2 f.e.)
+        const relativeXRadius = radiusXOverflow.lte(0);
+        const relativeYRadius = relativeXRadius && radiusYOverflow.lte(0);
+
         const radiusRatio = radiusX.div(radiusY);
-        const usedRadiusX = relativeRadius ? minRadius : radiusX;
-        const usedRadiusY = relativeRadius
+        const usedRadiusX = relativeXRadius ? minRadius : radiusX;
+        let usedRadiusY = relativeYRadius
           ? minRadius.times(radiusRatio)
           : radiusY;
 
         // absolute radius and large arc, this requires 3 circle samples
         const absoluteRadLargeArc =
-          useLargeArc === true && relativeRadius === false;
+          useLargeArc === true && relativeXRadius === false;
 
         // when absolute radius, circle will not fit into start and endpoint, a scale of 0.5
         // means that the distance from start to finish is 0.5 times of the circles radius
-        let scale = relativeRadius ? new BigDecimal(1) : minRadius.div(radiusX);
+        let scale = relativeXRadius
+          ? new BigDecimal(1)
+          : minRadius.div(radiusX);
+
+        // when relativeXRadius and egg shaped circle
+        if (relativeXRadius === true && relativeYRadius === false) {
+          usedRadiusY = minRadius.times(radiusY.div(radiusX));
+        }
+
         let downshift = new BigDecimal(0);
 
         // get the first y coordinate
-        const start = relativeRadius
+        const start = relativeXRadius
           ? new BigDecimal(0)
           : new BigDecimal(50).minus(scale.times(100).div(2));
-        const end = relativeRadius
+        const end = relativeXRadius
           ? new BigDecimal(100)
           : new BigDecimal(50).plus(scale.times(100).div(2));
         const range = end.minus(start);
@@ -328,7 +338,7 @@ export const arcCommand: pathCommandImplementation = {
         if (absoluteRadLargeArc === false) {
           arcSamples = [
             ...[...new Array(101)].map((_, i) => {
-              const sample = relativeRadius
+              const sample = relativeXRadius
                 ? new BigDecimal(i)
                 : start.plus(range.times(i).div(100));
               return ellipse(
@@ -338,7 +348,7 @@ export const arcCommand: pathCommandImplementation = {
               );
             }),
           ];
-          downshift = relativeRadius
+          downshift = relativeXRadius
             ? new BigDecimal(0)
             : arcSamples[0][1].times(-1);
         } else {

@@ -1068,6 +1068,90 @@ describe("svg model (path)", () => {
           });
         });
       });
+
+      describe("1:2", () => {
+        const res1to2 = arcCommand.process({
+          command: "c",
+          args: ["50", "150", "0", "0", "0", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        const res1to2LargeArc = arcCommand.process({
+          command: "c",
+          args: ["50", "150", "0", "1", "0", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        const res1to2Sweep = arcCommand.process({
+          command: "c",
+          args: ["50", "150", "0", "0", "1", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        const res1to2LargeArcSweep = arcCommand.process({
+          command: "c",
+          args: ["50", "150", "0", "1", "1", "250", "0"],
+          lines: [
+            [
+              [new BD("-5"), new BD("-5")],
+              [new BD("0"), new BD("0")],
+            ],
+          ],
+        });
+
+        test.concurrent("lower", () => {
+          expect(res1to2[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(res1to2[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["0", "0"],
+          ]); // first point and circle start
+
+          expect(mapMatrixToString(res1to2[0].slice(-51, -50))).toEqual([
+            ["125", "375"],
+          ]); // highes circle point
+
+          expect(mapMatrixToString(res1to2[0].slice(-1))).toEqual([
+            ["250", "0"],
+          ]); // circle end
+        });
+
+        test.concurrent("same result with large arc flag", () => {
+          expect(res1to2).toEqual(res1to2LargeArc);
+        });
+
+        test.concurrent("upper", () => {
+          expect(res1to2Sweep[0].length).toEqual(102); // first point, and 101 circle samples
+          expect(mapMatrixToString(res1to2Sweep[0].slice(0, 2))).toEqual([
+            ["-5", "-5"],
+            ["0", "0"],
+          ]); // first point and circle start
+          expect(mapMatrixToString(res1to2Sweep[0].slice(-51, -50))).toEqual([
+            ["125", "-375"],
+          ]); // highes circle point
+          expect(mapMatrixToString(res1to2Sweep[0].slice(-1))).toEqual([
+            ["250", "0"],
+          ]); // circle end
+        });
+
+        test.concurrent("upper has same result with large arc flag", () => {
+          expect(res1to2Sweep).toEqual(res1to2LargeArcSweep);
+        });
+      });
     });
   });
 
