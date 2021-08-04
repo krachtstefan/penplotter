@@ -344,11 +344,7 @@ export const arcCommand: pathCommandImplementation = {
         } else {
           arcSamples = mirrorY([
             ...[...new Array(101)].map((_, i) => {
-              const sample = new BigDecimal(100)
-                .minus(end)
-                .times(i)
-                .div(100)
-                .plus(end);
+              const sample = start.times(100 - i).div(100);
               return ellipse(
                 [center, usedRadiusX, usedRadiusY],
                 sample,
@@ -356,7 +352,7 @@ export const arcCommand: pathCommandImplementation = {
               );
             }),
             ...[...new Array(101)].map((_, i) => {
-              const sample = new BigDecimal(100 - i);
+              const sample = new BigDecimal(i);
               return ellipse(
                 [center, usedRadiusX, usedRadiusY],
                 sample,
@@ -364,7 +360,11 @@ export const arcCommand: pathCommandImplementation = {
               );
             }),
             ...[...new Array(101)].map((_, i) => {
-              const sample = start.times(i).div(100);
+              const sample = new BigDecimal(100)
+                .minus(end)
+                .times(100 - i)
+                .div(100)
+                .plus(end);
               return ellipse(
                 [center, usedRadiusX, usedRadiusY],
                 sample,
