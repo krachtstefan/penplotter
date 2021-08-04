@@ -685,7 +685,7 @@ describe("svg model (path)", () => {
           ]); // circle end
         });
 
-        test.concurrent("upper hast same result with large arc flag", () => {
+        test.concurrent("upper has same result with large arc flag", () => {
           expect(resSweep).toEqual(resLargeArcSweep);
         });
       });
@@ -853,7 +853,7 @@ describe("svg model (path)", () => {
             ]); // circle end
           });
 
-          test.concurrent("upper hast same result with large arc flag", () => {
+          test.concurrent("upper has same result with large arc flag", () => {
             expect(res2to1Sweep).toEqual(res2to1LargeArcSweep);
           });
         });
@@ -936,7 +936,7 @@ describe("svg model (path)", () => {
             ]); // circle end
           });
 
-          test.concurrent("upper hast same result with large arc flag", () => {
+          test.concurrent("upper has same result with large arc flag", () => {
             expect(res1to2Sweep).toEqual(res1to2LargeArcSweep);
           });
         });
