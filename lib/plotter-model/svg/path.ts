@@ -93,7 +93,7 @@ export const closeCmd: pathCommandImplementation = {
         [...lines.slice(-1)[0], createPoint2D(firstPoint)],
       ];
     } else {
-      console.warn(`Noting to close, skipped ${command} command.`);
+      console.warn(`Nothing to close, skipped ${command} command.`);
       return lines;
     }
   },
