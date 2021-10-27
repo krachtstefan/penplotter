@@ -1203,6 +1203,18 @@ describe("svg model (path)", () => {
       expect(mapMatrixToString(res[1].slice(-1))[0]).toEqual(["200", "200"]); // the last point is the finish point
     });
 
+    test.concurrent("two quadratic bezier", () => {
+      const res = translatePathString(
+        "M 0,0 L 20,20 M 10,10 Q 400,20 200,200 Q 100,10 100,100"
+      );
+      expect(res.length).toEqual(2); // two lines
+      expect(res[1].length).toEqual(201); // second line has start point and 100 bezier samples
+      expect(mapMatrixToString(res[1])[0]).toEqual(["10", "10"]); // start point
+      expect(mapMatrixToString(res[1])[100]).toEqual(["200", "200"]); // end point
+      expect(mapMatrixToString(res[1])[101]).toEqual(["198.01", "196.23"]); // first sample point of the second bezier is close to the point before
+      expect(mapMatrixToString(res[1].slice(-1))[0]).toEqual(["100", "100"]); // the last point is the finish point
+    });
+
     test.concurrent("one line with basic cubic bezier", () => {
       const res = translatePathString("M 10,90 L 20,20 C 30,90 25,10 50,10");
       expect(res.length).toEqual(1); // one line
@@ -1210,6 +1222,19 @@ describe("svg model (path)", () => {
       expect(mapMatrixToString(res[0])[0]).toEqual(["10", "90"]); // start point
       expect(mapMatrixToString(res[0])[1]).toEqual(["20", "20"]); // second point
       expect(mapMatrixToString(res[0].slice(-1))[0]).toEqual(["50", "10"]); // the last point is the finish point
+    });
+
+    test.concurrent("one line with two basic cubic bezier", () => {
+      const res = translatePathString(
+        "M 10,90 L 20,20 C 30,90 25,10 50,10 C 30,90 25,10 60,20"
+      );
+      expect(res.length).toEqual(1); // one line
+      expect(res[0].length).toEqual(202); // start point, second point and 200 bezier samples
+      expect(mapMatrixToString(res[0])[0]).toEqual(["10", "90"]); // start point
+      expect(mapMatrixToString(res[0])[1]).toEqual(["20", "20"]); // second point
+      expect(mapMatrixToString(res[0])[101]).toEqual(["50", "10"]); // point 102 ist the end of the first cubic bezier
+      expect(mapMatrixToString(res[0])[102]).toEqual(["49.405", "12.35"]); // the first simple point must be close to the prior point
+      expect(mapMatrixToString(res[0].slice(-1))[0]).toEqual(["60", "20"]); // the last point is the finish point
     });
 
     test.concurrent("very simple arc inside a line segment", () => {

@@ -194,15 +194,13 @@ export const quadraticBezierCmd: pathCommandImplementation = {
       }
       const quadSampleSize = 100;
       const quadInterpolations = [...new Array(quadSampleSize)]
-        .map((_, index, src) => {
-          return index / src.length;
-        })
+        .map((_, index, src) => index / src.length)
         .slice(1)
         // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
         .map((x) =>
           quadraticBezier(
             [
-              lines.slice(-1)[0][0],
+              lines.slice(-1)[0].slice(-1)[0],
               quadraticCurveCoords[0],
               quadraticCurveCoords[1],
             ],
@@ -237,15 +235,13 @@ export const cubicBezierCmd: pathCommandImplementation = {
       }
       const cubicSampleSize = 100;
       const cubicInterpolations = [...new Array(cubicSampleSize)]
-        .map((_, index, src) => {
-          return index / src.length;
-        })
+        .map((_, index, src) => index / src.length)
         .slice(1)
         // for a sampleSize of 5, this array contains [0.2, 0.4, 0.6, 0.8] at this point
         .map((x) =>
           cubicBezier(
             [
-              lines.slice(-1)[0][0],
+              lines.slice(-1)[0].slice(-1)[0],
               cubicCurveCoords[0],
               cubicCurveCoords[1],
               cubicCurveCoords[2],
