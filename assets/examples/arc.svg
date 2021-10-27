@@ -1,0 +1,54 @@
+<svg width="2000" height="1000"
+  xmlns="http://www.w3.org/2000/svg" viewBox="-100 -100 2000 1000">
+
+  <!-- lower relative radius -->
+  <!-- <path d="M 0 100 A 1 1 0 0 0 250 100" stroke="green" fill="none" stroke-width="1"/>
+  <path d="M 0 100 A 1 2 0 0 0 250 100" stroke="blue" fill="none" stroke-width="1"/>
+  <path d="M 0 100 A 2 1 0 0 0 250 100" stroke="red" fill="none" stroke-width="1"/>
+  <circle cx="125" cy="225" r="2" stroke="green" fill="none" />
+  <circle cx="125" cy="350" r="2" stroke="blue" fill="none" />
+  <circle cx="125" cy="162.5" r="2" stroke="red" fill="none" /> -->
+
+  <!-- lower absolute radius -->
+  <!-- <path d="M 500 0 A 150 150 0 0 0 600 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 500 0 A 150 150 0 1 0 600 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 500 0 A 150 150 0 1 1 600 0" stroke="coral" fill="none" stroke-width="1"/> -->
+
+
+  <!-- <path d="M 0 0 A 50 150 0 0 0 250 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 0 0 A 50 150 0 0 1 250 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 0 0 A 50 150 0 1 0 250 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 0 0 A 50 150 0 1 1 250 0" stroke="coral" fill="none" stroke-width="1"/> -->
+
+  <!-- <path d="M 0 0 A 150 50 0 0 0 250 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 0 0 A 150 50 0 0 1 250 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 0 0 A 150 50 0 1 0 250 0" stroke="coral" fill="none" stroke-width="1"/>
+  <path d="M 0 0 A 150 50 0 1 1 250 0" stroke="coral" fill="none" stroke-width="1"/> -->
+
+
+  <circle cx="125" cy="375" r="2" stroke="red" fill="none" />
+  <circle cx="125" cy="41.665" r="2" stroke="red" fill="none" />
+
+  <path d="M80 80 A 45 45, 0, 0, 0, 125 125" fill="green" stroke-width="1"/>
+  <!-- <path d="M80 230 A 45 45, 0, 0, 1, 125 275" fill="purple" stroke-width="1"/> -->
+  <!-- <path d="M230 80 A 45 45, 0, 1, 0, 275 125" fill="red" stroke-width="1"/>
+  <path d="M230 230 A 45 45, 0, 1, 1, 275 275" fill="blue" stroke-width="1"/> -->
+
+  <!-- <path d="M80 80
+           A 45 45, 0, 0, 0, 125 125
+           L 125 80 Z" fill="green"/>
+  <path d="M230 80
+           A 45 45, 0, 1, 0, 275 125
+           L 275 80 Z" fill="red"/>
+  <path d="M80 230
+           A 45 45, 0, 0, 1, 125 275
+           L 125 230 Z" fill="purple"/>
+  <path d="M230 230
+           A 45 45, 0, 1, 1, 275 275
+           L 275 230 Z" fill="blue"/> -->
+
+  <!-- upper relative radius -->
+  <!-- <path d="M 0 100 A 1 1 0 0 1 250 100" stroke="green" fill="none" stroke-width="1"/>
+  <path d="M 0 100 A 1 2 0 0 1 250 100" stroke="blue" fill="none" stroke-width="1"/>
+  <path d="M 0 100 A 2 1 0 0 1 250 100" stroke="red" fill="none" stroke-width="1"/> -->
+</svg>
