@@ -184,6 +184,7 @@ board.on("ready", () => {
         if (wakeLock) {
           wakeLock.release();
         }
+        movePen(PenPosition.UP);
         store.dispatch(stopDrawing());
       });
   };
